@@ -10,8 +10,6 @@ import UIKit
 import Firebase
 
 class RegisterViewController: UIViewController{
-    //comment here to commit test
-    
     
     @IBOutlet weak var emailTextField: UITextField!
     
@@ -22,17 +20,25 @@ class RegisterViewController: UIViewController{
             Auth.auth().createUser(withEmail: email, password: password) {
                 authResult, error in
                 if let e = error {
-                    print(error)
+                    let reason = e.localizedDescription
+                    self.showErrorAlert(message: reason)
                     //take care of this later
                 }else{
                     //go to homepage.
-                    
+                    self.performSegue(withIdentifier: "RegisterSuccess", sender: self)
                 }
                 
             }
         }
         
         
+    }
+    
+    func showErrorAlert(message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(okAction)
+        present(alert, animated: true, completion: nil)
     }
     
 }

@@ -22,6 +22,7 @@
 		3FA9FDC82B5EF525001E513C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3FA9FDC62B5EF525001E513C /* LaunchScreen.storyboard */; };
 		3FBBFC522B84F91B009CABCE /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 3FBBFC512B84F91B009CABCE /* FirebaseAuth */; };
 		3FBBFC542B84F91B009CABCE /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 3FBBFC532B84F91B009CABCE /* FirebaseFirestore */; };
+		3FBBFC5A2B8502F8009CABCE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3FBBFC592B8502F8009CABCE /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		3FA9FDC42B5EF525001E513C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3FA9FDC72B5EF525001E513C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3FA9FDC92B5EF525001E513C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3FBBFC592B8502F8009CABCE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +106,7 @@
 				3FA9FDC42B5EF525001E513C /* Assets.xcassets */,
 				3FA9FDC62B5EF525001E513C /* LaunchScreen.storyboard */,
 				3FA9FDC92B5EF525001E513C /* Info.plist */,
+				3FBBFC592B8502F8009CABCE /* GoogleService-Info.plist */,
 			);
 			path = WhatEven;
 			sourceTree = "<group>";
@@ -174,6 +177,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3FA9FDC82B5EF525001E513C /* LaunchScreen.storyboard in Resources */,
+				3FBBFC5A2B8502F8009CABCE /* GoogleService-Info.plist in Resources */,
 				3FA9FDC52B5EF525001E513C /* Assets.xcassets in Resources */,
 				3FA9FDC32B5EF523001E513C /* Main.storyboard in Resources */,
 			);
@@ -355,7 +359,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.matson.WhatEven;
+				PRODUCT_BUNDLE_IDENTIFIER = com.google.firebase.udacity.WhatEven;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -383,7 +387,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.matson.WhatEven;
+				PRODUCT_BUNDLE_IDENTIFIER = com.google.firebase.udacity.WhatEven;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

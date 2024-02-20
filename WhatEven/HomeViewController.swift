@@ -8,6 +8,8 @@
 import Foundation
 import UIKit
 
+//after user signs in, or registers will be shown this main screen.
+
 class HomeViewController: UIViewController {
     
     

@@ -8,7 +8,7 @@
 import UIKit
 
 class LoginViewController: UIViewController {
-
+    
     @IBOutlet weak var loginText: UITextField!
     
     @IBOutlet weak var passwordText: UITextField!
@@ -17,13 +17,13 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
     }
-
+    
     @IBAction func login(_ sender: UIButton) {
         
     }
     
     @IBAction func register(_ sender: UIButton) {
-        
+        performSegue(withIdentifier: "ToRegister", sender: self)
     }
 }
 
