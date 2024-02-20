@@ -16,7 +16,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="C74-eT-uti">
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="12345678!" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="C74-eT-uti">
                                 <rect key="frame" x="75" y="485" width="240" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -51,7 +51,7 @@
                                     <action selector="register:" destination="BYZ-38-t0r" eventType="touchUpInside" id="aqb-tW-bJq"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Cgn-9R-W2y">
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Madison.k.adams@gmail.com" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Cgn-9R-W2y">
                                 <rect key="frame" x="75" y="405" width="240" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -77,8 +77,8 @@
                     </view>
                     <navigationItem key="navigationItem" id="awh-mn-RKl"/>
                     <connections>
-                        <outlet property="loginText" destination="Cgn-9R-W2y" id="4A0-rM-D4T"/>
                         <outlet property="passwordText" destination="C74-eT-uti" id="OM2-0U-RaK"/>
+                        <outlet property="usernameText" destination="Cgn-9R-W2y" id="n8l-ju-bDD"/>
                         <segue destination="vR0-EB-rAV" kind="show" identifier="LoginSuccess" id="qdA-NG-o5f"/>
                         <segue destination="nqr-fr-H8a" kind="show" identifier="ToRegister" id="xZy-Ba-Y19"/>
                     </connections>
@@ -106,7 +106,14 @@
                         <viewLayoutGuide key="safeArea" id="rGd-Zh-feh"/>
                         <color key="backgroundColor" red="0.74729186296463013" green="0.83490520715713501" blue="0.93912315368652344" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
-                    <navigationItem key="navigationItem" id="CxE-sp-weZ"/>
+                    <navigationItem key="navigationItem" id="CxE-sp-weZ">
+                        <barButtonItem key="rightBarButtonItem" title="logout" id="eZ0-eD-hoa">
+                            <color key="tintColor" systemColor="tintColor"/>
+                            <connections>
+                                <action selector="logout:" destination="vR0-EB-rAV" id="UBT-EU-Y5b"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Vb4-Vj-xqt" sceneMemberID="firstResponder"/>
             </objects>
@@ -267,11 +274,14 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="qdA-NG-o5f"/>
+        <segue reference="CbP-No-O6w"/>
     </inferredMetricsTieBreakers>
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="tintColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

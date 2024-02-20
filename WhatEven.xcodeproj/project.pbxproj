@@ -14,6 +14,7 @@
 		3F1F19892B5F44BC007CCB0A /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1F19882B5F44BC007CCB0A /* ProfileViewController.swift */; };
 		3F1F198B2B5F4507007CCB0A /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1F198A2B5F4507007CCB0A /* PostViewController.swift */; };
 		3F1F198D2B5F455B007CCB0A /* AddBloopViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1F198C2B5F455B007CCB0A /* AddBloopViewController.swift */; };
+		3F5C1FE72B852D9F00906F3F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5C1FE62B852D9F00906F3F /* Constants.swift */; };
 		3FA9FDBC2B5EF523001E513C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FA9FDBB2B5EF523001E513C /* AppDelegate.swift */; };
 		3FA9FDBE2B5EF523001E513C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FA9FDBD2B5EF523001E513C /* SceneDelegate.swift */; };
 		3FA9FDC02B5EF523001E513C /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FA9FDBF2B5EF523001E513C /* LoginViewController.swift */; };
@@ -33,6 +34,7 @@
 		3F1F19882B5F44BC007CCB0A /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		3F1F198A2B5F4507007CCB0A /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
 		3F1F198C2B5F455B007CCB0A /* AddBloopViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBloopViewController.swift; sourceTree = "<group>"; };
+		3F5C1FE62B852D9F00906F3F /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		3FA9FDB82B5EF523001E513C /* WhatEven.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhatEven.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FA9FDBB2B5EF523001E513C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3FA9FDBD2B5EF523001E513C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -60,6 +62,7 @@
 		3F1F19802B5F4342007CCB0A /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				3F5C1FE62B852D9F00906F3F /* Constants.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -191,6 +194,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F1F198B2B5F4507007CCB0A /* PostViewController.swift in Sources */,
+				3F5C1FE72B852D9F00906F3F /* Constants.swift in Sources */,
 				3F1F19832B5F43D6007CCB0A /* HomeViewController.swift in Sources */,
 				3FA9FDC02B5EF523001E513C /* LoginViewController.swift in Sources */,
 				3F1F198D2B5F455B007CCB0A /* AddBloopViewController.swift in Sources */,

@@ -15,6 +15,7 @@ class RegisterViewController: UIViewController{
     
     @IBOutlet weak var passwordTextField: UITextField!
     
+    //Register New User
     @IBAction func register(_ sender: UIButton) {
         if let email = emailTextField.text, let password = passwordTextField.text{
             Auth.auth().createUser(withEmail: email, password: password) {
@@ -25,7 +26,7 @@ class RegisterViewController: UIViewController{
                     //take care of this later
                 }else{
                     //go to homepage.
-                    self.performSegue(withIdentifier: "RegisterSuccess", sender: self)
+                    self.performSegue(withIdentifier: Constants.registerSegue, sender: self)
                 }
                 
             }
