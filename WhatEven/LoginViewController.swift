@@ -27,7 +27,7 @@ class LoginViewController: UIViewController {
                     let reason = e.localizedDescription
                     self.showErrorAlert(message: reason)
                 }else{
-                    self.performSegue(withIdentifier: Constants.loginSegue, sender: self)
+                    self.performSegue(withIdentifier: Constants.Segue.loginSegue, sender: self)
                 }
               
             }
@@ -37,7 +37,7 @@ class LoginViewController: UIViewController {
     
     //Register
     @IBAction func register(_ sender: UIButton) {
-        performSegue(withIdentifier: Constants.toRegisterSegue, sender: self)
+        performSegue(withIdentifier: Constants.Segue.toRegisterSegue, sender: self)
     }
     
     func showErrorAlert(message: String) {

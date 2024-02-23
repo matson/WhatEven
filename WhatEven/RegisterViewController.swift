@@ -26,7 +26,7 @@ class RegisterViewController: UIViewController{
                     //take care of this later
                 }else{
                     //go to homepage.
-                    self.performSegue(withIdentifier: Constants.registerSegue, sender: self)
+                    self.performSegue(withIdentifier: Constants.Segue.toRegisterSegue, sender: self)
                 }
                 
             }
