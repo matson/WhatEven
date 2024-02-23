@@ -64,14 +64,13 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             
             
         }
-            
-        
-        
-        
         //to hide back button
         navigationItem.hidesBackButton = true
+        setRows()
     }
     
+    
+    @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
     
     //to logout
     @IBAction func logout(_ sender: UIBarButtonItem) {
@@ -118,11 +117,32 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     // Implement the UICollectionViewDelegateFlowLayout method to customize the layout
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cellWidth = collectionView.bounds.width
-        let cellHeight: CGFloat = 300 // Set the desired height for each cell
+        let collectionViewWidth = collectionView.bounds.width
+        let space: CGFloat = 3.0
+        let numberOfItemsPerRow: CGFloat = 3
+        let dimension = (collectionViewWidth - ((numberOfItemsPerRow - 1) * space)) / numberOfItemsPerRow
         
-        return CGSize(width: cellWidth, height: cellHeight)
+        return CGSize(width: dimension, height: dimension)
     }
+    
+    func setRows(){
+        // Create a new flow layout instance
+        let layout = UICollectionViewFlowLayout()
+        
+        // Set the spacing between cells
+        layout.minimumInteritemSpacing = 3.0
+        layout.minimumLineSpacing = 3.0
+        
+        // Calculate the item size based on the available width
+        let collectionViewWidth = feedView.bounds.width
+        let numberOfItemsPerRow: CGFloat = 3
+        let dimension = (collectionViewWidth - ((numberOfItemsPerRow - 1) * layout.minimumInteritemSpacing)) / numberOfItemsPerRow
+        layout.itemSize = CGSize(width: dimension, height: dimension)
+        
+        // Set the collection view's layout
+        feedView.collectionViewLayout = layout
+    }
+    
     
     //For DetailedViewController:
     
