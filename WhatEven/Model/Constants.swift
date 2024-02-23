@@ -20,7 +20,8 @@ struct Constants{
     
     struct FStore {
         
-        static let collectionName = "post"
+        static let collectionNamePost = "post"
+        static let collectionNameComment = "comments"
         static let postNameField = "name"
         static let postImageField = "image"
         static let postDescriptionField = "description"

@@ -48,7 +48,7 @@ class PostViewController: UIViewController {
            //let name = clothingName.text,
            //let description = clothingDescrip.text,
            let user = Auth.auth().currentUser?.email {
-            let documentRef = db.collection(Constants.FStore.collectionName).addDocument(data: [ Constants.FStore.createdByField: user,
+            let documentRef = db.collection(Constants.FStore.collectionNamePost).addDocument(data: [ Constants.FStore.createdByField: user,
                                                                                Constants.FStore.postImageField: imageData,
                                                                                Constants.FStore.postNameField: name,
                                                                                Constants.FStore.postDescriptionField: description
@@ -65,7 +65,7 @@ class PostViewController: UIViewController {
             //works
             let postID = documentRef.documentID
             
-            db.collection("comments").addDocument(data: [
+            db.collection(Constants.FStore.collectionNameComment).addDocument(data: [
                 Constants.FStore.commentTextField: comment,
                 Constants.FStore.createdByField: user,
                 Constants.FStore.postIDField: postID
