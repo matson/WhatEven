@@ -17,7 +17,7 @@ struct Bloop {
     var images: UIImage
     var description: String
     var name: String
-    //var comments: [String]
+    var comments: [Comment]
     var createdBy: String
     //var likes: Int
     

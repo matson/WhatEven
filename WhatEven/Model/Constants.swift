@@ -16,6 +16,7 @@ struct Constants{
         static let registerSegue = "RegisterSuccess"
         static let toRegisterSegue = "ToRegister"
         static let toPostSegue = "ToPost"
+        static let toDetailsSegue = "ToDetails"
     }
     
     struct FStore {
@@ -26,7 +27,6 @@ struct Constants{
         static let postImageField = "image"
         static let postDescriptionField = "description"
         static let createdByField = "createdBy"
-        //static let commentsField = "comments"
         static let postIDField = "postId"
         static let commentTextField = "commentText"
     }
