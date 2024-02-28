@@ -41,6 +41,12 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
     
     
     @IBAction func add(_ sender: UIButton) {
+        
+       //CommentViewController?
+        let commentVC = CommentViewController()
+        commentVC.modalPresentationStyle = .fullScreen
+        commentVC.modalTransitionStyle = .crossDissolve
+        present(commentVC, animated: true, completion: nil)
     }
     
     //MARK: TableView Methods

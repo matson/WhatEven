@@ -21,12 +21,7 @@ class PostViewController: UIViewController {
     var postID = ""
     
     
-    var posts: [Bloop] = [
-        
-        //        Bloop(images: UIImage(named: "Online1")!, description: "Link of item needed and more details", name: "Shein Tan Dress", comments: ["",""]),
-        //        Bloop(images: UIImage(named: "Online2")!, description: "Link of item required", name: "Shein Jean Straps", comments: ["",""])
-        
-    ]
+    var posts: [Bloop] = []
     
     @IBOutlet weak var clothingName: UITextField!
     
