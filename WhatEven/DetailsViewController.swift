@@ -21,6 +21,9 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
     
     var comments: [Comment] = []
     
+    private let mainStoryboardName = "Main"
+    private let commentViewControllerID = "CommentViewController"
+    
     
     var selectedPost: Bloop?
     
@@ -42,10 +45,12 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
     
     @IBAction func add(_ sender: UIButton) {
         
-        //CommentViewController?
-        let commentVC = CommentViewController()
+        //to CommentViewController
+        let storyBoard: UIStoryboard = UIStoryboard(name: mainStoryboardName, bundle: nil)
+        guard let commentVC = storyBoard.instantiateViewController(withIdentifier: commentViewControllerID) as? CommentViewController else { return }
         commentVC.modalPresentationStyle = .fullScreen
         commentVC.modalTransitionStyle = .crossDissolve
+        //need to send the postID through here. 
         navigationController?.pushViewController(commentVC, animated: true)
     }
     

@@ -31,17 +31,11 @@ class AddBloopViewController: UIViewController {
         super.viewDidLoad()
         
         //for testing:
-        let imageEx = UIImage(named: "Online5")
+        //let imageEx = UIImage(named: "Online5")
         
         print(imageSelected)
-        imageSelectedUI.image = imageEx
-        
-        
-       
-        
-       
-        
-        
+        imageSelectedUI.image = imageSelected
+
     }
     
     @IBAction func shareButton(_ sender: UIButton) {
