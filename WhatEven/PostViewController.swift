@@ -12,6 +12,9 @@ import Firebase
 
 class PostViewController: UIViewController {
     
+    //this will allow a user to pick an image, then add the name and description on the next controller
+    
+    
     //should send image, description and label
     //will be doing this with imagePicker but not now.
     //to test will use default image
@@ -26,6 +29,19 @@ class PostViewController: UIViewController {
     @IBOutlet weak var clothingName: UITextField!
     
     @IBOutlet weak var clothingDescrip: UITextField!
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        //imagePicker.delegate = self
+        
+    }
+    
+   
+    
+    
+    
+    
     //post content to cloud/Firestore
     
     @IBAction func post(_ sender: UIButton) {
@@ -82,13 +98,28 @@ class PostViewController: UIViewController {
     
     //let comment = "Girl this product is gross I had the same problem you had"
     
-    @IBAction func AddComment(_ sender: UIButton) {
+   
+    @IBAction func pickPhoto(_ sender: UIButton) {
+        let imagePicker = UIImagePickerController()
+            imagePicker.delegate = self
+            imagePicker.sourceType = .photoLibrary
+            present(imagePicker, animated: true, completion: nil)
         
-       //assume that we select a post, then it shows the post on the DetailViewController.
-        //We want to show the Post, as well as the collection comment's associated with this post.
-        //Each comment should have the postID (firebase auto ID) for the post collection.  How do I retrieve the data from Firebase?
-        
-
     }
     
+}
+extension PostViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let selectedImage = info[.originalImage] as? UIImage {
+            // Pass the selected image to the next view controller
+            let nextViewController = AddBloopViewController()
+            nextViewController.imageSelected = selectedImage
+            navigationController?.pushViewController(nextViewController, animated: true)
+        }
+        picker.dismiss(animated: true, completion: nil)
+    }
+
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
+    }
 }

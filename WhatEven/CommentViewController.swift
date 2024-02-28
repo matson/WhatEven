@@ -11,6 +11,9 @@ class CommentViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.backgroundColor = .white
+        
 
         // Do any additional setup after loading the view.
     }
@@ -22,6 +25,13 @@ class CommentViewController: UIViewController {
     }
     
     @IBAction func postComment(_ sender: UIButton) {
+        
+        //This will post the comment immediately.
+        //Should send to Firebase then should be able to see it refreshed on the top of the tableView of this controller
+        //should then be able to select it and then delete
+        
+        
+        
     }
     /*
     // MARK: - Navigation
