@@ -19,6 +19,9 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     var bloops: [Bloop] = []
     var selectedPost: Bloop?
     
+    //need this for posting comments
+    var globalPostID: String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -127,6 +130,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
                 if let selectedPost = selectedPost {
                     detailsVC.selectedPost = selectedPost
                     
+                    
                 }
             }
         }
@@ -134,6 +138,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     func getData(){
         //to interact with FireBase
+       
         //Need Listener:
         let db = Firestore.firestore()
         let postsCollection = db.collection(Constants.FStore.collectionNamePost)
@@ -178,7 +183,6 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
                         let postID = commentData["postId"] as? String ?? ""
                         // ...
                         let comment = Comment(user: user, postID: postID, text: text/* comment attributes */)
-                        //print(comment)
                         
                         // Add comment to the post's comments array
                         tempComments.append(comment)
@@ -193,7 +197,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
                     
                     let image = UIImage(data: imageData)
                     
-                    let bloop = Bloop(images: image!, description: description, name: name, comments: tempComments, createdBy: createdBy)
+                    let bloop = Bloop(images: image!, description: description, name: name, comments: tempComments, createdBy: createdBy, postID: postID)
                     
                     //add to array
                     bloops.append(bloop)
@@ -203,7 +207,6 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             dispatchGroup.notify(queue: .main) {
                 self.bloops = bloops // Assign the separate bloops array to the main bloops array
                 self.feedView.reloadData()
-                //print(self.bloops)
             }
         
         }

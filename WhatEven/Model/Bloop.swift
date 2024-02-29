@@ -19,6 +19,7 @@ struct Bloop {
     var name: String
     var comments: [Comment]
     var createdBy: String
+    var postID: String
     //var likes: Int
     
 }

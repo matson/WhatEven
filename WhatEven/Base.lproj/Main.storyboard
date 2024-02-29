@@ -93,11 +93,11 @@
             <objects>
                 <viewController id="vR0-EB-rAV" userLabel="HomeViewController" customClass="HomeViewController" customModule="WhatEven" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="HC0-3y-caL">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="787"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="A1K-8t-0sx">
-                                <rect key="frame" x="-3" y="760" width="387" height="45"/>
+                                <rect key="frame" x="-3" y="703" width="386" height="45"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <items>
                                     <barButtonItem title="Item" id="wj3-11-uNL"/>
@@ -219,7 +219,7 @@
             <objects>
                 <viewController id="0OG-FR-a5i" userLabel="DetailsViewController " customClass="DetailsViewController" customModule="WhatEven" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="63v-5U-nbL">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="787"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Sic-hI-ViO">
@@ -317,7 +317,7 @@
         <!--AddBloopController-->
         <scene sceneID="zEd-y2-o7S">
             <objects>
-                <viewController id="TK1-iG-3PL" userLabel="AddBloopController" customClass="AddBloopViewController" customModule="WhatEven" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AddBloop" id="TK1-iG-3PL" userLabel="AddBloopController" customClass="AddBloopViewController" customModule="WhatEven" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ga6-U7-6aK">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -338,13 +338,13 @@
                                 </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="name of item" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tb6-TU-dkw">
-                                <rect key="frame" x="16" y="468" width="150" height="34"/>
+                                <rect key="frame" x="16" y="468" width="358" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="write a description" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Si4-zg-ugm">
-                                <rect key="frame" x="16" y="522" width="150" height="34"/>
+                                <rect key="frame" x="16" y="522" width="358" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -357,18 +357,19 @@
                         <outlet property="imageSelectedUI" destination="MiN-QB-laE" id="QKV-rk-FcR"/>
                         <outlet property="itemDescription" destination="Si4-zg-ugm" id="AI7-yF-E2v"/>
                         <outlet property="itemName" destination="tb6-TU-dkw" id="SAg-zU-B6N"/>
+                        <segue destination="vR0-EB-rAV" kind="show" identifier="backToHomeSegue" id="baU-Ss-suV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xKS-fU-eFN" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1409.2307692307693" y="731.51658767772506"/>
+            <point key="canvasLocation" x="1728" y="732"/>
         </scene>
         <!--PostViewController-->
         <scene sceneID="XKE-zI-2Z1">
             <objects>
                 <viewController id="jE5-Ql-fYt" userLabel="PostViewController" customClass="PostViewController" customModule="WhatEven" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="QHW-6R-jtZ">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="787"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Let's Talk Shit" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QG2-c8-S6Y">
@@ -378,8 +379,15 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Please Pick an Image from Your Device" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UVf-jC-T8X">
+                                <rect key="frame" x="85" y="106" width="220" height="15"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n8K-NH-nsc">
-                                <rect key="frame" x="165" y="741" width="61" height="38"/>
+                                <rect key="frame" x="165" y="247" width="61" height="38"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Pick">
@@ -390,13 +398,6 @@
                                     <action selector="pickPhoto:" destination="jE5-Ql-fYt" eventType="touchUpInside" id="ZDJ-9S-b0N"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Please Pick an Image from Your Device" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UVf-jC-T8X">
-                                <rect key="frame" x="85" y="106" width="220" height="15"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="0OZ-gc-9qd"/>
                         <color key="backgroundColor" red="0.67251038551330566" green="0.79299908876419067" blue="0.92771530151367188" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -405,7 +406,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kKm-OL-Emm" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="736.92307692307691" y="731.51658767772506"/>
+            <point key="canvasLocation" x="865" y="732"/>
         </scene>
         <!--ProfileViewController-->
         <scene sceneID="l0t-JE-djM">
@@ -511,9 +512,6 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <action selector="commentTyped:" destination="nCK-DV-p8V" eventType="editingDidEnd" id="bse-LP-bWt"/>
-                                </connections>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I6K-lb-JGv">
                                 <rect key="frame" x="324" y="738" width="66" height="35"/>
@@ -544,6 +542,7 @@
                         <color key="backgroundColor" red="0.83308631181716919" green="0.92847853899002075" blue="0.95284324884414673" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                     <connections>
+                        <outlet property="commentText" destination="bdl-Uz-tuQ" id="fbo-ps-TsR"/>
                         <outlet property="tableView" destination="Tau-jg-hj6" id="dQd-9K-bSM"/>
                     </connections>
                 </viewController>
@@ -571,7 +570,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="cWX-so-G6g"/>
+        <segue reference="baU-Ss-suV"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="bubble.left.fill" catalog="system" width="128" height="110"/>

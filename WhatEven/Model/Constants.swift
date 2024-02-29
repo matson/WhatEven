@@ -17,6 +17,7 @@ struct Constants{
         static let toRegisterSegue = "ToRegister"
         static let toPostSegue = "ToPost"
         static let toDetailsSegue = "ToDetails"
+        static let backToHomeSegue = "backToHomeSegue"
     }
     
     struct FStore {
@@ -30,6 +31,8 @@ struct Constants{
         static let postIDField = "postId"
         static let commentTextField = "commentText"
     }
+    
+    
     
     
     

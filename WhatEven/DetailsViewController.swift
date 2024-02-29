@@ -10,6 +10,7 @@ import UIKit
 
 class DetailsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
+    //reload data here first
     
     @IBOutlet weak var photo: UIImageView!
     
@@ -24,7 +25,6 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
     private let mainStoryboardName = "Main"
     private let commentViewControllerID = "CommentViewController"
     
-    
     var selectedPost: Bloop?
     
     override func viewDidLoad() {
@@ -38,16 +38,18 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         clothingLabel.text = selectedPost?.name
         descriptionText.text = selectedPost?.description
         comments = selectedPost!.comments
-        
-        
     }
     
     
     @IBAction func add(_ sender: UIButton) {
         
+        //access postID through comment:
+        let postID = selectedPost?.postID
+            
         //to CommentViewController
         let storyBoard: UIStoryboard = UIStoryboard(name: mainStoryboardName, bundle: nil)
         guard let commentVC = storyBoard.instantiateViewController(withIdentifier: commentViewControllerID) as? CommentViewController else { return }
+        commentVC.receivedPostID = postID
         commentVC.modalPresentationStyle = .fullScreen
         commentVC.modalTransitionStyle = .crossDissolve
         //need to send the postID through here. 
