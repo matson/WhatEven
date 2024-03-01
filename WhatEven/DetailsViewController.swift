@@ -38,6 +38,9 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         clothingLabel.text = selectedPost?.name
         descriptionText.text = selectedPost?.description
         comments = selectedPost!.comments
+        
+        tableView.reloadData()
+        
     }
     
     
@@ -50,9 +53,10 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         let storyBoard: UIStoryboard = UIStoryboard(name: mainStoryboardName, bundle: nil)
         guard let commentVC = storyBoard.instantiateViewController(withIdentifier: commentViewControllerID) as? CommentViewController else { return }
         commentVC.receivedPostID = postID
+        commentVC.commentsReceived = comments
         commentVC.modalPresentationStyle = .fullScreen
         commentVC.modalTransitionStyle = .crossDissolve
-        //need to send the postID through here. 
+        
         navigationController?.pushViewController(commentVC, animated: true)
     }
     

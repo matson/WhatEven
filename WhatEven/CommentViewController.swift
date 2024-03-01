@@ -19,6 +19,8 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
     
     var userEmail: String?
     
+    var commentsReceived: [Comment] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -35,6 +37,10 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
         if let currentUser = Auth.auth().currentUser {
             userEmail = currentUser.email
         }
+        
+        tableView.reloadData()
+        
+        print(commentsReceived)
 
         // Do any additional setup after loading the view.
     }
@@ -59,13 +65,19 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
                 print("Successfully saved data")
             }
         }
+        let newComment = Comment(user: userEmail!, postID: receivedPostID!, text: finalCommentText!)
+        //append to array:
+        commentsReceived.append(newComment)
         
         //This will post the comment immediately.
         //Should send to Firebase then should be able to see it refreshed on the top of the tableView of this controller
         //should then be able to select it and then delete
         
         //saving correctly but need to figure out why it is not showing fast
-        
+        // Refresh the table view
+        tableView.reloadData()
+        // Reset the text field
+        commentText.text = ""
         
     }
     
@@ -73,12 +85,17 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        
+        return commentsReceived.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "CommentCell", for: indexPath) as! CommentViewCell
+        // Configure the cell with data
+        let comment = commentsReceived[indexPath.row]
+        cell.commentText.text = comment.text
+        cell.userLabel.text = comment.user
         
         return cell
     }
