@@ -32,6 +32,17 @@ struct Constants{
         static let commentTextField = "commentText"
     }
     
+    struct Attributes {
+        
+        static let feedCell = "FeedCell"
+        static let mainStoryboardName = "Main"
+        static let commentViewControllerId = "CommentViewController"
+        static let commentCell = "CommentCell"
+        static let addBloop = "AddBloop"
+
+        
+    }
+    
     
     
     

@@ -16,8 +16,6 @@ class PostViewController: UIViewController {
     
     @IBOutlet weak var clothingDescrip: UITextField!
     
-    //var posts: [Bloop] = []
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -38,9 +36,9 @@ class PostViewController: UIViewController {
 extension PostViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let selectedImage = info[.originalImage] as? UIImage {
-            let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            let storyboard: UIStoryboard = UIStoryboard(name: Constants.Attributes.mainStoryboardName, bundle: nil)
             // Pass the selected image to the next view controller
-            let nextViewController = storyboard.instantiateViewController(withIdentifier: "AddBloop") as! AddBloopViewController
+            let nextViewController = storyboard.instantiateViewController(withIdentifier: Constants.Attributes.addBloop) as! AddBloopViewController
             nextViewController.imageSelected = selectedImage
             navigationController?.pushViewController(nextViewController, animated: true)
         }

@@ -31,6 +31,7 @@
 		3FBBFC522B84F91B009CABCE /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 3FBBFC512B84F91B009CABCE /* FirebaseAuth */; };
 		3FBBFC542B84F91B009CABCE /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 3FBBFC532B84F91B009CABCE /* FirebaseFirestore */; };
 		3FBBFC5A2B8502F8009CABCE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3FBBFC592B8502F8009CABCE /* GoogleService-Info.plist */; };
+		3FDA67882B963269000DAEF6 /* FirebaseAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDA67872B963269000DAEF6 /* FirebaseAPI.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +59,7 @@
 		3FA9FDC72B5EF525001E513C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3FA9FDC92B5EF525001E513C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3FBBFC592B8502F8009CABCE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		3FDA67872B963269000DAEF6 /* FirebaseAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAPI.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +84,7 @@
 				3F5C1FEC2B86BB7A00906F3F /* User.swift */,
 				3F1FC24D2B88F57F00AC42B5 /* Comment.swift */,
 				3F9CA8992B8D68D60079018B /* CommentViewCell.swift */,
+				3FDA67872B963269000DAEF6 /* FirebaseAPI.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -216,6 +219,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F1F198B2B5F4507007CCB0A /* PostViewController.swift in Sources */,
+				3FDA67882B963269000DAEF6 /* FirebaseAPI.swift in Sources */,
 				3F5C1FEB2B86960200906F3F /* FeedCell.swift in Sources */,
 				3F5C1FE72B852D9F00906F3F /* Constants.swift in Sources */,
 				3F1F19832B5F43D6007CCB0A /* HomeViewController.swift in Sources */,

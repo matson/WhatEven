@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import Firebase
 
 class DetailsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
@@ -20,12 +21,13 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
     
     @IBOutlet weak var tableView: UITableView!
     
+    var globalPostId: String?
+    
     var comments: [Comment] = []
     
-    private let mainStoryboardName = "Main"
-    private let commentViewControllerID = "CommentViewController"
-    
     var selectedPost: Bloop?
+    
+    let firebaseAPI = FirebaseAPI()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,23 +39,24 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         photo.image = selectedPost?.images
         clothingLabel.text = selectedPost?.name
         descriptionText.text = selectedPost?.description
-        comments = selectedPost!.comments
+        globalPostId = selectedPost?.postID
         
-        tableView.reloadData()
+        firebaseAPI.getComments(forPostId: selectedPost!.postID) { comments in
+            self.comments = comments // Assign the separate comments array to the commentsReceived array
+            self.tableView.reloadData()
+        }
+        
+        //tableView.reloadData()
         
     }
     
     
     @IBAction func add(_ sender: UIButton) {
-        
-        //access postID through comment:
-        let postID = selectedPost?.postID
             
         //to CommentViewController
-        let storyBoard: UIStoryboard = UIStoryboard(name: mainStoryboardName, bundle: nil)
-        guard let commentVC = storyBoard.instantiateViewController(withIdentifier: commentViewControllerID) as? CommentViewController else { return }
-        commentVC.receivedPostID = postID
-        commentVC.commentsReceived = comments
+        let storyBoard: UIStoryboard = UIStoryboard(name: Constants.Attributes.mainStoryboardName, bundle: nil)
+        guard let commentVC = storyBoard.instantiateViewController(withIdentifier: Constants.Attributes.commentViewControllerId) as? CommentViewController else { return }
+        commentVC.receivedPostId = globalPostId
         commentVC.modalPresentationStyle = .fullScreen
         commentVC.modalTransitionStyle = .crossDissolve
         
@@ -70,7 +73,7 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // Dequeue a reusable cell
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CommentCell", for: indexPath) as! CommentViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.Attributes.commentCell, for: indexPath) as! CommentViewCell
         
         // Configure the cell with data
         let comment = comments[indexPath.row]
@@ -79,7 +82,5 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         
         return cell
     }
-    
-    
     
 }

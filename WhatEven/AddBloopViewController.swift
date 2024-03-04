@@ -38,7 +38,7 @@ class AddBloopViewController: UIViewController {
         //for testing:
         //This in the end should come from imagePicker. ***
         //imageSelectedUI.image = imageSelected
-        let imageEx = UIImage(named: "Online5")
+        let imageEx = UIImage(named: "Online4")
         imageSelectedUI.image = imageEx
         
         //get current user:
