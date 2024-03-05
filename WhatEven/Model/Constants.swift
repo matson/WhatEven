@@ -30,6 +30,7 @@ struct Constants{
         static let createdByField = "createdBy"
         static let postIDField = "postId"
         static let commentTextField = "commentText"
+        static let collectionNameUserDetails = "userDetails"
     }
     
     struct Attributes {

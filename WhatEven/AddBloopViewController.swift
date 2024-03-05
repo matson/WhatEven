@@ -23,12 +23,14 @@ class AddBloopViewController: UIViewController {
     
     var imageSelected: UIImage?
     
-    var userEmail: String?
+    var uid: String?
+    
+    let firebaseAPI = FirebaseAPI()
     
     override func viewWillAppear(_ animated: Bool) {
         
         super.viewWillAppear(animated)
-       
+        
     }
     
     
@@ -38,41 +40,39 @@ class AddBloopViewController: UIViewController {
         //for testing:
         //This in the end should come from imagePicker. ***
         //imageSelectedUI.image = imageSelected
-        let imageEx = UIImage(named: "Online4")
+        let imageEx = UIImage(named: "Online3")
         imageSelectedUI.image = imageEx
         
         //get current user:
         if let currentUser = Auth.auth().currentUser {
-            userEmail = currentUser.email
+            uid = currentUser.uid
         }
-
+        
+        
+        
     }
     
     @IBAction func shareButton(_ sender: UIButton) {
         
-        let name = itemName.text
-        let description = itemDescription.text!
+        let name = itemName.text ?? ""
+        let description = itemDescription.text ?? ""
         
         // Convert the UIImage to Data
         guard let imageData = imageSelectedUI.image!.pngData() else {
             // Handle the error if conversion fails
             return
         }
-
-        let db = Firestore.firestore()
-        let documentRef = db.collection(Constants.FStore.collectionNamePost).addDocument(data: [ Constants.FStore.createdByField: userEmail,
-            Constants.FStore.postImageField: imageData,
-            Constants.FStore.postNameField: name,
-            Constants.FStore.postDescriptionField: description
-        ]) { (error) in
-            if let e = error {
-                print("There was an issue saving data")
+        
+        firebaseAPI.postItemToFirestore(name: name, description: description, image: imageSelectedUI.image!, uid: uid!) { error in
+            if let error = error {
+                // Handle the error
+                print("Error posting item: \(error)")
             } else {
-                print("Successfully saved data")
+                // Item posted successfully, perform the segue here
+                self.performSegue(withIdentifier: Constants.Segue.backToHomeSegue, sender: self)
             }
         }
-        // Perform the segue to navigate back to HomeViewController
-        performSegue(withIdentifier: Constants.Segue.backToHomeSegue, sender: self)
+        
     }
-  
+    
 }

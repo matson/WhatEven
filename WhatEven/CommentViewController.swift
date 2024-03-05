@@ -12,7 +12,7 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
     
     var receivedPostId: String?
     
-    var userEmail: String?
+    var uid: String?
     
     var commentsReceived: [Comment] = []
     
@@ -26,16 +26,10 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
         tableView.delegate = self
         tableView.dataSource = self
         
-        if let postID = receivedPostId {
-            print("Received postID: \(postID)")
-        }
-        
         //get current user:
         if let currentUser = Auth.auth().currentUser {
-            userEmail = currentUser.email
+            uid = currentUser.uid
         }
-        
-        //tableView.reloadData()
         
         firebaseAPI.getComments(forPostId: receivedPostId!) { comments in
             self.commentsReceived = comments // Assign the separate comments array to the commentsReceived array
@@ -50,18 +44,14 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
     
     @IBAction func postComment(_ sender: UIButton) {
         
-        let finalCommentText = commentText.text
-        let db = Firestore.firestore()
-        db.collection(Constants.FStore.collectionNameComment).addDocument(data: [
-            Constants.FStore.commentTextField: finalCommentText,
-            Constants.FStore.createdByField: userEmail,
-            Constants.FStore.postIDField: receivedPostId
-            
-        ]){ (error) in
-            if let e = error {
-                print("There was an issue saving data")
-            } else {
-                print("Successfully saved data")
+        let finalCommentText = commentText.text ?? ""
+    
+        firebaseAPI.postCommentToFirestore(commentText: finalCommentText, uid: uid!, receivedPostId: receivedPostId!) { result in
+            switch result {
+            case .success:
+                print("Comment posted successfully")
+            case .failure(let error):
+                print("Error posting comment: \(error.localizedDescription)")
             }
         }
         
@@ -87,7 +77,7 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
         // Configure the cell with data
         let comment = commentsReceived[indexPath.row]
         cell.commentText.text = comment.text
-        cell.userLabel.text = comment.user
+        cell.userLabel.text = comment.user.username
         
         return cell
     }

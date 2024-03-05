@@ -15,4 +15,9 @@ class FeedCell: UICollectionViewCell {
     
     @IBOutlet weak var clothingLabel: UILabel!
     
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        clothingLabel.font = UIFont(name: "PTSans-Bold", size: 12)
+    }
+    
 }

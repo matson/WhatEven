@@ -15,24 +15,28 @@ class RegisterViewController: UIViewController{
     
     @IBOutlet weak var passwordTextField: UITextField!
     
+    @IBOutlet weak var usernameTextField: UITextField!
+   
+    let firebaseAPI = FirebaseAPI()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+    }
+    
     //Register New User
     @IBAction func register(_ sender: UIButton) {
-        if let email = emailTextField.text, let password = passwordTextField.text{
-            Auth.auth().createUser(withEmail: email, password: password) {
-                authResult, error in
-                if let e = error {
-                    let reason = e.localizedDescription
+        if let email = emailTextField.text, let password = passwordTextField.text, let username = usernameTextField.text {
+            firebaseAPI.createUser(withEmail: email, password: password, username: username) { error in
+                if let error = error {
+                    let reason = error.localizedDescription
                     self.showErrorAlert(message: reason)
-                    //take care of this later
-                }else{
-                    //go to homepage.
-                    self.performSegue(withIdentifier: Constants.Segue.toRegisterSegue, sender: self)
+                } else {
+                    self.performSegue(withIdentifier: Constants.Segue.registerSegue, sender: self)
                 }
-                
             }
         }
-        
-        
+
     }
     
     func showErrorAlert(message: String) {

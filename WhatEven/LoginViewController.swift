@@ -14,9 +14,25 @@ class LoginViewController: UIViewController {
     
     @IBOutlet weak var passwordText: UITextField!
     
+    @IBOutlet weak var titleLabel: UILabel!
+   
+    @IBOutlet weak var usernameLabel: UILabel!
+    
+    @IBOutlet weak var passwordLabel: UILabel!
+    
+    @IBOutlet weak var login: UIButton!
+    
+    @IBOutlet weak var register: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
+        usernameLabel.font = UIFont(name: "PTSans-Bold", size: 14)
+        passwordLabel.font = UIFont(name: "PTSans-Bold", size: 14)
+        titleLabel.font = UIFont(name: "PTSans-Bold", size: 26)
+        
+        
     }
     
     //Login

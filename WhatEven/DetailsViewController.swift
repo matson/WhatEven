@@ -25,9 +25,12 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
     
     var comments: [Comment] = []
     
+    var user: UserDetails?
+    
     var selectedPost: Bloop?
     
     let firebaseAPI = FirebaseAPI()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,18 +38,15 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         tableView.delegate = self
         tableView.dataSource = self
         
-        //set features to selectedPost attributes
-        photo.image = selectedPost?.images
-        clothingLabel.text = selectedPost?.name
-        descriptionText.text = selectedPost?.description
-        globalPostId = selectedPost?.postID
+        setAttributes()
         
+        //print(selectedPost?.createdBy.username)
+
+        //get comments
         firebaseAPI.getComments(forPostId: selectedPost!.postID) { comments in
             self.comments = comments // Assign the separate comments array to the commentsReceived array
             self.tableView.reloadData()
         }
-        
-        //tableView.reloadData()
         
     }
     
@@ -78,9 +78,17 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         // Configure the cell with data
         let comment = comments[indexPath.row]
         cell.commentText.text = comment.text
-        cell.userLabel.text = comment.user
+        cell.userLabel.text = comment.user.username
         
         return cell
+    }
+    
+    func setAttributes(){
+        //set features to selectedPost attributes
+        photo.image = selectedPost?.images
+        clothingLabel.text = selectedPost?.name
+        descriptionText.text = selectedPost?.description
+        globalPostId = selectedPost?.postID
     }
     
 }

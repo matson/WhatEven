@@ -18,7 +18,7 @@ struct Bloop {
     var description: String
     var name: String
     var comments: [Comment]
-    var createdBy: String
+    var createdBy: UserDetails
     var postID: String
     //var likes: Int
     

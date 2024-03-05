@@ -8,13 +8,9 @@
 import Foundation
 
 struct Comment {
-    
-    
-    var user: String
+
+    var user: UserDetails
     var postID: String
     var text: String
-    
-    
-    
     
 }

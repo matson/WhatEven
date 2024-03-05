@@ -8,9 +8,11 @@
 import Foundation
 import UIKit
 
-struct User {
+struct UserDetails {
     
     var username: String?
-    var profileImage: UIImage?
+    var userEmail: String?
+    //var profileImage: UIImage?
+    var uid: String?
     
 }

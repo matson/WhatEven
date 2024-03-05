@@ -17,6 +17,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     @IBOutlet weak var feedView: UICollectionView!
     
     var bloops: [Bloop] = []
+    
     var selectedPost: Bloop?
     
     //need this for posting comments
@@ -31,8 +32,10 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         feedView.delegate = self
         
         firebaseAPI.getPosts { bloops in
+            
             self.bloops = bloops
             self.feedView.reloadData()
+            
         }
        
         //to hide back button
@@ -78,6 +81,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.Attributes.feedCell, for: indexPath) as! FeedCell
         
         let post = bloops[indexPath.item]
+        
         // Configure the cell's image and label views
         cell.photo.image = post.images
         cell.clothingLabel.text = post.name
