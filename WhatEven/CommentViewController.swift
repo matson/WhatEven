@@ -31,6 +31,7 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
             uid = currentUser.uid
         }
         
+        //get comments
         firebaseAPI.getComments(forPostId: receivedPostId!) { comments in
             self.commentsReceived = comments // Assign the separate comments array to the commentsReceived array
             self.tableView.reloadData()
@@ -42,11 +43,16 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
     
     @IBOutlet weak var tableView: UITableView!
     
+    
+    //post comment
     @IBAction func postComment(_ sender: UIButton) {
         
         let finalCommentText = commentText.text ?? ""
+        
+        //get the current time for comment posting
+        let timestamp = Date().timeIntervalSince1970
     
-        firebaseAPI.postCommentToFirestore(commentText: finalCommentText, uid: uid!, receivedPostId: receivedPostId!) { result in
+        firebaseAPI.postCommentToFirestore(commentText: finalCommentText, uid: uid!, receivedPostId: receivedPostId!, timestamp: timestamp) { result in
             switch result {
             case .success:
                 print("Comment posted successfully")

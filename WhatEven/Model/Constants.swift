@@ -31,6 +31,7 @@ struct Constants{
         static let postIDField = "postId"
         static let commentTextField = "commentText"
         static let collectionNameUserDetails = "userDetails"
+        static let commentTimestampField = "timestamp"
     }
     
     struct Attributes {
@@ -40,6 +41,8 @@ struct Constants{
         static let commentViewControllerId = "CommentViewController"
         static let commentCell = "CommentCell"
         static let addBloop = "AddBloop"
+        static let boldFont = "PTSans-Bold"
+        static let regularFont = "PTSans-Regular"
 
         
     }

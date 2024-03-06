@@ -15,7 +15,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var passwordText: UITextField!
     
     @IBOutlet weak var titleLabel: UILabel!
-   
+    
     @IBOutlet weak var usernameLabel: UILabel!
     
     @IBOutlet weak var passwordLabel: UILabel!
@@ -24,19 +24,26 @@ class LoginViewController: UIViewController {
     
     @IBOutlet weak var register: UIButton!
     
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
         usernameLabel.font = UIFont(name: "PTSans-Bold", size: 14)
         passwordLabel.font = UIFont(name: "PTSans-Bold", size: 14)
-        titleLabel.font = UIFont(name: "PTSans-Bold", size: 26)
+        titleLabel.font = UIFont(name: "PTSans-Regular", size: 26)
         
+        // Create and configure the activity indicator
+        activityIndicator.hidesWhenStopped = true
         
     }
     
     //Login
     @IBAction func login(_ sender: UIButton) {
+        // Start the activity indicator
+        activityIndicator.startAnimating()
+        
         if let email = usernameText.text, let password = passwordText.text {
             Auth.auth().signIn(withEmail: email, password: password) {  authResult, error in
                 if let e = error {
@@ -45,7 +52,9 @@ class LoginViewController: UIViewController {
                 }else{
                     self.performSegue(withIdentifier: Constants.Segue.loginSegue, sender: self)
                 }
-              
+                // Stop the activity indicator when the process is complete
+                self.activityIndicator.stopAnimating()
+                
             }
         }
         

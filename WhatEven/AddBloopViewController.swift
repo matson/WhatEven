@@ -52,6 +52,8 @@ class AddBloopViewController: UIViewController {
         
     }
     
+    
+    //post
     @IBAction func shareButton(_ sender: UIButton) {
         
         let name = itemName.text ?? ""

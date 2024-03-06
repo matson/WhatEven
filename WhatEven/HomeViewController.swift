@@ -16,6 +16,8 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     @IBOutlet weak var feedView: UICollectionView!
     
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+   
     var bloops: [Bloop] = []
     
     var selectedPost: Bloop?
@@ -31,10 +33,14 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         feedView.dataSource = self
         feedView.delegate = self
         
+        activityIndicator.hidesWhenStopped = true
+        
+        activityIndicator.startAnimating()
         firebaseAPI.getPosts { bloops in
             
             self.bloops = bloops
             self.feedView.reloadData()
+            self.activityIndicator.stopAnimating()
             
         }
        
@@ -67,6 +73,8 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         performSegue(withIdentifier: Constants.Segue.toPostSegue, sender: self)
         
     }
+    
+    //MARK: -- CollectionView Methods
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -133,6 +141,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         
     }
     
+    //send selected post to next view
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == Constants.Segue.toDetailsSegue {
             if let detailsVC = segue.destination as? DetailsViewController {

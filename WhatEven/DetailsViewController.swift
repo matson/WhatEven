@@ -11,8 +11,6 @@ import Firebase
 
 class DetailsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-    //reload data here first
-    
     @IBOutlet weak var photo: UIImageView!
     
     @IBOutlet weak var clothingLabel: UILabel!
@@ -39,8 +37,6 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         tableView.dataSource = self
         
         setAttributes()
-        
-        //print(selectedPost?.createdBy.username)
 
         //get comments
         firebaseAPI.getComments(forPostId: selectedPost!.postID) { comments in

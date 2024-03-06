@@ -7,55 +7,81 @@
 
 import Foundation
 import Firebase
+import SystemConfiguration
 
 class FirebaseAPI {
     
     let db = Firestore.firestore()
     
+    //MARK: get and save methods
+    
     //get comments
     func getComments(forPostId postId: String, completion: @escaping ([Comment]) -> Void) {
+        
+        if !isConnectedToNetwork() {
+            // Show network alert here
+            alertNet()
+            return
+        }
+        
+        
         let commentsCollection = db.collection(Constants.FStore.collectionNameComment)
+        
+        commentsCollection.whereField("postId", isEqualTo: postId).order(by: "timestamp", descending: true).addSnapshotListener { snapshot, error in
+            guard let documents = snapshot?.documents else {
+                print("Error fetching comments")
+                return
+            }
             
-            commentsCollection.whereField("postId", isEqualTo: postId).addSnapshotListener { snapshot, error in
-                guard let documents = snapshot?.documents else {
-                    print("Error fetching comments")
-                    return
-                }
+            var tempComments = [Comment]()
+            let dispatchGroup = DispatchGroup()
+            
+            for document in documents {
+                let data = document.data()
                 
-                var tempComments = [Comment]()
-                let dispatchGroup = DispatchGroup()
+                dispatchGroup.enter()
                 
-                for document in documents {
-                    let data = document.data()
-                    
-                    dispatchGroup.enter()
-                    
-                    let user = data["createdBy"] as? String ?? ""
-                    let text = data["commentText"] as? String ?? ""
-                    let postID = data["postId"] as? String ?? ""
-                    
-                    // Fetch user details for the createdBy UID
-                    self.getUsers(uid: user) { result in
-                        switch result {
-                        case .success(let userDetails):
-                            let comment = Comment(user: userDetails, postID: postID, text: text)
-                            tempComments.append(comment)
-                        case .failure(let error):
-                            print("Error retrieving user details: \(error.localizedDescription)")
-                        }
-                        
-                        dispatchGroup.leave()
+                let user = data["createdBy"] as? String ?? ""
+                let text = data["commentText"] as? String ?? ""
+                let postID = data["postId"] as? String ?? ""
+                let timestamp = data["timestamp"] as? TimeInterval
+                
+                // Convert the timestamp to a Date object
+                let date = Date(timeIntervalSince1970: timestamp ?? 0)
+                
+                // Fetch user details for the createdBy UID
+                self.getUsers(uid: user) { result in
+                    switch result {
+                    case .success(let userDetails):
+                        let comment = Comment(user: userDetails, postID: postID, text: text, timestamp: date)
+                        tempComments.append(comment)
+                    case .failure(let error):
+                        print("Error retrieving user details: \(error.localizedDescription)")
                     }
-                }
-                
-                dispatchGroup.notify(queue: .main) {
-                    completion(tempComments)
+                    
+                    dispatchGroup.leave()
                 }
             }
+            
+            dispatchGroup.notify(queue: .main) {
+                // Sort the comments array in descending order based on the timestamp field
+                tempComments.sort { comment1, comment2 in
+                    return comment1.timestamp.compare(comment2.timestamp) == .orderedDescending
+                }
+                completion(tempComments)
+            }
+        }
     }
     
     //get posts
     func getPosts(completion: @escaping ([Bloop]) -> Void) {
+        
+        if !isConnectedToNetwork() {
+            // Show network alert here
+            alertNet()
+            return
+        }
+        
         let postsCollection = db.collection(Constants.FStore.collectionNamePost)
         
         postsCollection.addSnapshotListener { snapshot, error in
@@ -101,7 +127,7 @@ class FirebaseAPI {
         }
         
     }
-
+    
     //register user
     func createUser(withEmail email: String, password: String, username: String, completion: @escaping (Error?) -> Void) {
         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
@@ -129,14 +155,15 @@ class FirebaseAPI {
     }
     
     //post Comment
-    func postCommentToFirestore(commentText: String, uid: String, receivedPostId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+    func postCommentToFirestore(commentText: String, uid: String, receivedPostId: String, timestamp: Double, completion: @escaping (Result<Void, Error>) -> Void) {
         
         let finalCommentText = commentText
         
         db.collection(Constants.FStore.collectionNameComment).addDocument(data: [
             Constants.FStore.commentTextField: finalCommentText,
             Constants.FStore.createdByField: uid,
-            Constants.FStore.postIDField: receivedPostId
+            Constants.FStore.postIDField: receivedPostId,
+            Constants.FStore.commentTimestampField: timestamp
         ]) { (error) in
             if let e = error {
                 completion(.failure(e))
@@ -214,6 +241,42 @@ class FirebaseAPI {
                 completion(.failure(NSError(domain: "Failed to retrieve user details.", code: 0, userInfo: nil)))
             }
         }
+    }
+    
+    //alert
+    func alertNet(){
+        let alert = UIAlertController(title: "No Network Connection", message: "Please check your internet connection and try again.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
+    }
+    
+    
+    
+    //MARK: Network Connection Code
+    
+    // Check network connection
+    func isConnectedToNetwork() -> Bool {
+        var zeroAddress = sockaddr_in()
+        zeroAddress.sin_len = UInt8(MemoryLayout.size(ofValue: zeroAddress))
+        zeroAddress.sin_family = sa_family_t(AF_INET)
+        
+        guard let defaultRouteReachability = withUnsafePointer(to: &zeroAddress, {
+            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
+                SCNetworkReachabilityCreateWithAddress(nil, $0)
+            }
+        }) else {
+            return false
+        }
+        
+        var flags: SCNetworkReachabilityFlags = []
+        if !SCNetworkReachabilityGetFlags(defaultRouteReachability, &flags) {
+            return false
+        }
+        
+        let isReachable = flags.contains(.reachable)
+        let needsConnection = flags.contains(.connectionRequired)
+        
+        return (isReachable && !needsConnection)
     }
     
 }

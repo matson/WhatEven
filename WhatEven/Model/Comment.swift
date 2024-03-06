@@ -6,11 +6,13 @@
 //
 
 import Foundation
+import UIKit
 
 struct Comment {
 
     var user: UserDetails
     var postID: String
     var text: String
+    var timestamp: Date
     
 }
