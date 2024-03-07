@@ -25,6 +25,8 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     //need this for posting comments
     var globalPostID: String?
     
+    var loggedUser: String?
+    
     let firebaseAPI = FirebaseAPI()
     
     override func viewDidLoad() {
@@ -35,6 +37,11 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         
         activityIndicator.hidesWhenStopped = true
         
+        //get current user:
+        if let currentUser = Auth.auth().currentUser {
+            loggedUser = currentUser.uid
+        }
+        
         activityIndicator.startAnimating()
         firebaseAPI.getPosts { bloops in
             
@@ -43,6 +50,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             self.activityIndicator.stopAnimating()
             
         }
+        
        
         //to hide back button
         navigationItem.hidesBackButton = true
@@ -89,6 +97,8 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.Attributes.feedCell, for: indexPath) as! FeedCell
         
         let post = bloops[indexPath.item]
+        
+        configureDeleteButton(for: cell, post: post, loggedUser: loggedUser!)
         
         // Configure the cell's image and label views
         cell.photo.image = post.images
@@ -153,5 +163,36 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             }
         }
     }
+    
+    //MARK: --Helper Methods
+    
+    func configureDeleteButton(for cell: FeedCell, post: Bloop, loggedUser: String) {
+        if post.createdBy.uid == loggedUser {
+            cell.delete.isHidden = false
+            cell.deleteAction = { [weak self] in
+                self?.deletePost(post)
+            }
+        } else {
+            cell.delete.isHidden = true
+            cell.deleteAction = nil
+        }
+    }
+    
+    func deletePost(_ post: Bloop) {
+        firebaseAPI.deletePost(post) { [weak self] success in
+            if success {
+                // Delete the post from the local array or perform any other necessary actions
+                if let index = self?.bloops.firstIndex(of: post) {
+                    self?.bloops.remove(at: index)
+                    self?.feedView.reloadData()
+                }
+            } else {
+                // Handle deletion failure
+                // Display an error message or take appropriate action
+                print("Error deleting post")
+            }
+        }
+    }
 
 }
+

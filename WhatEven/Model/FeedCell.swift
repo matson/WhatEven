@@ -15,9 +15,16 @@ class FeedCell: UICollectionViewCell {
     
     @IBOutlet weak var clothingLabel: UILabel!
     
+    @IBOutlet weak var delete: UIButton!
+    
+    var deleteAction: (() -> Void)?
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         clothingLabel.font = UIFont(name: "PTSans-Bold", size: 12)
     }
     
+    @IBAction func deleteButton(_ sender: UIButton) {
+        deleteAction?()
+    }
 }

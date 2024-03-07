@@ -10,6 +10,8 @@ import Firebase
 
 class CommentViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
+    @IBOutlet weak var postComment: UIButton!
+    
     var receivedPostId: String?
     
     var uid: String?
@@ -25,6 +27,8 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
         
         tableView.delegate = self
         tableView.dataSource = self
+        
+        setButton()
         
         //get current user:
         if let currentUser = Auth.auth().currentUser {
@@ -64,11 +68,28 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
             }
         }
         
+        // Disable the post button
+        postComment.isEnabled = false
+        
         // Refresh the table view
         tableView.reloadData()
         
         // Reset the text field
         commentText.text = ""
+        
+    }
+    
+    @objc func commentTextChanged() {
+        // Enable the post button only if the comment text field is not empty
+        postComment.isEnabled = !commentText.text!.isEmpty
+    }
+    
+    func setButton(){
+        // Set up the initial state of the post button
+        postComment.isEnabled = false
+        
+        // Add a target to the comment text field to detect changes in its text
+        commentText.addTarget(self, action: #selector(commentTextChanged), for: .editingChanged)
         
     }
     

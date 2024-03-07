@@ -141,6 +141,15 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qJt-2L-U66">
+                                                    <rect key="frame" x="89" y="8" width="43" height="29"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" title="Button"/>
+                                                    <buttonConfiguration key="configuration" style="plain" image="trash" catalog="system"/>
+                                                    <connections>
+                                                        <action selector="deleteButton:" destination="zsD-jA-QsX" eventType="touchUpInside" id="2iC-pW-Oho"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="zSe-vo-d1H" secondAttribute="trailing" constant="-8" id="83q-CJ-a5n"/>
@@ -155,6 +164,7 @@
                                         <size key="customSize" width="165" height="226"/>
                                         <connections>
                                             <outlet property="clothingLabel" destination="zSe-vo-d1H" id="Tuy-xF-buZ"/>
+                                            <outlet property="delete" destination="qJt-2L-U66" id="3ON-ug-jTc"/>
                                             <outlet property="photo" destination="WAa-3y-m5P" id="czK-Cr-J0s"/>
                                         </connections>
                                     </collectionViewCell>
@@ -208,38 +218,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Vb4-Vj-xqt" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="100" y="-2.1327014218009479"/>
-        </scene>
-        <!--Tab Bar Controller-->
-        <scene sceneID="3gc-7J-Y3W">
-            <objects>
-                <tabBarController id="R2L-QS-feu" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="WDt-V0-eKZ"/>
-                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Jcc-Jo-Y8K">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="49"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    </tabBar>
-                    <connections>
-                        <segue destination="tAG-Cn-QSQ" kind="relationship" relationship="viewControllers" id="BrR-bg-cHq"/>
-                    </connections>
-                </tabBarController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="6S8-5N-Szu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-875" y="805"/>
-        </scene>
-        <!--Item-->
-        <scene sceneID="8zA-ke-Hle">
-            <objects>
-                <navigationController id="tAG-Cn-QSQ" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="JU0-Bt-nrs"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="mU9-lM-bZr">
-                        <rect key="frame" x="0.0" y="47" width="390" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="pJT-7t-kuH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-52" y="805"/>
         </scene>
         <!--DetailsViewController -->
         <scene sceneID="vAV-4c-i85">
@@ -311,10 +289,20 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qkn-ZA-C5K" userLabel="delete">
+                                                    <rect key="frame" x="308" y="11" width="30" height="24"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" title="Button"/>
+                                                    <buttonConfiguration key="configuration" style="plain" image="trash" catalog="system"/>
+                                                    <connections>
+                                                        <action selector="deleteAction:" destination="9dH-4u-GUb" eventType="touchUpInside" id="1bn-Cw-MRI"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="commentText" destination="X2g-no-jA4" id="FmH-Se-snZ"/>
+                                            <outlet property="delete" destination="Qkn-ZA-C5K" id="PFQ-sG-DKk"/>
                                             <outlet property="userLabel" destination="Ssj-K8-nyY" id="rHa-mX-a6l"/>
                                         </connections>
                                     </tableViewCell>
@@ -416,6 +404,7 @@
                         <outlet property="imageSelectedUI" destination="MiN-QB-laE" id="QKV-rk-FcR"/>
                         <outlet property="itemDescription" destination="Si4-zg-ugm" id="AI7-yF-E2v"/>
                         <outlet property="itemName" destination="tb6-TU-dkw" id="SAg-zU-B6N"/>
+                        <outlet property="share" destination="TxH-ae-26a" id="vca-yB-nmG"/>
                         <segue destination="vR0-EB-rAV" kind="show" identifier="backToHomeSegue" id="baU-Ss-suV"/>
                     </connections>
                 </viewController>
@@ -641,6 +630,7 @@
                     </view>
                     <connections>
                         <outlet property="commentText" destination="bdl-Uz-tuQ" id="fbo-ps-TsR"/>
+                        <outlet property="postComment" destination="I6K-lb-JGv" id="GH7-l8-gK0"/>
                         <outlet property="tableView" destination="Tau-jg-hj6" id="dQd-9K-bSM"/>
                     </connections>
                 </viewController>
@@ -673,6 +663,7 @@
     <resources>
         <image name="bubble.left.fill" catalog="system" width="128" height="110"/>
         <image name="paperplane.fill" catalog="system" width="128" height="119"/>
+        <image name="trash" catalog="system" width="117" height="128"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

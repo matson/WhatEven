@@ -39,6 +39,9 @@ class FirebaseAPI {
             for document in documents {
                 let data = document.data()
                 
+                // Retrieve the auto-generated comment ID
+                let commentID = document.documentID
+                
                 dispatchGroup.enter()
                 
                 let user = data["createdBy"] as? String ?? ""
@@ -53,7 +56,7 @@ class FirebaseAPI {
                 self.getUsers(uid: user) { result in
                     switch result {
                     case .success(let userDetails):
-                        let comment = Comment(user: userDetails, postID: postID, text: text, timestamp: date)
+                        let comment = Comment(user: userDetails, postID: postID, text: text, timestamp: date, commentID: commentID)
                         tempComments.append(comment)
                     case .failure(let error):
                         print("Error retrieving user details: \(error.localizedDescription)")
@@ -199,6 +202,39 @@ class FirebaseAPI {
         }
     }
     
+    //delete comment
+    func deleteComment(_ comment: Comment, completion: @escaping (Bool) -> Void) {
+        let commentID = comment.commentID
+        print(commentID)
+        print("got here")
+        
+        let commentRef = db.collection(Constants.FStore.collectionNameComment).document(commentID)
+        
+        commentRef.delete { error in
+            if let error = error {
+                print("Error deleting comment: \(error.localizedDescription)")
+                completion(false)
+            } else {
+                completion(true)
+            }
+        }
+    }
+    
+    //delete post
+    func deletePost(_ post: Bloop, completion: @escaping (Bool) -> Void) {
+        let postID = post.postID
+        
+        let postRef = db.collection(Constants.FStore.collectionNamePost).document(postID)
+        
+        postRef.delete { error in
+            if let error = error {
+                print("Error deleting post: \(error.localizedDescription)")
+                completion(false)
+            } else {
+                completion(true)
+            }
+        }
+    }
     
     //get userDetails:
     func getUsers(uid: String, completion: @escaping (Result<UserDetails, Error>) -> Void) {

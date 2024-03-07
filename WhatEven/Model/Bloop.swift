@@ -12,14 +12,20 @@ import Foundation
 
 import UIKit
 
-struct Bloop {
-    
+struct Bloop: Equatable {
     var images: UIImage
     var description: String
     var name: String
     var comments: [Comment]
     var createdBy: UserDetails
     var postID: String
-    //var likes: Int
     
+    static func ==(lhs: Bloop, rhs: Bloop) -> Bool {
+        return lhs.images == rhs.images &&
+            lhs.description == rhs.description &&
+            lhs.name == rhs.name &&
+            lhs.comments == rhs.comments &&
+            lhs.createdBy == rhs.createdBy &&
+            lhs.postID == rhs.postID
+    }
 }
