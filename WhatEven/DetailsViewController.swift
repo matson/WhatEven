@@ -63,7 +63,14 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        comments.count
+        //get comments
+        firebaseAPI.getComments(forPostId: selectedPost!.postID) { comments in
+            self.comments = comments // Assign the separate comments array to the commentsReceived array
+            
+           
+        }
+        
+        return comments.count
     }
     
     

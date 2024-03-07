@@ -25,7 +25,7 @@ class RegisterViewController: UIViewController{
         super.viewDidLoad()
         
         // Create and configure the activity indicator
-
+        
         activityIndicator.hidesWhenStopped = true
         
         
@@ -33,6 +33,9 @@ class RegisterViewController: UIViewController{
     
     //Register New User
     @IBAction func register(_ sender: UIButton) {
+        
+        checkFields()
+        
         // Start the activity indicator
         activityIndicator.startAnimating()
         
@@ -53,11 +56,33 @@ class RegisterViewController: UIViewController{
         
     }
     
+    //MARK: -- Alerts
+    
     func showErrorAlert(message: String) {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(okAction)
         present(alert, animated: true, completion: nil)
     }
+    
+    func checkFields(){
+        // Check if any of the required fields are empty
+        guard let username = usernameTextField.text, !username.isEmpty else {
+            showErrorAlert(message: "Please enter a username")
+            return
+        }
+        
+        guard let password = passwordTextField.text, !password.isEmpty else {
+            showErrorAlert(message: "Please enter a password")
+            return
+        }
+        
+        guard let email = emailTextField.text, !email.isEmpty else {
+            showErrorAlert(message: "Please enter an email")
+            return
+        }
+        
+    }
+    
     
 }

@@ -56,6 +56,9 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
             switch result {
             case .success:
                 print("Comment posted successfully")
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
             case .failure(let error):
                 print("Error posting comment: \(error.localizedDescription)")
             }
@@ -73,6 +76,12 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        //get comments
+        firebaseAPI.getComments(forPostId: receivedPostId!) { comments in
+            self.commentsReceived = comments // Assign the separate comments array to the commentsReceived array
+           
+        }
         
         return commentsReceived.count
     }
