@@ -21,7 +21,8 @@ class FeedCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        clothingLabel.font = UIFont(name: "PTSans-Bold", size: 12)
+        clothingLabel.font = UIFont(name: Constants.Attributes.boldFont, size: 12)
+        clothingLabel.textColor = .white
     }
     
     @IBAction func deleteButton(_ sender: UIButton) {

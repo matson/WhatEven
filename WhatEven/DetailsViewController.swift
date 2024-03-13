@@ -19,6 +19,8 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
     
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var addComment: UIButton!
+    
     var globalPostId: String?
     
     var comments: [Comment] = []
@@ -55,6 +57,12 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         tableView.dataSource = self
         
         setAttributes()
+        
+        //constraints
+        setUpElements()
+        
+        tableView.backgroundColor = .clear
+        tableView.separatorStyle = .none
         
         //get comments
         firebaseAPI.getComments(forPostId: selectedPost!.postID) { comments in
@@ -95,8 +103,13 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        
+        
         // Dequeue a reusable cell
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.Attributes.commentCell, for: indexPath) as! CommentViewCell
+        
+        cell.contentView.backgroundColor = UIColor.clear
         
         // Configure the cell with data
         let comment = comments[indexPath.row]
@@ -122,6 +135,58 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         clothingLabel.text = selectedPost?.name
         descriptionText.text = selectedPost?.description
         globalPostId = selectedPost?.postID
+    }
+    
+    func setUpElements(){
+        
+        addComment.titleLabel?.font = UIFont(name: Constants.Attributes.boldFont, size: 10)
+        addComment.setTitleColor(.white, for: .normal)
+        addComment.setTitleColor(.white, for: .selected)
+        
+        clothingLabel.textColor = .white
+        clothingLabel.font = UIFont(name: Constants.Attributes.boldFont, size: 18)
+        
+        photo.translatesAutoresizingMaskIntoConstraints = false
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        clothingLabel.translatesAutoresizingMaskIntoConstraints = false
+        descriptionText.translatesAutoresizingMaskIntoConstraints = false
+        addComment.translatesAutoresizingMaskIntoConstraints = false
+        
+        
+        
+        NSLayoutConstraint.activate([
+            
+            //imageView
+            photo.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            photo.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            photo.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            photo.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -365),
+            
+            //tableView
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.topAnchor.constraint(equalTo: photo.bottomAnchor, constant: 89),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            //name label
+            clothingLabel.topAnchor.constraint(equalTo: photo.bottomAnchor, constant: -4),
+            clothingLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            clothingLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            clothingLabel.bottomAnchor.constraint(equalTo: tableView.topAnchor, constant: -59),
+            
+            descriptionText.topAnchor.constraint(equalTo: clothingLabel.bottomAnchor, constant: 4),
+            descriptionText.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            descriptionText.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            descriptionText.bottomAnchor.constraint(equalTo: tableView.topAnchor, constant: -27),
+            
+            addComment.topAnchor.constraint(equalTo: descriptionText.bottomAnchor, constant: 6),
+            addComment.bottomAnchor.constraint(equalTo: tableView.topAnchor, constant: -2),
+            addComment.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -260),
+            addComment.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16)
+        
+        
+        
+        ])
     }
     
     func updateDeleteButtonVisibility(for cell: CommentViewCell, with comment: Comment, loggedInUserID: String) {

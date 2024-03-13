@@ -19,6 +19,15 @@ class RegisterViewController: UIViewController{
     
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
+    @IBOutlet weak var emailLabel: UILabel!
+    
+    @IBOutlet weak var passwordLabel: UILabel!
+    
+    @IBOutlet weak var createLabel: UILabel!
+    
+    @IBOutlet weak var registerButton: UIButton!
+    
+    
     let firebaseAPI = FirebaseAPI()
     
     override func viewDidLoad() {
@@ -28,6 +37,7 @@ class RegisterViewController: UIViewController{
         
         activityIndicator.hidesWhenStopped = true
         
+        setAttributes()
         
     }
     
@@ -103,6 +113,17 @@ class RegisterViewController: UIViewController{
         let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
         let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
         return emailPredicate.evaluate(with: email)
+    }
+    
+    func setAttributes(){
+        view.backgroundColor = Constants.Attributes.styleBlue2
+        emailLabel.font = UIFont(name: Constants.Attributes.regularFont, size: 14)
+        emailLabel.textColor = .white
+        createLabel.textColor = .white
+        passwordLabel.textColor = .white
+        createLabel.font = UIFont(name: Constants.Attributes.regularFont, size: 14)
+        passwordLabel.font = UIFont(name: Constants.Attributes.regularFont, size: 14)
+        registerButton.titleLabel!.font = UIFont(name: Constants.Attributes.boldFont, size: 18)
     }
     
     

@@ -16,6 +16,8 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     @IBOutlet weak var feedView: UICollectionView!
     
+    @IBOutlet weak var toolBar: UIToolbar!
+   
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
    
     var bloops: [Bloop] = []
@@ -57,7 +59,8 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         
         setRows()
         
-        
+        setAttributes()
+
     }
     
     
@@ -192,6 +195,14 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
                 print("Error deleting post")
             }
         }
+    }
+    
+    func setAttributes(){
+        view.backgroundColor = Constants.Attributes.styleBlue2
+        toolBar.tintColor = .white
+        toolBar.barTintColor = Constants.Attributes.styleBlue2
+        
+        
     }
 
 }

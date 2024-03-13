@@ -20,9 +20,9 @@ class LoginViewController: UIViewController {
     
     @IBOutlet weak var passwordLabel: UILabel!
     
-    @IBOutlet weak var login: UIButton!
+    @IBOutlet weak var loginButton: UIButton!
     
-    @IBOutlet weak var register: UIButton!
+    @IBOutlet weak var registerButton: UIButton!
     
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
@@ -31,10 +31,8 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        usernameLabel.font = UIFont(name: "PTSans-Bold", size: 14)
-        passwordLabel.font = UIFont(name: "PTSans-Bold", size: 14)
-        titleLabel.font = UIFont(name: "PTSans-Regular", size: 26)
-        
+        setAttributes()
+       
         // Create and configure the activity indicator
         activityIndicator.hidesWhenStopped = true
         
@@ -71,6 +69,16 @@ class LoginViewController: UIViewController {
         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(okAction)
         present(alert, animated: true, completion: nil)
+    }
+    
+    func setAttributes(){
+        usernameLabel.font = UIFont(name: Constants.Attributes.boldFont, size: 14)
+        passwordLabel.font = UIFont(name: Constants.Attributes.boldFont, size: 14)
+        titleLabel.font = UIFont(name: Constants.Attributes.boldFont, size: 35)
+        loginButton.titleLabel!.font = UIFont(name: Constants.Attributes.regularFont, size: 14)
+        registerButton.titleLabel!.font = UIFont(name: Constants.Attributes.regularFont, size: 14)
+        
+        view.backgroundColor = Constants.Attributes.styleBlue1
     }
 }
 

@@ -28,6 +28,9 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
         tableView.delegate = self
         tableView.dataSource = self
         
+        tableView.backgroundColor = .clear
+        tableView.separatorStyle = .none
+        
         setButton()
         
         //get current user:
@@ -40,6 +43,8 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
             self.commentsReceived = comments // Assign the separate comments array to the commentsReceived array
             self.tableView.reloadData()
         }
+        
+        setUpTableView()
         
     }
     
@@ -79,6 +84,8 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
         
     }
     
+    //MARK: Helper Functions
+    
     @objc func commentTextChanged() {
         // Enable the post button only if the comment text field is not empty
         postComment.isEnabled = !commentText.text!.isEmpty
@@ -116,6 +123,35 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
         cell.userLabel.text = comment.user.username
         
         return cell
+    }
+    
+    func setUpTableView(){
+        
+        commentText.translatesAutoresizingMaskIntoConstraints = false
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        postComment.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            
+            //textField:
+            commentText.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            commentText.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 8),
+            commentText.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -37),
+            commentText.trailingAnchor.constraint(equalTo: postComment.leadingAnchor),
+            
+            
+            //tableView:
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -79),
+            
+            //button:
+            postComment.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            postComment.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 8),
+            postComment.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -37)
+        
+        ])
     }
     
 }

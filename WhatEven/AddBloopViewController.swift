@@ -52,6 +52,7 @@ class AddBloopViewController: UIViewController {
         
         setButton()
         
+        setAttributes()
     }
     
     
@@ -134,6 +135,24 @@ class AddBloopViewController: UIViewController {
         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(okAction)
         present(alert, animated: true, completion: nil)
+    }
+    
+    func setAttributes(){
+        
+        imageSelectedUI.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.backgroundColor = Constants.Attributes.styleBlue1
+        
+        NSLayoutConstraint.activate([
+            imageSelectedUI.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            imageSelectedUI.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            imageSelectedUI.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            imageSelectedUI.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -364)
+            
+        
+        
+        ])
+       
     }
   
 }
