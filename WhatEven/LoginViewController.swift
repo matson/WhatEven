@@ -73,15 +73,14 @@ class LoginViewController: UIViewController {
     
     func setAttributes(){
         
+        let buttonFont = UIFont(name: Constants.Attributes.regularFont, size: 14)
+        let buttonColor = UIColor.white
         
         usernameLabel.font = UIFont(name: Constants.Attributes.boldFont, size: 14)
         passwordLabel.font = UIFont(name: Constants.Attributes.boldFont, size: 14)
         titleLabel.font = UIFont(name: Constants.Attributes.boldFont, size: 35)
         
         view.backgroundColor = Constants.Attributes.styleBlue1
-        
-        let buttonFont = UIFont(name: Constants.Attributes.regularFont, size: 14)
-        let buttonColor = UIColor.white
 
         loginButton.titleLabel?.font = buttonFont
         loginButton.setTitleColor(buttonColor, for: .normal)

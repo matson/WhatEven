@@ -39,11 +39,9 @@ class AddBloopViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //for testing:
+        
         //This in the end should come from imagePicker. ***
-        //imageSelectedUI.image = imageSelected
-        let imageEx = UIImage(named: "Online3")
-        imageSelectedUI.image = imageEx
+        imageSelectedUI.image = imageSelected
         
         //get current user:
         if let currentUser = Auth.auth().currentUser {
@@ -72,14 +70,7 @@ class AddBloopViewController: UIViewController {
         let name = itemName.text ?? ""
         let description = itemDescription.text ?? ""
         
-        //****
-        // Convert the UIImage to Data
-        guard let imageData = imageSelectedUI.image!.pngData() else {
-            // Handle the error if conversion fails
-            return
-        }
-        
-        //****
+       
         firebaseAPI.postItemToFirestore(name: name, description: description, image: imageSelectedUI.image!, uid: uid!) { error in
             if let error = error {
                 // Handle the error
