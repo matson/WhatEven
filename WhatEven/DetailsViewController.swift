@@ -143,6 +143,8 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         addComment.setTitleColor(.white, for: .normal)
         addComment.setTitleColor(.white, for: .selected)
         
+        view.backgroundColor = Constants.Attributes.styleBlue1
+        
         clothingLabel.textColor = .white
         clothingLabel.font = UIFont(name: Constants.Attributes.boldFont, size: 18)
         

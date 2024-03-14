@@ -72,13 +72,28 @@ class LoginViewController: UIViewController {
     }
     
     func setAttributes(){
+        
+        
         usernameLabel.font = UIFont(name: Constants.Attributes.boldFont, size: 14)
         passwordLabel.font = UIFont(name: Constants.Attributes.boldFont, size: 14)
         titleLabel.font = UIFont(name: Constants.Attributes.boldFont, size: 35)
-        loginButton.titleLabel!.font = UIFont(name: Constants.Attributes.regularFont, size: 14)
-        registerButton.titleLabel!.font = UIFont(name: Constants.Attributes.regularFont, size: 14)
         
         view.backgroundColor = Constants.Attributes.styleBlue1
+        
+        let buttonFont = UIFont(name: Constants.Attributes.regularFont, size: 14)
+        let buttonColor = UIColor.white
+
+        loginButton.titleLabel?.font = buttonFont
+        loginButton.setTitleColor(buttonColor, for: .normal)
+        loginButton.setTitleColor(buttonColor, for: .highlighted)
+        loginButton.setTitleColor(buttonColor, for: .disabled)
+        loginButton.setTitleColor(buttonColor, for: .selected)
+
+        registerButton.titleLabel?.font = buttonFont
+        registerButton.setTitleColor(buttonColor, for: .normal)
+        registerButton.setTitleColor(buttonColor, for: .highlighted)
+        registerButton.setTitleColor(buttonColor, for: .disabled)
+        registerButton.setTitleColor(buttonColor, for: .selected)
     }
 }
 

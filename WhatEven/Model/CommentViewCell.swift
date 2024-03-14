@@ -26,7 +26,7 @@ class CommentViewCell: UITableViewCell {
         userLabel.translatesAutoresizingMaskIntoConstraints = false
         commentText.translatesAutoresizingMaskIntoConstraints = false
         
-        contentView.backgroundColor = .clear
+        contentView.backgroundColor = Constants.Attributes.styleBlue1
         
         // Add your constraints here
         NSLayoutConstraint.activate([
