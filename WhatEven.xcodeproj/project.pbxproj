@@ -11,19 +11,15 @@
 		3F1F197F2B5F433A007CCB0A /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1F197E2B5F433A007CCB0A /* RegisterViewController.swift */; };
 		3F1F19832B5F43D6007CCB0A /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1F19822B5F43D6007CCB0A /* HomeViewController.swift */; };
 		3F1F19852B5F4416007CCB0A /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1F19842B5F4416007CCB0A /* DetailsViewController.swift */; };
-		3F1F19872B5F4466007CCB0A /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1F19862B5F4466007CCB0A /* HistoryViewController.swift */; };
-		3F1F19892B5F44BC007CCB0A /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1F19882B5F44BC007CCB0A /* ProfileViewController.swift */; };
 		3F1F198B2B5F4507007CCB0A /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1F198A2B5F4507007CCB0A /* PostViewController.swift */; };
 		3F1F198D2B5F455B007CCB0A /* AddBloopViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1F198C2B5F455B007CCB0A /* AddBloopViewController.swift */; };
 		3F1FC24E2B88F57F00AC42B5 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1FC24D2B88F57F00AC42B5 /* Comment.swift */; };
 		3F3BA9682B969B7D00CDF37E /* PTSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3F3BA9672B969B7100CDF37E /* PTSans-Bold.ttf */; };
 		3F3BA9692B969B8000CDF37E /* PTSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3F3BA9662B969B6A00CDF37E /* PTSans-Regular.ttf */; };
-		3F41952B2B8799CA00C1697A /* images.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F41952A2B8799CA00C1697A /* images.png */; };
 		3F5C1FE72B852D9F00906F3F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5C1FE62B852D9F00906F3F /* Constants.swift */; };
 		3F5C1FE92B868F6F00906F3F /* Bloop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5C1FE82B868F6F00906F3F /* Bloop.swift */; };
 		3F5C1FEB2B86960200906F3F /* FeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5C1FEA2B86960200906F3F /* FeedCell.swift */; };
 		3F5C1FED2B86BB7A00906F3F /* UserDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5C1FEC2B86BB7A00906F3F /* UserDetails.swift */; };
-		3F62D13D2BA3978F0030AC64 /* Pink Dress.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F62D13C2BA3978F0030AC64 /* Pink Dress.png */; };
 		3F9CA89A2B8D68D60079018B /* CommentViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9CA8992B8D68D60079018B /* CommentViewCell.swift */; };
 		3FA9FDBC2B5EF523001E513C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FA9FDBB2B5EF523001E513C /* AppDelegate.swift */; };
 		3FA9FDBE2B5EF523001E513C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FA9FDBD2B5EF523001E513C /* SceneDelegate.swift */; };
@@ -42,20 +38,16 @@
 		3F1F197E2B5F433A007CCB0A /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		3F1F19822B5F43D6007CCB0A /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		3F1F19842B5F4416007CCB0A /* DetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
-		3F1F19862B5F4466007CCB0A /* HistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
-		3F1F19882B5F44BC007CCB0A /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		3F1F198A2B5F4507007CCB0A /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
 		3F1F198C2B5F455B007CCB0A /* AddBloopViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBloopViewController.swift; sourceTree = "<group>"; };
 		3F1FC24D2B88F57F00AC42B5 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		3F3BA9662B969B6A00CDF37E /* PTSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PTSans-Regular.ttf"; sourceTree = "<group>"; };
 		3F3BA9672B969B7100CDF37E /* PTSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PTSans-Bold.ttf"; sourceTree = "<group>"; };
-		3F41952A2B8799CA00C1697A /* images.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = images.png; sourceTree = "<group>"; };
 		3F5C1FE62B852D9F00906F3F /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		3F5C1FE82B868F6F00906F3F /* Bloop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bloop.swift; sourceTree = "<group>"; };
 		3F5C1FEA2B86960200906F3F /* FeedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCell.swift; sourceTree = "<group>"; };
 		3F5C1FEC2B86BB7A00906F3F /* UserDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetails.swift; sourceTree = "<group>"; };
 		3F62D13B2BA345590030AC64 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		3F62D13C2BA3978F0030AC64 /* Pink Dress.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Pink Dress.png"; sourceTree = "<group>"; };
 		3F9CA8992B8D68D60079018B /* CommentViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewCell.swift; sourceTree = "<group>"; };
 		3FA9FDB82B5EF523001E513C /* WhatEven.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhatEven.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FA9FDBB2B5EF523001E513C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -103,8 +95,6 @@
 				3FA9FDBF2B5EF523001E513C /* LoginViewController.swift */,
 				3F1F19822B5F43D6007CCB0A /* HomeViewController.swift */,
 				3F1F19842B5F4416007CCB0A /* DetailsViewController.swift */,
-				3F1F19862B5F4466007CCB0A /* HistoryViewController.swift */,
-				3F1F19882B5F44BC007CCB0A /* ProfileViewController.swift */,
 				3F1F198A2B5F4507007CCB0A /* PostViewController.swift */,
 				3F1F198C2B5F455B007CCB0A /* AddBloopViewController.swift */,
 				3F15145D2B8E2D84004C65EB /* CommentViewController.swift */,
@@ -148,8 +138,6 @@
 				3FA9FDBD2B5EF523001E513C /* SceneDelegate.swift */,
 				3FA9FDC12B5EF523001E513C /* Main.storyboard */,
 				3FA9FDC42B5EF525001E513C /* Assets.xcassets */,
-				3F62D13C2BA3978F0030AC64 /* Pink Dress.png */,
-				3F41952A2B8799CA00C1697A /* images.png */,
 				3FA9FDC62B5EF525001E513C /* LaunchScreen.storyboard */,
 				3FA9FDC92B5EF525001E513C /* Info.plist */,
 				3FBBFC592B8502F8009CABCE /* GoogleService-Info.plist */,
@@ -223,10 +211,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				3FA9FDC82B5EF525001E513C /* LaunchScreen.storyboard in Resources */,
-				3F41952B2B8799CA00C1697A /* images.png in Resources */,
 				3F3BA9682B969B7D00CDF37E /* PTSans-Bold.ttf in Resources */,
 				3FBBFC5A2B8502F8009CABCE /* GoogleService-Info.plist in Resources */,
-				3F62D13D2BA3978F0030AC64 /* Pink Dress.png in Resources */,
 				3FA9FDC52B5EF525001E513C /* Assets.xcassets in Resources */,
 				3FA9FDC32B5EF523001E513C /* Main.storyboard in Resources */,
 				3F3BA9692B969B8000CDF37E /* PTSans-Regular.ttf in Resources */,
@@ -254,8 +240,6 @@
 				3FA9FDBC2B5EF523001E513C /* AppDelegate.swift in Sources */,
 				3F1FC24E2B88F57F00AC42B5 /* Comment.swift in Sources */,
 				3FA9FDBE2B5EF523001E513C /* SceneDelegate.swift in Sources */,
-				3F1F19872B5F4466007CCB0A /* HistoryViewController.swift in Sources */,
-				3F1F19892B5F44BC007CCB0A /* ProfileViewController.swift in Sources */,
 				3F9CA89A2B8D68D60079018B /* CommentViewCell.swift in Sources */,
 				3F1F197F2B5F433A007CCB0A /* RegisterViewController.swift in Sources */,
 			);
