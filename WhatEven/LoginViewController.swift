@@ -10,18 +10,22 @@ import Firebase
 
 class LoginViewController: UIViewController {
     
-    //to replace storyboard:
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "WhatEven!"
-        label.font = UIFont(name: Constants.Attributes.boldFont, size: 35)
-        label.textColor = .white
-        label.textAlignment = .center
-        return label
-    }()
+    //Check activity indicator
     
+    private let titleLabel: UITextView = {
+        let textView = UITextView()
+           textView.translatesAutoresizingMaskIntoConstraints = false
+           textView.font = UIFont(name: Constants.Attributes.boldFont, size: 35) ?? UIFont.systemFont(ofSize: 35)
+           textView.textColor = .white
+           textView.backgroundColor = .clear
+           textView.textAlignment = .center
+           textView.text = "WhatEven!"
+           return textView
+    }()
+   
     private let usernameLabel: UILabel = {
         let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "username"
         label.font = UIFont(name: Constants.Attributes.boldFont, size: 15)
         label.textColor = .white
@@ -31,6 +35,7 @@ class LoginViewController: UIViewController {
     
     private let passwordLabel: UILabel = {
         let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "password"
         label.font = UIFont(name: Constants.Attributes.boldFont, size: 15)
         label.textColor = .white
@@ -40,6 +45,7 @@ class LoginViewController: UIViewController {
     
     private let usernameField: UITextField = {
         let field = UITextField()
+        field.translatesAutoresizingMaskIntoConstraints = false
         field.font = UIFont(name: Constants.Attributes.regularFont, size: 15)
         field.backgroundColor = .white
         field.placeholder = "username"
@@ -49,6 +55,7 @@ class LoginViewController: UIViewController {
     
     private let passwordField: UITextField = {
         let field = UITextField()
+        field.translatesAutoresizingMaskIntoConstraints = false
         field.font = UIFont(name: Constants.Attributes.regularFont, size: 15)
         field.backgroundColor = .white
         field.placeholder = "password"
@@ -58,7 +65,6 @@ class LoginViewController: UIViewController {
     
     private let loginButton: UIButton = {
         let button = UIButton()
-        //may have to add this outside of function 
         button.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
         button.setTitle("login", for: .normal)
         let buttonFont = UIFont(name: Constants.Attributes.regularFont, size: 25)
@@ -74,6 +80,8 @@ class LoginViewController: UIViewController {
     
     private let registerButton: UIButton = {
         let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(registerButtonTapped), for: .touchUpInside)
         button.setTitle("register", for: .normal)
         let buttonFont = UIFont(name: Constants.Attributes.regularFont, size: 25)
         let buttonColor = UIColor.white
@@ -86,35 +94,66 @@ class LoginViewController: UIViewController {
         
     }()
     
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    private let stackView1: UIStackView = {
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.distribution = .fillEqually
+        stack.axis = .vertical
+        stack.backgroundColor = .clear
+        return stack
+        
+    }()
     
+    private let stackView2: UIStackView = {
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.distribution = .fillEqually
+        stack.axis = .horizontal
+        stack.backgroundColor = .clear
+        return stack
+        
+    }()
+    
+    private let stackView3: UIStackView = {
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.backgroundColor = .clear
+        return stack
+        
+    }()
+    
+    private let topImageContainerView : UIView = {
+        let topView = UIView()
+        topView.backgroundColor = .clear
+        topView.translatesAutoresizingMaskIntoConstraints = false
+        return topView
+    }()
+    
+    private let indicator: UIActivityIndicatorView = {
+        let activity = UIActivityIndicatorView()
+        activity.translatesAutoresizingMaskIntoConstraints = false
+        activity.color = .blue
+        return activity
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
         view.backgroundColor = Constants.Attributes.styleBlue1
         
-        view.addSubview(titleLabel)
-        view.addSubview(usernameLabel)
-        view.addSubview(usernameField)
-        view.addSubview(passwordField)
-        view.addSubview(passwordLabel)
-        view.addSubview(loginButton)
-        view.addSubview(registerButton)
-        
-        
-        
-        setAttributes()
-       
-        // Create and configure the activity indicator
-        //activityIndicator.hidesWhenStopped = true
+        setUpTopLayout()
+        setUpMedLayout()
+        setUpButtonLayout()
+     
+        indicator.hidesWhenStopped = true
         
     }
     
     //Login
     @objc func loginButtonTapped() {
+        print("works")
         // Start the activity indicator
-        activityIndicator.startAnimating()
+        indicator.startAnimating()
         
         if let email = usernameField.text, let password = passwordField.text {
             Auth.auth().signIn(withEmail: email, password: password) {  authResult, error in
@@ -125,15 +164,16 @@ class LoginViewController: UIViewController {
                     self.performSegue(withIdentifier: Constants.Segue.loginSegue, sender: self)
                 }
                 // Stop the activity indicator when the process is complete
-                self.activityIndicator.stopAnimating()
+                //NEED TO ADD THIS
+                self.indicator.stopAnimating()
                 
             }
         }
         
     }
     
-    //Register
-    @IBAction func register(_ sender: UIButton) {
+    @objc func registerButtonTapped() {
+        print("register")
         performSegue(withIdentifier: Constants.Segue.toRegisterSegue, sender: self)
     }
     
@@ -144,45 +184,113 @@ class LoginViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    func setAttributes(){
-       
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        usernameLabel.translatesAutoresizingMaskIntoConstraints = false
-        usernameField.translatesAutoresizingMaskIntoConstraints = false
-        passwordField.translatesAutoresizingMaskIntoConstraints = false
-        passwordLabel.translatesAutoresizingMaskIntoConstraints = false
-        loginButton.translatesAutoresizingMaskIntoConstraints = false
-        registerButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        //contraints
+    func setUpTopLayout(){
+     
+        view.addSubview(topImageContainerView)
+        topImageContainerView.addSubview(titleLabel)
+
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 65),
-            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            usernameLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 100),
-            usernameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            usernameField.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 10),
-            usernameField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            usernameField.heightAnchor.constraint(equalToConstant: 35),
-            usernameField.widthAnchor.constraint(equalToConstant: 250),
-            passwordLabel.topAnchor.constraint(equalTo: usernameField.bottomAnchor, constant: 55),
-            passwordLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            passwordField.topAnchor.constraint(equalTo: passwordLabel.bottomAnchor, constant: 10),
-            passwordField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            passwordField.heightAnchor.constraint(equalToConstant: 35),
-            passwordField.widthAnchor.constraint(equalToConstant: 250),
             
-            //buttons
-            loginButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            loginButton.topAnchor.constraint(equalTo: passwordField.bottomAnchor, constant: 25),
-            loginButton.widthAnchor.constraint(equalToConstant: 100),
-            loginButton.heightAnchor.constraint(equalToConstant: 40),
-            registerButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            registerButton.topAnchor.constraint(equalTo: passwordField.bottomAnchor, constant: 25),
-            registerButton.widthAnchor.constraint(equalToConstant: 100),
-            loginButton.trailingAnchor.constraint(equalTo: registerButton.leadingAnchor, constant: -10)
-           
+            topImageContainerView.topAnchor.constraint(equalTo: view.topAnchor),
+            topImageContainerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            topImageContainerView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            topImageContainerView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.33),
+            
+            titleLabel.topAnchor.constraint(equalTo: topImageContainerView.topAnchor, constant: 50),
+            titleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 24),
+            titleLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -24),
+            titleLabel.bottomAnchor.constraint(equalTo: topImageContainerView.bottomAnchor, constant: -50),
+            titleLabel.heightAnchor.constraint(equalTo: topImageContainerView.heightAnchor, multiplier: 0.5),
+
         ])
-      
     }
+    
+    func setUpMedLayout(){
+        //username, password, labels
+        
+        let yellowView = UIView()
+        yellowView.backgroundColor = .clear
+        
+        let greenView = UIView()
+        greenView.backgroundColor = .clear
+        
+        let blueView = UIView()
+        blueView.backgroundColor = .clear
+        
+        let purpleView = UIView()
+        purpleView.backgroundColor = .clear
+        
+        view.addSubview(stackView1)
+        stackView1.addArrangedSubview(yellowView)
+        stackView1.addArrangedSubview(greenView)
+        stackView1.addArrangedSubview(blueView)
+        stackView1.addArrangedSubview(purpleView)
+        
+        yellowView.addSubview(usernameLabel)
+        greenView.addSubview(usernameField)
+        blueView.addSubview(passwordLabel)
+        purpleView.addSubview(passwordField)
+     
+        NSLayoutConstraint.activate([
+            stackView1.topAnchor.constraint(equalTo: topImageContainerView.bottomAnchor),
+            stackView1.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            stackView1.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            stackView1.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.33),
+            
+            usernameLabel.topAnchor.constraint(equalTo: yellowView.topAnchor),
+            usernameLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            usernameLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            usernameLabel.heightAnchor.constraint(equalTo: yellowView.heightAnchor, multiplier: 0.75),
+            
+            usernameField.topAnchor.constraint(equalTo: greenView.topAnchor),
+            usernameField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            usernameField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            usernameField.heightAnchor.constraint(equalTo: greenView.heightAnchor, multiplier: 0.75),
+            
+            passwordLabel.topAnchor.constraint(equalTo: blueView.topAnchor),
+            passwordLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            passwordLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            passwordLabel.heightAnchor.constraint(equalTo: blueView.heightAnchor, multiplier: 0.75),
+            
+            passwordField.topAnchor.constraint(equalTo: purpleView.topAnchor),
+            passwordField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            passwordField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            passwordField.heightAnchor.constraint(equalTo: purpleView.heightAnchor, multiplier: 0.75),
+ 
+        ])
+        
+        
+    }
+    
+    func setUpButtonLayout(){
+        //two buttons and indicator
+     
+        view.addSubview(stackView2)
+        view.addSubview(stackView3)
+        stackView2.addArrangedSubview(loginButton)
+        stackView2.addArrangedSubview(registerButton)
+        stackView3.addSubview(indicator)
+        
+        
+        
+        NSLayoutConstraint.activate([
+            stackView2.topAnchor.constraint(equalTo: stackView1.bottomAnchor),
+            stackView2.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            stackView2.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            stackView2.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.10),
+            
+            stackView3.topAnchor.constraint(equalTo: stackView2.bottomAnchor),
+            stackView3.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            stackView3.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            stackView3.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.10),
+            
+            indicator.centerXAnchor.constraint(equalTo: stackView3.centerXAnchor),
+            indicator.centerYAnchor.constraint(equalTo: stackView3.centerYAnchor)
+  
+        ])
+        
+        
+    }
+ 
 }
 

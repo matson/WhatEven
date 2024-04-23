@@ -12,6 +12,10 @@ import Firebase
 
 //after user signs in, or registers will be shown this main screen.
 
+//NEXT VIEW TO WORK ON
+//Fix the error first
+
+
 class HomeViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     @IBOutlet weak var feedView: UICollectionView!
