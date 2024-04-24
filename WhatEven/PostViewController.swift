@@ -14,21 +14,71 @@ class PostViewController: UIViewController {
     
     @IBOutlet weak var topLabel: UILabel!
     
-    @IBOutlet weak var pickButton: UIButton!
+    private let stackView1: UIStackView = {
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.distribution = .fillEqually
+        stack.axis = .vertical
+        stack.backgroundColor = .clear
+        return stack
+        
+    }()
     
-    @IBOutlet weak var midLabel: UILabel!
+    
+    private let pickButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(pickPhoto), for: .touchUpInside)
+        button.setTitle("Pick", for: .normal)
+        let buttonFont = UIFont(name: Constants.Attributes.regularFont, size: 25)
+        let buttonColor = UIColor.white
+        button.titleLabel?.font = buttonFont
+        button.setTitleColor(buttonColor, for: .normal)
+        button.setTitleColor(buttonColor, for: .highlighted)
+        button.setTitleColor(buttonColor, for: .disabled)
+        button.setTitleColor(buttonColor, for: .selected)
+        return button
+        
+    }()
+    
+    
+    private let label1: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Let's Talk Shit!"
+        label.font = UIFont(name: Constants.Attributes.boldFont, size: 20)
+        label.textColor = .white
+        label.textAlignment = .center
+        return label
+    }()
+    
+    
+    private let label2: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Choose your item to cause chaos"
+        label.font = UIFont(name: Constants.Attributes.boldFont, size: 20)
+        label.textColor = .white
+        label.textAlignment = .center
+        return label
+    }()
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setAttributes()
+        setUpLayout()
+        view.backgroundColor = Constants.Attributes.styleBlue1
         
     }
-   
-    @IBAction func pickPhoto(_ sender: UIButton) {
+    
+    @objc func pickPhoto(){
+        
         let imagePicker = UIImagePickerController()
             imagePicker.delegate = self
             imagePicker.sourceType = .photoLibrary
+        //need to add camera if no simulator is detected
             present(imagePicker, animated: true, completion: nil)
         
     }
@@ -53,32 +103,29 @@ extension PostViewController: UIImagePickerControllerDelegate, UINavigationContr
         picker.dismiss(animated: true, completion: nil)
     }
     
-    func setAttributes(){
+    func setUpLayout(){
         
-        topLabel.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = Constants.Attributes.styleBlue1
-        pickButton.translatesAutoresizingMaskIntoConstraints = false
-        midLabel.translatesAutoresizingMaskIntoConstraints = false
+        let yellowView = UIView()
+        yellowView.backgroundColor = .green
         
-        pickButton.titleLabel?.font = UIFont(name: Constants.Attributes.boldFont, size: 24)
+        let greenView = UIView()
+        greenView.backgroundColor = .blue
+        
+        let orangeView = UIView()
+        greenView.backgroundColor = .orange
+        
+        view.addSubview(stackView1)
+        stackView1.addArrangedSubview(label1)
+        stackView1.addArrangedSubview(label2)
+        stackView1.addArrangedSubview(pickButton)
         
         NSLayoutConstraint.activate([
             
-            topLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
-            topLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 142),
-            topLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -142),
-            
-            pickButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            pickButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            pickButton.heightAnchor.constraint(equalToConstant:  60 ),
-            pickButton.widthAnchor.constraint(equalToConstant: 80),
-            
-            midLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 149),
-            midLabel.leadingAnchor.constraint(equalTo:
-                view.leadingAnchor, constant: 85),
-            midLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -85)
-            
-            
+            stackView1.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            stackView1.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            stackView1.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            stackView1.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.50),
+          
         
         
         ])

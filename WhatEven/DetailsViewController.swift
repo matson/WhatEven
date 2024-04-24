@@ -13,14 +13,69 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
     
     @IBOutlet weak var photo: UIImageView!
     
-    @IBOutlet weak var clothingLabel: UILabel!
+    private let imageSelectedUI: UIImageView = {
+        let image = UIImageView()
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
+        
+    }()
     
-    @IBOutlet weak var descriptionText: UILabel!
+    private let stackView1: UIStackView = {
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.backgroundColor = .clear
+        return stack
+        
+    }()
+    
+    private let stackView2: UIStackView = {
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.distribution = .fillEqually
+        stack.axis = .vertical
+        stack.backgroundColor = .clear
+        return stack
+        
+    }()
+    
+    private let clothingLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont(name: Constants.Attributes.boldFont, size: 20)
+        label.textColor = .white
+        label.textAlignment = .left
+        return label
+    }()
+    
+    private let addComment: UIButton = {
+        let button = UIButton()
+        button.addTarget(self, action: #selector(add), for: .touchUpInside)
+        button.setTitle("add a comment", for: .normal)
+        let buttonFont = UIFont(name: Constants.Attributes.regularFont, size: 15)
+        let buttonColor = UIColor.white
+        button.titleLabel?.font = buttonFont
+        button.setTitleColor(buttonColor, for: .normal)
+        button.setTitleColor(buttonColor, for: .highlighted)
+        button.setTitleColor(buttonColor, for: .disabled)
+        button.setTitleColor(buttonColor, for: .selected)
+        return button
+        
+    }()
+    
+    private let descriptionText: UITextView = {
+        let textView = UITextView()
+           textView.translatesAutoresizingMaskIntoConstraints = false
+           textView.font = UIFont(name: Constants.Attributes.boldFont, size: 10) ?? UIFont.systemFont(ofSize: 10)
+           textView.textColor = .white
+           textView.backgroundColor = .clear
+           textView.textAlignment = .left
+           return textView
+    }()
+   
+    
     
     @IBOutlet weak var tableView: UITableView!
-    
-    @IBOutlet weak var addComment: UIButton!
-    
+
     var globalPostId: String?
     
     var comments: [Comment] = []
@@ -131,7 +186,7 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func setAttributes(){
         //set features to selectedPost attributes
-        photo.image = selectedPost?.images
+        imageSelectedUI.image = selectedPost?.images
         clothingLabel.text = selectedPost?.name
         descriptionText.text = selectedPost?.description
         globalPostId = selectedPost?.postID
@@ -139,55 +194,38 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func setUpElements(){
         
-        addComment.titleLabel?.font = UIFont(name: Constants.Attributes.boldFont, size: 10)
-        addComment.setTitleColor(.white, for: .normal)
-        addComment.setTitleColor(.white, for: .selected)
-        
         view.backgroundColor = Constants.Attributes.styleBlue1
         
-        clothingLabel.textColor = .white
-        clothingLabel.font = UIFont(name: Constants.Attributes.boldFont, size: 18)
-        
-        photo.translatesAutoresizingMaskIntoConstraints = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        clothingLabel.translatesAutoresizingMaskIntoConstraints = false
-        descriptionText.translatesAutoresizingMaskIntoConstraints = false
-        addComment.translatesAutoresizingMaskIntoConstraints = false
+        tableView.backgroundColor = .cyan
         
+        view.addSubview(stackView1)
+        view.addSubview(stackView2)
+        stackView1.addArrangedSubview(imageSelectedUI)
         
+        stackView2.addArrangedSubview(clothingLabel)
+        stackView2.addArrangedSubview(descriptionText)
+        stackView2.addArrangedSubview(addComment)
+
         
         NSLayoutConstraint.activate([
             
-            //imageView
-            photo.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            photo.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            photo.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            photo.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -365),
+            stackView1.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            stackView1.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            stackView1.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            stackView1.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.45),
             
+            stackView2.topAnchor.constraint(equalTo: stackView1.bottomAnchor),
+            stackView2.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            stackView2.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            stackView2.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.10),
+        
             //tableView
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.topAnchor.constraint(equalTo: photo.bottomAnchor, constant: 89),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            
-            //name label
-            clothingLabel.topAnchor.constraint(equalTo: photo.bottomAnchor, constant: -4),
-            clothingLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            clothingLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            clothingLabel.bottomAnchor.constraint(equalTo: tableView.topAnchor, constant: -59),
-            
-            descriptionText.topAnchor.constraint(equalTo: clothingLabel.bottomAnchor, constant: 4),
-            descriptionText.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            descriptionText.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            descriptionText.bottomAnchor.constraint(equalTo: tableView.topAnchor, constant: -27),
-            
-            addComment.topAnchor.constraint(equalTo: descriptionText.bottomAnchor, constant: 6),
-            addComment.bottomAnchor.constraint(equalTo: tableView.topAnchor, constant: -2),
-            addComment.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -260),
-            addComment.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16)
-        
-        
-        
+            tableView.topAnchor.constraint(equalTo: stackView2.bottomAnchor),
+            tableView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.20),
+
         ])
     }
     

@@ -10,16 +10,86 @@ import UIKit
 import Firebase
 
 class AddBloopViewController: UIViewController {
-
-    @IBOutlet weak var imageSelectedUI: UIImageView!
     
-    @IBOutlet weak var itemName: UITextField!
+    //check indicator
     
-    @IBOutlet weak var itemDescription: UITextField!
+    private let imageSelectedUI: UIImageView = {
+        let image = UIImageView()
+        return image
+        
+    }()
     
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    private let shareButton: UIButton = {
+        let button = UIButton()
+        button.addTarget(self, action: #selector(share), for: .touchUpInside)
+        button.setTitle("Share", for: .normal)
+        let buttonFont = UIFont(name: Constants.Attributes.regularFont, size: 25)
+        let buttonColor = UIColor.white
+        button.titleLabel?.font = buttonFont
+        button.setTitleColor(buttonColor, for: .normal)
+        button.setTitleColor(buttonColor, for: .highlighted)
+        button.setTitleColor(buttonColor, for: .disabled)
+        button.setTitleColor(buttonColor, for: .selected)
+        return button
+        
+    }()
     
-    @IBOutlet weak var share: UIButton!
+    private let indicator: UIActivityIndicatorView = {
+        let activity = UIActivityIndicatorView()
+        activity.translatesAutoresizingMaskIntoConstraints = false
+        activity.color = .blue
+        return activity
+    }()
+    
+    private let itemField: UITextField = {
+        let field = UITextField()
+        field.translatesAutoresizingMaskIntoConstraints = false
+        field.font = UIFont(name: Constants.Attributes.regularFont, size: 15)
+        field.backgroundColor = .white
+        field.placeholder = "item name"
+        field.layer.cornerRadius = 5
+        return field
+    }()
+    
+    private let descriptionField: UITextField = {
+        let field = UITextField()
+        field.translatesAutoresizingMaskIntoConstraints = false
+        field.font = UIFont(name: Constants.Attributes.regularFont, size: 15)
+        field.backgroundColor = .white
+        field.placeholder = "item description"
+        field.layer.cornerRadius = 5
+        return field
+    }()
+    
+    private let stackView1: UIStackView = {
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.distribution = .fillEqually
+        stack.axis = .vertical
+        stack.backgroundColor = .clear
+        return stack
+        
+    }()
+    
+    private let stackView2: UIStackView = {
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.distribution = .fillEqually
+        stack.axis = .vertical
+        stack.backgroundColor = .clear
+        return stack
+        
+    }()
+    
+    private let stackView3: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.distribution = .fillEqually
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.backgroundColor = .clear
+        return stack
+        
+    }()
     
     var imageSelected: UIImage?
     
@@ -31,7 +101,7 @@ class AddBloopViewController: UIViewController {
         
         super.viewWillAppear(animated)
         
-        activityIndicator.hidesWhenStopped = true
+        indicator.hidesWhenStopped = true
         
     }
     
@@ -43,32 +113,32 @@ class AddBloopViewController: UIViewController {
         //This in the end should come from imagePicker. ***
         imageSelectedUI.image = imageSelected
         
+        
+        view.backgroundColor = Constants.Attributes.styleBlue1
+        
         //get current user:
         if let currentUser = Auth.auth().currentUser {
             uid = currentUser.uid
         }
         
-        setButton()
-        
-        setAttributes()
+        setUpLayout()
     }
     
     
     //post
-    @IBAction func shareButton(_ sender: UIButton) {
-        
+    @objc func share(){
         guard checkFields() else {
             return
         }
         
         // Disable the share button
-        sender.isEnabled = false
+        shareButton.isEnabled = false
         
         // Start the activity indicator
-        activityIndicator.startAnimating()
+        indicator.startAnimating()
         
-        let name = itemName.text ?? ""
-        let description = itemDescription.text ?? ""
+        let name = itemField.text ?? ""
+        let description = descriptionField.text ?? ""
         
        
         firebaseAPI.postItemToFirestore(name: name, description: description, image: imageSelectedUI.image!, uid: uid!) { error in
@@ -80,25 +150,26 @@ class AddBloopViewController: UIViewController {
                 self.performSegue(withIdentifier: Constants.Segue.backToHomeSegue, sender: self)
             }
             // Stop the activity indicator when the process is complete
-            self.activityIndicator.stopAnimating()
+            self.indicator.stopAnimating()
             
             // Enable the share button
-            sender.isEnabled = true
+            self.shareButton.isEnabled = true
         }
-        
     }
+    
+   
     
     //MARK: -- Alerts
     
     func checkFields() -> Bool {
             // Check if the item name is empty
-            guard let item = itemName.text, !item.isEmpty else {
+            guard let item = itemField.text, !item.isEmpty else {
                 showErrorAlert(message: "Please enter an item name")
                 return false
             }
             
             // Check if the item description is empty or less than 50 characters
-            guard let descrip = itemDescription.text, !descrip.isEmpty, descrip.count > 50 else {
+            guard let descrip = descriptionField.text, !descrip.isEmpty, descrip.count > 50 else {
                 showErrorAlert(message: "Please enter an item description with more than 50 characters")
                 return false
             }
@@ -109,16 +180,16 @@ class AddBloopViewController: UIViewController {
     func setButton(){
         
         // Disable the share button
-        share.isEnabled = false
+        shareButton.isEnabled = false
         
         // Add targets to the text fields to detect changes in their values
-        itemName.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
-        itemDescription.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        itemField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        descriptionField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
     }
     
     @objc func textFieldDidChange(_ textField: UITextField) {
            // Enable the share button only if both the name and description fields have text
-           share.isEnabled = !(itemName.text?.isEmpty ?? true) && !(itemDescription.text?.isEmpty ?? true)
+           shareButton.isEnabled = !(itemField.text?.isEmpty ?? true) && !(descriptionField.text?.isEmpty ?? true)
     }
     
     func showErrorAlert(message: String) {
@@ -128,22 +199,59 @@ class AddBloopViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    func setAttributes(){
+    func setUpLayout(){
         
-        imageSelectedUI.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(stackView1)
+        view.addSubview(stackView2)
+        view.addSubview(stackView3)
         
-        view.backgroundColor = Constants.Attributes.styleBlue1
+        let yellowView = UIView()
+        yellowView.backgroundColor = .clear
+        
+        let greenView = UIView()
+        greenView.backgroundColor = .clear
+        
+        stackView1.addArrangedSubview(imageSelectedUI)
+        
+        stackView2.addArrangedSubview(greenView)
+        stackView2.addArrangedSubview(yellowView)
+        
+        stackView3.addArrangedSubview(shareButton)
+        stackView3.addArrangedSubview(indicator)
+        
+        yellowView.addSubview(descriptionField)
+        greenView.addSubview(itemField)
         
         NSLayoutConstraint.activate([
-            imageSelectedUI.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            imageSelectedUI.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            imageSelectedUI.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            imageSelectedUI.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -364)
+            stackView1.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            stackView1.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            stackView1.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            stackView1.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.40),
             
-        
-        
+            stackView2.topAnchor.constraint(equalTo: stackView1.bottomAnchor),
+            stackView2.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            stackView2.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            stackView2.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.25),
+            
+            itemField.topAnchor.constraint(equalTo: greenView.topAnchor),
+            itemField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            itemField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            itemField.heightAnchor.constraint(equalTo: greenView.heightAnchor, multiplier: 0.75),
+            
+            descriptionField.topAnchor.constraint(equalTo: yellowView.topAnchor),
+            descriptionField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            descriptionField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            descriptionField.heightAnchor.constraint(equalTo: yellowView.heightAnchor, multiplier: 0.75),
+            
+            
+            stackView3.topAnchor.constraint(equalTo: stackView2.bottomAnchor),
+            stackView3.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            stackView3.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            stackView3.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.20),
+
         ])
        
     }
+
   
 }

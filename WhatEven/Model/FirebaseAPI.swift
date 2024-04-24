@@ -135,10 +135,12 @@ class FirebaseAPI {
     func createUser(withEmail email: String, password: String, username: String, completion: @escaping (Error?) -> Void) {
         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
             if let error = error {
+                print("got error at making a user")
                 completion(error)
             } else {
                 guard let uid = authResult?.user.uid else {
                     completion(NSError(domain: "com.yourapp.error", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to get user ID"]))
+                    
                     return
                 }
                 

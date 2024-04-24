@@ -27,7 +27,7 @@ class LoginViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "username"
-        label.font = UIFont(name: Constants.Attributes.boldFont, size: 15)
+        label.font = UIFont(name: Constants.Attributes.boldFont, size: 20)
         label.textColor = .white
         label.textAlignment = .center
         return label
@@ -37,7 +37,7 @@ class LoginViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "password"
-        label.font = UIFont(name: Constants.Attributes.boldFont, size: 15)
+        label.font = UIFont(name: Constants.Attributes.boldFont, size: 20)
         label.textColor = .white
         label.textAlignment = .center
         return label
@@ -46,6 +46,7 @@ class LoginViewController: UIViewController {
     private let usernameField: UITextField = {
         let field = UITextField()
         field.translatesAutoresizingMaskIntoConstraints = false
+        //field.placeholder = "Madison.k.adams@gmail.com"
         field.font = UIFont(name: Constants.Attributes.regularFont, size: 15)
         field.backgroundColor = .white
         field.placeholder = "username"
@@ -56,6 +57,7 @@ class LoginViewController: UIViewController {
     private let passwordField: UITextField = {
         let field = UITextField()
         field.translatesAutoresizingMaskIntoConstraints = false
+        //field.placeholder = "Madison.k.adams@gmail.com"
         field.font = UIFont(name: Constants.Attributes.regularFont, size: 15)
         field.backgroundColor = .white
         field.placeholder = "password"
@@ -151,26 +153,26 @@ class LoginViewController: UIViewController {
     
     //Login
     @objc func loginButtonTapped() {
-        print("works")
         // Start the activity indicator
         indicator.startAnimating()
         
         if let email = usernameField.text, let password = passwordField.text {
+            
             Auth.auth().signIn(withEmail: email, password: password) {  authResult, error in
                 if let e = error {
                     let reason = e.localizedDescription
                     self.showErrorAlert(message: reason)
                 }else{
+                 
                     self.performSegue(withIdentifier: Constants.Segue.loginSegue, sender: self)
                 }
-                // Stop the activity indicator when the process is complete
-                //NEED TO ADD THIS
+            
                 self.indicator.stopAnimating()
                 
             }
         }
         
-    }
+    }//logs in
     
     @objc func registerButtonTapped() {
         print("register")

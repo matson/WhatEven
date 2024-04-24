@@ -157,11 +157,13 @@ class RegisterViewController: UIViewController{
         if let email = emailTextField.text,
            let password = passwordTextField.text,
            let username = usernameTextField.text {
+            print("got here")
             firebaseAPI.createUser(withEmail: email, password: password, username: username) { error in
                 if let error = error {
                     let reason = error.localizedDescription
                     self.showErrorAlert(message: reason)
                 } else {
+                    print("registered user")
                     self.performSegue(withIdentifier: Constants.Segue.registerSegue, sender: self)
                 }
                 // Stop the activity indicator when the process is complete
