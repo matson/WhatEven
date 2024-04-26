@@ -9,6 +9,10 @@ import Foundation
 import UIKit
 import Firebase
 
+//fix cell
+//add two more photos
+//check project revisions
+
 class DetailsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var photo: UIImageView!
@@ -117,7 +121,7 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         setUpElements()
         
         tableView.backgroundColor = .clear
-        tableView.separatorStyle = .none
+        tableView.separatorStyle = .singleLine
         
         //get comments
         firebaseAPI.getComments(forPostId: selectedPost!.postID) { comments in
@@ -149,11 +153,11 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         //get comments
         firebaseAPI.getComments(forPostId: selectedPost!.postID) { comments in
             self.comments = comments // Assign the separate comments array to the commentsReceived array
-            
-            
+ 
         }
         
         return comments.count
+        
     }
     
     
@@ -164,11 +168,10 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         // Dequeue a reusable cell
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.Attributes.commentCell, for: indexPath) as! CommentViewCell
         
-        cell.contentView.backgroundColor = UIColor.clear
         
         // Configure the cell with data
         let comment = comments[indexPath.row]
-        cell.commentText.text = comment.text
+        cell.commentView.text = comment.text
         cell.userLabel.text = comment.user.username
         
         // Update the delete button visibility
@@ -224,7 +227,8 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.topAnchor.constraint(equalTo: stackView2.bottomAnchor),
-            tableView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.20),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            //tableView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.20),
 
         ])
     }
@@ -232,10 +236,10 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
     func updateDeleteButtonVisibility(for cell: CommentViewCell, with comment: Comment, loggedInUserID: String) {
         if comment.user.uid == loggedInUserID {
             // Show the delete button
-            cell.delete.isHidden = false
+            cell.deleteButton.isHidden = false
         } else {
             // Hide the delete button
-            cell.delete.isHidden = true
+            cell.deleteButton.isHidden = true
         }
     }
     

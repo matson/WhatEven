@@ -10,11 +10,6 @@ import UIKit
 import Firebase
 
 
-//after user signs in, or registers will be shown this main screen.
-
-//NEXT VIEW TO WORK ON
-//Fix the error first
-
 
 class HomeViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
@@ -22,7 +17,12 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     @IBOutlet weak var toolBar: UIToolbar!
    
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    private let indicator: UIActivityIndicatorView = {
+        let activity = UIActivityIndicatorView()
+        activity.translatesAutoresizingMaskIntoConstraints = false
+        activity.color = .blue
+        return activity
+    }()
    
     var bloops: [Bloop] = []
     
@@ -40,20 +40,21 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         
         feedView.dataSource = self
         feedView.delegate = self
+        feedView.register(FeedCell.self, forCellWithReuseIdentifier: Constants.Attributes.feedCell)
         
-        activityIndicator.hidesWhenStopped = true
+        indicator.hidesWhenStopped = true
         
         //get current user:
         if let currentUser = Auth.auth().currentUser {
             loggedUser = currentUser.uid
         }
         
-        activityIndicator.startAnimating()
+        indicator.startAnimating()
         firebaseAPI.getPosts { bloops in
             
             self.bloops = bloops
             self.feedView.reloadData()
-            self.activityIndicator.stopAnimating()
+            self.indicator.stopAnimating()
             
         }
         
@@ -63,7 +64,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         
         setRows()
         
-        setAttributes()
+        setCollectionLayout()
 
     }
     
@@ -84,9 +85,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     }
     
     @IBAction func addPost(_ sender: UIBarButtonItem) {
-        
         performSegue(withIdentifier: Constants.Segue.toPostSegue, sender: self)
-        
     }
     
     //MARK: -- CollectionView Methods
@@ -95,8 +94,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         return bloops.count
-        
-        
+
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -108,7 +106,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         configureDeleteButton(for: cell, post: post, loggedUser: loggedUser!)
         
         // Configure the cell's image and label views
-        cell.photo.image = post.images
+        cell.imageView.image = post.images
         cell.clothingLabel.text = post.name
    
         
@@ -118,9 +116,10 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     // Implement the UICollectionViewDelegateFlowLayout method to customize the layout
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
         let collectionViewWidth = collectionView.bounds.width
         let space: CGFloat = 3.0
-        let numberOfItemsPerRow: CGFloat = 3
+        let numberOfItemsPerRow: CGFloat = UIDevice.current.orientation.isPortrait ? 3 : 6
         let dimension = (collectionViewWidth - ((numberOfItemsPerRow - 1) * space)) / numberOfItemsPerRow
         
         return CGSize(width: dimension, height: dimension)
@@ -172,15 +171,15 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     }
     
     //MARK: --Helper Methods
-    
+    //go back to here if the delete buttons are wrong
     func configureDeleteButton(for cell: FeedCell, post: Bloop, loggedUser: String) {
         if post.createdBy.uid == loggedUser {
-            cell.delete.isHidden = false
+            cell.deleteButton.isHidden = false
             cell.deleteAction = { [weak self] in
                 self?.deletePost(post)
             }
         } else {
-            cell.delete.isHidden = true
+            cell.deleteButton.isHidden = true
             cell.deleteAction = nil
         }
     }
@@ -201,10 +200,18 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         }
     }
     
-    func setAttributes(){
+    func setCollectionLayout(){
         view.backgroundColor = Constants.Attributes.styleBlue2
         toolBar.tintColor = .white
         toolBar.barTintColor = Constants.Attributes.styleBlue2
+        
+        feedView.addSubview(indicator)
+        
+        NSLayoutConstraint.activate([
+            indicator.centerXAnchor.constraint(equalTo: feedView.centerXAnchor),
+            indicator.centerYAnchor.constraint(equalTo: feedView.centerYAnchor)
+        ])
+        
         
         
     }

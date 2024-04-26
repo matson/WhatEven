@@ -10,7 +10,35 @@ import Firebase
 
 class CommentViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-    @IBOutlet weak var postComment: UIButton!
+    private let postButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(postComment), for: .touchUpInside)
+        let mailImage = UIImage(systemName: "paperplane")
+        mailImage?.withTintColor(.white)
+        button.setImage(mailImage, for: .normal)
+        return button
+        
+    }()
+    
+    private let commentField: UITextField = {
+        let field = UITextField()
+        field.translatesAutoresizingMaskIntoConstraints = false
+        field.font = UIFont(name: Constants.Attributes.regularFont, size: 15)
+        field.backgroundColor = .white
+        field.placeholder = "speak your mind"
+        field.layer.cornerRadius = 10
+        return field
+    }()
+    
+    
+    private let stackView1: UIStackView = {
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.backgroundColor = Constants.Attributes.styleBlue1
+        return stack
+        
+    }()
     
     var receivedPostId: String?
     
@@ -29,7 +57,7 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
         tableView.dataSource = self
         
         tableView.backgroundColor = .clear
-        tableView.separatorStyle = .none
+        tableView.separatorStyle = .singleLine
         
         setButton()
         
@@ -48,15 +76,12 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
         
     }
     
-    @IBOutlet weak var commentText: UITextField!
-    
     @IBOutlet weak var tableView: UITableView!
     
-    
     //post comment
-    @IBAction func postComment(_ sender: UIButton) {
+    @objc func postComment(){
         
-        let finalCommentText = commentText.text ?? ""
+        let finalCommentText = commentField.text ?? ""
         
         //get the current time for comment posting
         let timestamp = Date().timeIntervalSince1970
@@ -74,29 +99,31 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         
         // Disable the post button
-        postComment.isEnabled = false
+        postButton.isEnabled = false
         
         // Refresh the table view
         tableView.reloadData()
         
         // Reset the text field
-        commentText.text = ""
+        commentField.text = ""
+        
         
     }
+    
     
     //MARK: Helper Functions
     
     @objc func commentTextChanged() {
         // Enable the post button only if the comment text field is not empty
-        postComment.isEnabled = !commentText.text!.isEmpty
+        postButton.isEnabled = !commentField.text!.isEmpty
     }
     
     func setButton(){
         // Set up the initial state of the post button
-        postComment.isEnabled = false
+        postButton.isEnabled = false
         
         // Add a target to the comment text field to detect changes in its text
-        commentText.addTarget(self, action: #selector(commentTextChanged), for: .editingChanged)
+        commentField.addTarget(self, action: #selector(commentTextChanged), for: .editingChanged)
         
     }
     
@@ -112,6 +139,7 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         
         return commentsReceived.count
+        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -119,7 +147,7 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.Attributes.commentCell, for: indexPath) as! CommentViewCell
         // Configure the cell with data
         let comment = commentsReceived[indexPath.row]
-        cell.commentText.text = comment.text
+        cell.commentView.text = comment.text
         cell.userLabel.text = comment.user.username
         
         return cell
@@ -127,30 +155,34 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func setUpTableView(){
         
-        commentText.translatesAutoresizingMaskIntoConstraints = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        postComment.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(stackView1)
+        stackView1.addSubview(commentField)
+        stackView1.addSubview(postButton)
         
+       
         NSLayoutConstraint.activate([
             
-            //textField:
-            commentText.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            commentText.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 8),
-            commentText.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -37),
-            commentText.trailingAnchor.constraint(equalTo: postComment.leadingAnchor),
-            
-            
-            //tableView:
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -79),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -75),
             
-            //button:
-            postComment.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            postComment.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 8),
-            postComment.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -37)
-        
+            stackView1.topAnchor.constraint(equalTo: tableView.bottomAnchor),
+            stackView1.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            stackView1.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            stackView1.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            commentField.topAnchor.constraint(equalTo: stackView1.topAnchor, constant: 20),
+            commentField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            commentField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -60),
+            commentField.heightAnchor.constraint(equalTo: stackView1.heightAnchor, multiplier: 0.50),
+            
+            postButton.topAnchor.constraint(equalTo: stackView1.topAnchor, constant: 20),
+            postButton.leadingAnchor.constraint(equalTo: commentField.trailingAnchor, constant: 10),
+            postButton.trailingAnchor.constraint(equalTo: stackView1.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+            postButton.heightAnchor.constraint(equalTo: stackView1.heightAnchor, multiplier: 0.50),
+            
         ])
     }
     
