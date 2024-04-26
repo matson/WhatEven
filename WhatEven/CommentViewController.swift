@@ -8,7 +8,7 @@
 import UIKit
 import Firebase
 
-class CommentViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class CommentViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
     
     private let postButton: UIButton = {
         let button = UIButton()
@@ -55,6 +55,7 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
         
         tableView.delegate = self
         tableView.dataSource = self
+        commentField.delegate = self
         
         tableView.backgroundColor = .clear
         tableView.separatorStyle = .singleLine
@@ -74,11 +75,15 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
         
         setUpTableView()
         
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChangeFrame(_:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        
+        
     }
     
     @IBOutlet weak var tableView: UITableView!
     
-    //post comment
+    //Post Action
     @objc func postComment(){
         
         let finalCommentText = commentField.text ?? ""
@@ -153,6 +158,7 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
         return cell
     }
     
+    //MARK: Constraints
     func setUpTableView(){
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -184,6 +190,43 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
             postButton.heightAnchor.constraint(equalTo: stackView1.heightAnchor, multiplier: 0.50),
             
         ])
+    }
+    
+    //MARK: -- Keyboard Functionality
+    @objc func keyboardWillChangeFrame(_ notification: Notification) {
+        
+        guard let userInfo = notification.userInfo,
+               let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
+               let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else {
+             return
+         }
+         
+         let keyboardHeight = keyboardFrame.height
+         let animationCurve = UIView.AnimationCurve(rawValue: userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as! Int)!
+         let animationOptions = UIView.AnimationOptions(rawValue: UInt(animationCurve.rawValue << 16))
+         
+         if keyboardFrame.origin.y < view.frame.maxY {
+             // Keyboard is appearing
+             let yOffset = keyboardHeight - (commentField.frame.height + postButton.frame.height) + 65
+             UIView.animate(withDuration: duration, delay: 0, options: animationOptions, animations: {
+                 self.view.frame.origin.y = -yOffset
+             }, completion: nil)
+         } else {
+             // Keyboard is disappearing
+             UIView.animate(withDuration: duration, delay: 0, options: animationOptions, animations: {
+                 self.view.frame.origin.y = 0
+             }, completion: nil)
+         }
+    }
+    
+    //to dismiss Keyboard
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
 }
