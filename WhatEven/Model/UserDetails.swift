@@ -7,15 +7,7 @@
 
 import Foundation
 import UIKit
-//
-//struct UserDetails {
-//
-//    var username: String?
-//    var userEmail: String?
-//    //var profileImage: UIImage?
-//    var uid: String?
-//
-//}
+
 struct UserDetails: Equatable {
     var username: String?
     var userEmail: String?

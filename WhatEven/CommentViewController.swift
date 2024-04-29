@@ -15,7 +15,7 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(postComment), for: .touchUpInside)
         let mailImage = UIImage(systemName: "paperplane")
-        mailImage?.withTintColor(.white)
+        button.tintColor = UIColor(.white)
         button.setImage(mailImage, for: .normal)
         return button
         
@@ -54,6 +54,8 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
     var commentsReceived: [Comment] = []
     
     let firebaseAPI = FirebaseAPI()
+    
+    var isCommentViewController: Bool = true
     
     override func viewDidLoad() {
         
@@ -169,6 +171,14 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.Attributes.commentCell, for: indexPath) as! CommentViewCell
+        
+        //hide the delete button
+        if isCommentViewController {
+              cell.deleteButton.isHidden = true
+          } else {
+              cell.deleteButton.isHidden = false
+          }
+          
         // Configure the cell with data
         let comment = commentsReceived[indexPath.row]
         cell.commentView.text = comment.text

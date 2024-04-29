@@ -70,14 +70,17 @@ class PostViewController: UIViewController {
         
     }
     
-    @objc func pickPhoto(){
-        
+    @objc func pickPhoto() {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
-        imagePicker.sourceType = .photoLibrary
-        //need to add camera if no simulator is detected
-        present(imagePicker, animated: true, completion: nil)
+    
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            imagePicker.sourceType = .camera
+        } else {
+            imagePicker.sourceType = .photoLibrary
+        }
         
+        present(imagePicker, animated: true, completion: nil)
     }
     
 }

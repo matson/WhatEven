@@ -183,18 +183,24 @@ class FirebaseAPI {
             completion(NSError(domain: "Image Conversion Error", code: 0, userInfo: nil))
             return
         }
-        
-        let documentRef = db.collection(Constants.FStore.collectionNamePost).addDocument(data: [
-            Constants.FStore.createdByField: uid,
-            Constants.FStore.postImageField: imageData,
-            Constants.FStore.postNameField: name,
-            Constants.FStore.postDescriptionField: description
-        ]) { (error) in
-            if let e = error {
-                completion(e)
-            } else {
-                completion(nil)
+        let maxSizeInBytes = 1_000_000 // 1 megabyte
+        //need to compress images more than 1MB
+        if let compressedData = compressImage(imageData: imageData, maxSize: maxSizeInBytes) {
+            let documentRef = db.collection(Constants.FStore.collectionNamePost).addDocument(data: [
+                Constants.FStore.createdByField: uid,
+                Constants.FStore.postImageField: compressedData,
+                Constants.FStore.postNameField: name,
+                Constants.FStore.postDescriptionField: description
+            ]) { (error) in
+                if let e = error {
+                    completion(e)
+                } else {
+                    completion(nil)
+                }
             }
+        } else {
+            // Handle the error or use the original image Data
+            completion(NSError(domain: "Compression Failed", code: 0, userInfo: nil))
         }
     }
     
@@ -278,6 +284,19 @@ class FirebaseAPI {
         UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
     }
     
+    //MARK: Image Compression
+   
+    func compressImage(imageData: Data, maxSize: Int) -> Data? {
+        var compression: CGFloat = 1.0
+        var compressedData = imageData
+        
+        while compressedData.count > maxSize, compression > 0.0 {
+            compression -= 0.1
+            compressedData = UIImage(data: imageData)?.jpegData(compressionQuality: compression) ?? Data()
+        }
+        
+        return compressedData
+    }
     
     
     //MARK: Network Connection

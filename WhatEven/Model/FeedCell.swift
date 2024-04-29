@@ -30,16 +30,17 @@ class FeedCell: UICollectionViewCell {
     }()
     
     
-    public let deleteButton: UIButton = {
+    public let deleteButtonFeed: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(deleteTap), for: .touchUpInside)
         let mailImage = UIImage(systemName: "trash.circle")
-        mailImage?.withTintColor(.white)
+        button.tintColor = UIColor.white
         button.setImage(mailImage, for: .normal)
         return button
         
     }()
+    
     
     // Override the initializer method
     override init(frame: CGRect) {
@@ -52,21 +53,22 @@ class FeedCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         
-        //not sure what this is for 
+        setUpCellLayout()
+        //not sure what this is for
         
+    }
+   
+    @objc func deleteTap() {
+        deleteAction?()
     }
     
     var deleteAction: (() -> Void)?
-   
-    
-    @objc func deleteTap(){
-        deleteAction?()
-    }
+
     
     func setUpCellLayout(){
         
         contentView.addSubview(imageView)
-        imageView.addSubview(deleteButton)
+        contentView.addSubview(deleteButtonFeed)
         contentView.addSubview(clothingLabel)
         
         NSLayoutConstraint.activate([
@@ -75,17 +77,17 @@ class FeedCell: UICollectionViewCell {
             imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
             
-            deleteButton.topAnchor.constraint(equalTo: contentView.topAnchor),
-            deleteButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            deleteButton.widthAnchor.constraint(equalToConstant: 50), // Set the desired width
-            deleteButton.heightAnchor.constraint(equalToConstant: 50),// Set the desired height
-            
+            deleteButtonFeed.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            deleteButtonFeed.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+
             clothingLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 2),
             clothingLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             clothingLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             clothingLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
             
         ])
+        
+        
         
         
     }

@@ -218,6 +218,8 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
     //indicator
     func deleteComment(at indexPath: IndexPath) {
         
+        print("deleting comment")
+        
         indicator.startAnimating()
         
         let comment = comments[indexPath.row]

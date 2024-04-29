@@ -112,6 +112,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         let post = bloops[indexPath.item]
         
         configureDeleteButton(for: cell, post: post, loggedUser: loggedUser!)
+        // Configure the delete button action
         
         // Configure the cell's image and label views
         cell.imageView.image = post.images
@@ -182,17 +183,18 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     //go back to here if the delete buttons are wrong
     func configureDeleteButton(for cell: FeedCell, post: Bloop, loggedUser: String) {
         if post.createdBy.uid == loggedUser {
-            cell.deleteButton.isHidden = false
+            cell.deleteButtonFeed.isHidden = false
             cell.deleteAction = { [weak self] in
                 self?.deletePost(post)
             }
         } else {
-            cell.deleteButton.isHidden = true
+            cell.deleteButtonFeed.isHidden = true
             cell.deleteAction = nil
         }
     }
     
     func deletePost(_ post: Bloop) {
+        print("delete called")
         
         indicator.startAnimating()
         

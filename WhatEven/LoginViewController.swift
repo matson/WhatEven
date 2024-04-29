@@ -11,8 +11,6 @@ import Firebase
 
 //The README.
 //Image Size Issue
-//Table Cell Issue
-
 
 class LoginViewController: UIViewController, UITextFieldDelegate {
     
