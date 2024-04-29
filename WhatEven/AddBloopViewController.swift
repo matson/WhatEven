@@ -110,10 +110,6 @@ class AddBloopViewController: UIViewController, UITextFieldDelegate {
         
         //This in the end should come from imagePicker
         imageSelectedUI.image = imageSelected
-        if let image = UIImage(named: "bikini"){
-            imageSelectedUI.image = image 
-        }
-        
         
         itemField.delegate = self
         descriptionField.delegate = self
