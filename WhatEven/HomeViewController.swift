@@ -50,15 +50,20 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         }
         
         indicator.startAnimating()
-        firebaseAPI.getPosts { bloops in
+        
+        firebaseAPI.getPosts(completion: { bloops in
             
             self.bloops = bloops
             self.feedView.reloadData()
             self.indicator.stopAnimating()
-            
-        }
+          //add something here
+        }, errorHandler: { error in
+            let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alert.addAction(okAction)
+            self.present(alert, animated: true, completion: nil)
+        })
         
-       
         //to hide back button
         navigationItem.hidesBackButton = true
         
@@ -67,7 +72,6 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         setCollectionLayout()
 
     }
-    
     
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
     
@@ -80,10 +84,14 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             navigationController?.popToRootViewController(animated: true)
             
         } catch let signOutError as NSError {
-            print("Error signing out: %@", signOutError)
+            // Show alert
+            let alert = UIAlertController(title: "Error", message: "Trouble signing out", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            present(alert, animated: true, completion: nil)
+                  
         }
     }
-    
+  
     @IBAction func addPost(_ sender: UIBarButtonItem) {
         performSegue(withIdentifier: Constants.Segue.toPostSegue, sender: self)
     }
@@ -185,6 +193,9 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     }
     
     func deletePost(_ post: Bloop) {
+        
+        indicator.startAnimating()
+        
         firebaseAPI.deletePost(post) { [weak self] success in
             if success {
                 // Delete the post from the local array or perform any other necessary actions
@@ -193,12 +204,19 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
                     self?.feedView.reloadData()
                 }
             } else {
-                // Handle deletion failure
-                // Display an error message or take appropriate action
-                print("Error deleting post")
+                let alert = UIAlertController(title: "Error", message: "Failed to delete post", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self?.present(alert, animated: true, completion: nil)
+               
             }
+            self?.indicator.stopAnimating()
         }
     }
+
+}
+extension HomeViewController {
+    
+    //MARK: -- Constraints
     
     func setCollectionLayout(){
         view.backgroundColor = Constants.Attributes.styleBlue2
@@ -211,10 +229,8 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             indicator.centerXAnchor.constraint(equalTo: feedView.centerXAnchor),
             indicator.centerYAnchor.constraint(equalTo: feedView.centerYAnchor)
         ])
-        
-        
-        
+  
     }
-
+    
 }
 

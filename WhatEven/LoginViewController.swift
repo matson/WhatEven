@@ -8,6 +8,12 @@
 import UIKit
 import Firebase
 
+
+//The README.
+//Image Size Issue
+//Table Cell Issue
+
+
 class LoginViewController: UIViewController, UITextFieldDelegate {
     
     
@@ -140,8 +146,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = Constants.Attributes.styleBlue1
-        
         setUpTopLayout()
         setUpMedLayout()
         setUpButtonLayout()
@@ -181,7 +185,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     //To Register Screen
     @objc func registerButtonTapped() {
-        print("register")
         performSegue(withIdentifier: Constants.Segue.toRegisterSegue, sender: self)
     }
     
@@ -192,12 +195,53 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         present(alert, animated: true, completion: nil)
     }
     
+    //MARK: -- Keyboard Functionality
+    
+    @objc func keyboardWillChangeFrame(_ notification: Notification) {
+        guard let userInfo = notification.userInfo,
+                  let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
+                  let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else {
+                return
+            }
+            
+            let keyboardHeight = view.frame.maxY - keyboardFrame.origin.y
+            let animationCurve = UIView.AnimationCurve(rawValue: userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as! Int)!
+            let animationOptions = UIView.AnimationOptions(rawValue: UInt(animationCurve.rawValue << 16))
+            
+            if keyboardFrame.origin.y < view.frame.maxY {
+                // Keyboard is appearing
+                UIView.animate(withDuration: duration, delay: 0, options: animationOptions, animations: {
+                    self.view.frame.origin.y = -keyboardHeight + self.view.safeAreaInsets.bottom
+                }, completion: nil)
+            } else {
+                // Keyboard is disappearing
+                UIView.animate(withDuration: duration, delay: 0, options: animationOptions, animations: {
+                    self.view.frame.origin.y = 0
+                }, completion: nil)
+            }
+    }
+    
+    //to dismiss Keyboard
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+}
+
+extension LoginViewController {
+    
     //MARK: -- Constraints
     
     func setUpTopLayout(){
      
         view.addSubview(topImageContainerView)
         topImageContainerView.addSubview(titleLabel)
+        view.backgroundColor = Constants.Attributes.styleBlue1
+        
 
         NSLayoutConstraint.activate([
             
@@ -300,42 +344,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         ])
         
         
-    }
-    
-    //MARK: -- Keyboard Functionality
-    
-    @objc func keyboardWillChangeFrame(_ notification: Notification) {
-        guard let userInfo = notification.userInfo,
-                  let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
-                  let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else {
-                return
-            }
-            
-            let keyboardHeight = view.frame.maxY - keyboardFrame.origin.y
-            let animationCurve = UIView.AnimationCurve(rawValue: userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as! Int)!
-            let animationOptions = UIView.AnimationOptions(rawValue: UInt(animationCurve.rawValue << 16))
-            
-            if keyboardFrame.origin.y < view.frame.maxY {
-                // Keyboard is appearing
-                UIView.animate(withDuration: duration, delay: 0, options: animationOptions, animations: {
-                    self.view.frame.origin.y = -keyboardHeight + self.view.safeAreaInsets.bottom
-                }, completion: nil)
-            } else {
-                // Keyboard is disappearing
-                UIView.animate(withDuration: duration, delay: 0, options: animationOptions, animations: {
-                    self.view.frame.origin.y = 0
-                }, completion: nil)
-            }
-    }
-    
-    //to dismiss Keyboard
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
     }
 }
 

@@ -12,8 +12,6 @@ import Firebase
 
 class PostViewController: UIViewController {
     
-    @IBOutlet weak var topLabel: UILabel!
-    
     private let stackView1: UIStackView = {
         let stack = UIStackView()
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -30,7 +28,7 @@ class PostViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(pickPhoto), for: .touchUpInside)
         button.setTitle("Pick", for: .normal)
-        let buttonFont = UIFont(name: Constants.Attributes.regularFont, size: 25)
+        let buttonFont = UIFont(name: Constants.Attributes.regularFont, size: 45)
         let buttonColor = UIColor.white
         button.titleLabel?.font = buttonFont
         button.setTitleColor(buttonColor, for: .normal)
@@ -69,17 +67,16 @@ class PostViewController: UIViewController {
         super.viewDidLoad()
         
         setUpLayout()
-        view.backgroundColor = Constants.Attributes.styleBlue1
         
     }
     
     @objc func pickPhoto(){
         
         let imagePicker = UIImagePickerController()
-            imagePicker.delegate = self
-            imagePicker.sourceType = .photoLibrary
+        imagePicker.delegate = self
+        imagePicker.sourceType = .photoLibrary
         //need to add camera if no simulator is detected
-            present(imagePicker, animated: true, completion: nil)
+        present(imagePicker, animated: true, completion: nil)
         
     }
     
@@ -103,8 +100,15 @@ extension PostViewController: UIImagePickerControllerDelegate, UINavigationContr
         picker.dismiss(animated: true, completion: nil)
     }
     
+    
+}
+extension PostViewController  {
+    
+    //MARK: -- Constraints
+    
     func setUpLayout(){
         
+        view.backgroundColor = Constants.Attributes.styleBlue1
         let yellowView = UIView()
         yellowView.backgroundColor = .green
         
@@ -125,9 +129,7 @@ extension PostViewController: UIImagePickerControllerDelegate, UINavigationContr
             stackView1.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             stackView1.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             stackView1.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.50),
-          
-        
-        
+
         ])
             
         

@@ -20,11 +20,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //database
         let db = Firestore.firestore()
-        
-//        let font = UIFont(name: "PTSans-Regular", size: 12)
-//        UILabel.appearance().font = font
-//        UITextField.appearance().font = font
-        
+        //for persistence
+        Database.database().isPersistenceEnabled = true
+         
         
         // Override point for customization after application launch.
         return true

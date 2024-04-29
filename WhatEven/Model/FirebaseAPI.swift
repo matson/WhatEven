@@ -16,7 +16,7 @@ class FirebaseAPI {
     //MARK: get and save methods
     
     //get comments
-    func getComments(forPostId postId: String, completion: @escaping ([Comment]) -> Void) {
+    func getComments(forPostId postId: String, completion: @escaping ([Comment]) -> Void, errorHandler: @escaping (Error) -> Void) {
         
         if !isConnectedToNetwork() {
             // Show network alert here
@@ -29,7 +29,6 @@ class FirebaseAPI {
         
         commentsCollection.whereField("postId", isEqualTo: postId).order(by: "timestamp", descending: true).addSnapshotListener { snapshot, error in
             guard let documents = snapshot?.documents else {
-                print("Error fetching comments")
                 return
             }
             
@@ -59,7 +58,7 @@ class FirebaseAPI {
                         let comment = Comment(user: userDetails, postID: postID, text: text, timestamp: date, commentID: commentID)
                         tempComments.append(comment)
                     case .failure(let error):
-                        print("Error retrieving user details: \(error.localizedDescription)")
+                        errorHandler(error)
                     }
                     
                     dispatchGroup.leave()
@@ -77,7 +76,7 @@ class FirebaseAPI {
     }
     
     //get posts
-    func getPosts(completion: @escaping ([Bloop]) -> Void) {
+    func getPosts(completion: @escaping ([Bloop]) -> Void, errorHandler: @escaping (Error) -> Void) {
         
         if !isConnectedToNetwork() {
             // Show network alert here
@@ -89,7 +88,6 @@ class FirebaseAPI {
         
         postsCollection.addSnapshotListener { snapshot, error in
             guard let documents = snapshot?.documents else {
-                print("Error fetching something")
                 return
             }
             
@@ -117,7 +115,7 @@ class FirebaseAPI {
                         let bloop = Bloop(images: image!, description: description, name: name, comments: [], createdBy: userDetails, postID: postID)
                         bloops.append(bloop)
                     case .failure(let error):
-                        print("Error retrieving user details: \(error.localizedDescription)")
+                        errorHandler(error)
                     }
                     
                     dispatchGroup.leave()
@@ -135,12 +133,10 @@ class FirebaseAPI {
     func createUser(withEmail email: String, password: String, username: String, completion: @escaping (Error?) -> Void) {
         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
             if let error = error {
-                print("got error at making a user")
                 completion(error)
             } else {
                 guard let uid = authResult?.user.uid else {
                     completion(NSError(domain: "com.yourapp.error", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to get user ID"]))
-                    
                     return
                 }
                 
@@ -195,10 +191,8 @@ class FirebaseAPI {
             Constants.FStore.postDescriptionField: description
         ]) { (error) in
             if let e = error {
-                print("There was an issue saving data")
                 completion(e)
             } else {
-                print("Successfully saved data")
                 completion(nil)
             }
         }
@@ -207,14 +201,11 @@ class FirebaseAPI {
     //delete comment
     func deleteComment(_ comment: Comment, completion: @escaping (Bool) -> Void) {
         let commentID = comment.commentID
-        print(commentID)
-        print("got here")
         
         let commentRef = db.collection(Constants.FStore.collectionNameComment).document(commentID)
         
         commentRef.delete { error in
             if let error = error {
-                print("Error deleting comment: \(error.localizedDescription)")
                 completion(false)
             } else {
                 completion(true)
@@ -230,7 +221,6 @@ class FirebaseAPI {
         
         postRef.delete { error in
             if let error = error {
-                print("Error deleting post: \(error.localizedDescription)")
                 completion(false)
             } else {
                 completion(true)
@@ -238,7 +228,7 @@ class FirebaseAPI {
         }
     }
     
-    //get userDetails:
+    //get userDetails
     func getUsers(uid: String, completion: @escaping (Result<UserDetails, Error>) -> Void) {
         
         let collectionName = Constants.FStore.collectionNameUserDetails
@@ -290,7 +280,7 @@ class FirebaseAPI {
     
     
     
-    //MARK: Network Connection Code
+    //MARK: Network Connection
     
     // Check network connection
     func isConnectedToNetwork() -> Bool {

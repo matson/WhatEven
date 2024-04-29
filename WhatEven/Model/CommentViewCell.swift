@@ -52,15 +52,25 @@ class CommentViewCell: UITableViewCell {
         
     }()
     
+    private let yellowView: UIView = {
+         let view = UIView()
+         view.backgroundColor = .clear
+         return view
+     }()
+     
+     private let greenView: UIView = {
+         let view = UIView()
+         view.backgroundColor = .clear
+         return view
+     }()
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
           super.setSelected(selected, animated: animated)
           
           // Update the layout of subviews when the cell is selected
           contentView.layoutIfNeeded()
       }
-    
-    
-    
+ 
     @objc func deleteTap(){
         deleteAction?()
     }
@@ -70,15 +80,8 @@ class CommentViewCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
     
-        //contentView.backgroundColor = Constants.Attributes.styleBlue1
         contentView.backgroundColor = .clear
         contentView.addSubview(stackView1)
-        
-        let yellowView = UIView()
-        yellowView.backgroundColor = .clear
-        
-        let greenView = UIView()
-        greenView.backgroundColor = .clear
         
         stackView1.addArrangedSubview(yellowView)
         stackView1.addArrangedSubview(greenView)

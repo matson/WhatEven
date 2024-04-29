@@ -11,8 +11,6 @@ import Firebase
 
 class AddBloopViewController: UIViewController, UITextFieldDelegate {
     
-    //check indicator
-    
     private let imageSelectedUI: UIImageView = {
         let image = UIImageView()
         return image
@@ -110,14 +108,11 @@ class AddBloopViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         
         
-        //This in the end should come from imagePicker. ***
+        //This in the end should come from imagePicker
         imageSelectedUI.image = imageSelected
         
         itemField.delegate = self
         descriptionField.delegate = self
-        
-        
-        view.backgroundColor = Constants.Attributes.styleBlue1
         
         //get current user:
         if let currentUser = Auth.auth().currentUser {
@@ -149,8 +144,10 @@ class AddBloopViewController: UIViewController, UITextFieldDelegate {
        
         firebaseAPI.postItemToFirestore(name: name, description: description, image: imageSelectedUI.image!, uid: uid!) { error in
             if let error = error {
-                // Handle the error
-                print("Error posting item: \(error)")
+                let message = "Failed posting item: \(error)"
+                let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
             } else {
                 // Item posted successfully, perform the segue here
                 self.performSegue(withIdentifier: Constants.Segue.backToHomeSegue, sender: self)
@@ -162,10 +159,9 @@ class AddBloopViewController: UIViewController, UITextFieldDelegate {
             self.shareButton.isEnabled = true
         }
     }
-    
-   
-    
+
     //MARK: -- Alerts
+    
     
     func checkFields() -> Bool {
             // Check if the item name is empty
@@ -205,8 +201,48 @@ class AddBloopViewController: UIViewController, UITextFieldDelegate {
         present(alert, animated: true, completion: nil)
     }
     
+    //MARK: -- Keyboard Functionality 
+    @objc func keyboardWillChangeFrame(_ notification: Notification) {
+        guard let userInfo = notification.userInfo,
+                  let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
+                  let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else {
+                return
+            }
+            
+            let keyboardHeight = view.frame.maxY - keyboardFrame.origin.y
+            let animationCurve = UIView.AnimationCurve(rawValue: userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as! Int)!
+            let animationOptions = UIView.AnimationOptions(rawValue: UInt(animationCurve.rawValue << 16))
+            
+            if keyboardFrame.origin.y < view.frame.maxY {
+                // Keyboard is appearing
+                UIView.animate(withDuration: duration, delay: 0, options: animationOptions, animations: {
+                    self.view.frame.origin.y = -keyboardHeight + self.view.safeAreaInsets.bottom
+                }, completion: nil)
+            } else {
+                // Keyboard is disappearing
+                UIView.animate(withDuration: duration, delay: 0, options: animationOptions, animations: {
+                    self.view.frame.origin.y = 0
+                }, completion: nil)
+            }
+    }
+    
+    //to dismiss Keyboard
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
+  
+}
+extension AddBloopViewController {
+    
     func setUpLayout(){
         
+        view.backgroundColor = Constants.Attributes.styleBlue1
         view.addSubview(stackView1)
         view.addSubview(stackView2)
         view.addSubview(stackView3)
@@ -258,41 +294,4 @@ class AddBloopViewController: UIViewController, UITextFieldDelegate {
         ])
        
     }
-    
-    //MARK: -- Keyboard Functionality 
-    @objc func keyboardWillChangeFrame(_ notification: Notification) {
-        guard let userInfo = notification.userInfo,
-                  let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
-                  let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else {
-                return
-            }
-            
-            let keyboardHeight = view.frame.maxY - keyboardFrame.origin.y
-            let animationCurve = UIView.AnimationCurve(rawValue: userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as! Int)!
-            let animationOptions = UIView.AnimationOptions(rawValue: UInt(animationCurve.rawValue << 16))
-            
-            if keyboardFrame.origin.y < view.frame.maxY {
-                // Keyboard is appearing
-                UIView.animate(withDuration: duration, delay: 0, options: animationOptions, animations: {
-                    self.view.frame.origin.y = -keyboardHeight + self.view.safeAreaInsets.bottom
-                }, completion: nil)
-            } else {
-                // Keyboard is disappearing
-                UIView.animate(withDuration: duration, delay: 0, options: animationOptions, animations: {
-                    self.view.frame.origin.y = 0
-                }, completion: nil)
-            }
-    }
-    
-    //to dismiss Keyboard
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-
-  
 }

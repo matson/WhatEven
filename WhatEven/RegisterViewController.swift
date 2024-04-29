@@ -11,8 +11,6 @@ import Firebase
 
 class RegisterViewController: UIViewController{
     
-    //Check registration logic and indicator 
-    
     private let stackView1: UIStackView = {
         let stack = UIStackView()
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -122,7 +120,7 @@ class RegisterViewController: UIViewController{
     private let indicator: UIActivityIndicatorView = {
         let activity = UIActivityIndicatorView()
         activity.translatesAutoresizingMaskIntoConstraints = false
-        activity.color = .black
+        activity.color = .blue
         return activity
     }()
     
@@ -137,33 +135,25 @@ class RegisterViewController: UIViewController{
         setUpTopLayout()
         setUpMedLayout()
         setUpBottomLayout()
-        
-        view.backgroundColor = Constants.Attributes.styleBlue2
-        
-        
     }
-    
-    //Register New User
-    @IBAction func register(_ sender: UIButton) {
+
+    @objc func registerButtonTapped() {
         
         checkFields()
-
-    }
-    
-    @objc func registerButtonTapped() {
         // Start the activity indicator
         indicator.startAnimating()
         
         if let email = emailTextField.text,
            let password = passwordTextField.text,
            let username = usernameTextField.text {
-            print("got here")
+            
             firebaseAPI.createUser(withEmail: email, password: password, username: username) { error in
                 if let error = error {
+                    self.indicator.isHidden = true
                     let reason = error.localizedDescription
                     self.showErrorAlert(message: reason)
                 } else {
-                    print("registered user")
+                   
                     self.performSegue(withIdentifier: Constants.Segue.registerSegue, sender: self)
                 }
                 // Stop the activity indicator when the process is complete
@@ -221,8 +211,17 @@ class RegisterViewController: UIViewController{
         let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
         return emailPredicate.evaluate(with: email)
     }
-    
+  
+}
+
+//MARK: -- Constraints
+
+extension RegisterViewController {
+
     func setUpTopLayout(){
+        
+        view.backgroundColor = Constants.Attributes.styleBlue2
+        
         let yellowView = UIView()
         yellowView.backgroundColor = .clear
         
@@ -284,7 +283,9 @@ class RegisterViewController: UIViewController{
         blueView.backgroundColor = .clear
         
         let purpleView = UIView()
+        
         purpleView.backgroundColor = .clear
+        
         view.addSubview(stackView2)
         stackView2.addArrangedSubview(blueView)
         stackView2.addArrangedSubview(purpleView)
@@ -316,14 +317,17 @@ class RegisterViewController: UIViewController{
     }
     
     func setUpBottomLayout(){
+        
         let blueView = UIView()
         blueView.backgroundColor = .clear
         
         let purpleView = UIView()
         purpleView.backgroundColor = .clear
+       
         view.addSubview(stackView3)
         stackView3.addArrangedSubview(blueView)
         stackView3.addArrangedSubview(purpleView)
+        
         blueView.addSubview(registerButton)
         purpleView.addSubview(indicator)
         
@@ -346,6 +350,4 @@ class RegisterViewController: UIViewController{
    
         ])
     }
-    
-    
 }

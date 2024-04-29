@@ -40,6 +40,13 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
         
     }()
     
+    private let indicator: UIActivityIndicatorView = {
+        let activity = UIActivityIndicatorView()
+        activity.translatesAutoresizingMaskIntoConstraints = false
+        activity.color = .blue
+        return activity
+    }()
+    
     var receivedPostId: String?
     
     var uid: String?
@@ -49,16 +56,12 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
     let firebaseAPI = FirebaseAPI()
     
     override func viewDidLoad() {
-        super.viewDidLoad()
         
-        view.backgroundColor = .white
+        super.viewDidLoad()
         
         tableView.delegate = self
         tableView.dataSource = self
         commentField.delegate = self
-        
-        tableView.backgroundColor = .clear
-        tableView.separatorStyle = .singleLine
         
         setButton()
         
@@ -68,10 +71,15 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         
         //get comments
-        firebaseAPI.getComments(forPostId: receivedPostId!) { comments in
+        firebaseAPI.getComments(forPostId: receivedPostId!, completion: { comments in
             self.commentsReceived = comments // Assign the separate comments array to the commentsReceived array
             self.tableView.reloadData()
-        }
+        }, errorHandler: { error in
+            let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alert.addAction(okAction)
+            self.present(alert, animated: true, completion: nil)
+        })
         
         setUpTableView()
         
@@ -90,17 +98,25 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
         
         //get the current time for comment posting
         let timestamp = Date().timeIntervalSince1970
+        
+        indicator.startAnimating()
     
+        //indicator
         firebaseAPI.postCommentToFirestore(commentText: finalCommentText, uid: uid!, receivedPostId: receivedPostId!, timestamp: timestamp) { result in
             switch result {
             case .success:
-                print("Comment posted successfully")
+                //print("Comment posted successfully")
                 DispatchQueue.main.async {
+                    
                     self.tableView.reloadData()
                 }
             case .failure(let error):
-                print("Error posting comment: \(error.localizedDescription)")
+                let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
             }
+            
+            self.indicator.stopAnimating()
         }
         
         // Disable the post button
@@ -134,14 +150,17 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
     
     //MARK: -- TableView Methods
     
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         //get comments
-        firebaseAPI.getComments(forPostId: receivedPostId!) { comments in
+        firebaseAPI.getComments(forPostId: receivedPostId!, completion: { comments in
             self.commentsReceived = comments // Assign the separate comments array to the commentsReceived array
-           
-        }
+        }, errorHandler: { error in
+            let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alert.addAction(okAction)
+            self.present(alert, animated: true, completion: nil)
+        })
         
         return commentsReceived.count
         
@@ -158,41 +177,8 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
         return cell
     }
     
-    //MARK: Constraints
-    func setUpTableView(){
-        
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(stackView1)
-        stackView1.addSubview(commentField)
-        stackView1.addSubview(postButton)
-        
-       
-        NSLayoutConstraint.activate([
-            
-            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -75),
-            
-            stackView1.topAnchor.constraint(equalTo: tableView.bottomAnchor),
-            stackView1.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            stackView1.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            stackView1.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            
-            commentField.topAnchor.constraint(equalTo: stackView1.topAnchor, constant: 20),
-            commentField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            commentField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -60),
-            commentField.heightAnchor.constraint(equalTo: stackView1.heightAnchor, multiplier: 0.50),
-            
-            postButton.topAnchor.constraint(equalTo: stackView1.topAnchor, constant: 20),
-            postButton.leadingAnchor.constraint(equalTo: commentField.trailingAnchor, constant: 10),
-            postButton.trailingAnchor.constraint(equalTo: stackView1.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-            postButton.heightAnchor.constraint(equalTo: stackView1.heightAnchor, multiplier: 0.50),
-            
-        ])
-    }
-    
     //MARK: -- Keyboard Functionality
+    
     @objc func keyboardWillChangeFrame(_ notification: Notification) {
         
         guard let userInfo = notification.userInfo,
@@ -229,4 +215,50 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
         NotificationCenter.default.removeObserver(self)
     }
     
+}
+
+extension CommentViewController {
+    
+    //MARK: Constraints
+    
+    func setUpTableView(){
+        
+        view.backgroundColor = .white
+        tableView.backgroundColor = .clear
+        tableView.separatorStyle = .singleLine
+        
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(stackView1)
+        view.addSubview(indicator)
+        stackView1.addSubview(commentField)
+        stackView1.addSubview(postButton)
+        
+       
+        NSLayoutConstraint.activate([
+            
+            indicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            indicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -75),
+            
+            stackView1.topAnchor.constraint(equalTo: tableView.bottomAnchor),
+            stackView1.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            stackView1.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            stackView1.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            commentField.topAnchor.constraint(equalTo: stackView1.topAnchor, constant: 20),
+            commentField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            commentField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -60),
+            commentField.heightAnchor.constraint(equalTo: stackView1.heightAnchor, multiplier: 0.50),
+            
+            postButton.topAnchor.constraint(equalTo: stackView1.topAnchor, constant: 20),
+            postButton.leadingAnchor.constraint(equalTo: commentField.trailingAnchor, constant: 10),
+            postButton.trailingAnchor.constraint(equalTo: stackView1.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+            postButton.heightAnchor.constraint(equalTo: stackView1.heightAnchor, multiplier: 0.50),
+            
+        ])
+    }
 }

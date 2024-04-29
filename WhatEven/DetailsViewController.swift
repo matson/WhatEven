@@ -9,10 +9,6 @@ import Foundation
 import UIKit
 import Firebase
 
-//fix cell
-//add two more photos
-//check project revisions
-
 class DetailsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var photo: UIImageView!
@@ -75,6 +71,13 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
            textView.textAlignment = .left
            return textView
     }()
+    
+    private let indicator: UIActivityIndicatorView = {
+        let activity = UIActivityIndicatorView()
+        activity.translatesAutoresizingMaskIntoConstraints = false
+        activity.color = .blue
+        return activity
+    }()
    
     
     
@@ -101,11 +104,16 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         
         //get comments
-        firebaseAPI.getComments(forPostId: selectedPost!.postID) { comments in
+        firebaseAPI.getComments(forPostId: selectedPost!.postID, completion: { comments in
             self.comments = comments // Assign the separate comments array to the commentsReceived array
             self.tableView.reloadData()
             
-        }
+        }, errorHandler: { error in
+            let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alert.addAction(okAction)
+            self.present(alert, animated: true, completion: nil)
+        })
         
     }
     
@@ -116,19 +124,18 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         tableView.dataSource = self
         
         setAttributes()
-        
-        //constraints
-        setUpElements()
-        
-        tableView.backgroundColor = .clear
-        tableView.separatorStyle = .singleLine
+        setUpConstraints()
         
         //get comments
-        firebaseAPI.getComments(forPostId: selectedPost!.postID) { comments in
+        firebaseAPI.getComments(forPostId: selectedPost!.postID, completion: {comments in
             self.comments = comments // Assign the separate comments array to the commentsReceived array
             self.tableView.reloadData()
-            
-        }
+        }, errorHandler: { error in
+            let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alert.addAction(okAction)
+            self.present(alert, animated: true, completion: nil)
+        })
         
         
     }
@@ -151,10 +158,15 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         //get comments
-        firebaseAPI.getComments(forPostId: selectedPost!.postID) { comments in
+        firebaseAPI.getComments(forPostId: selectedPost!.postID, completion: { comments in
             self.comments = comments // Assign the separate comments array to the commentsReceived array
  
-        }
+        }, errorHandler: { error in
+            let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alert.addAction(okAction)
+            self.present(alert, animated: true, completion: nil)
+        })
         
         return comments.count
         
@@ -162,8 +174,6 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        
         
         // Dequeue a reusable cell
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.Attributes.commentCell, for: indexPath) as! CommentViewCell
@@ -195,23 +205,69 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         globalPostId = selectedPost?.postID
     }
     
-    func setUpElements(){
+    func updateDeleteButtonVisibility(for cell: CommentViewCell, with comment: Comment, loggedInUserID: String) {
+        if comment.user.uid == loggedInUserID {
+            // Show the delete button
+            cell.deleteButton.isHidden = false
+        } else {
+            // Hide the delete button
+            cell.deleteButton.isHidden = true
+        }
+    }
+    
+    //indicator
+    func deleteComment(at indexPath: IndexPath) {
         
+        indicator.startAnimating()
+        
+        let comment = comments[indexPath.row]
+        
+        // Delete the comment from Firestore
+        firebaseAPI.deleteComment(comment) { [weak self] success in
+            if success {
+                // Delete the comment from the local array
+                self?.comments.remove(at: indexPath.row)
+                
+                // Delete the comment from the table view
+                self?.tableView.deleteRows(at: [indexPath], with: .fade)
+            } else {
+                let alert = UIAlertController(title: "Error", message: "Failed to delete comment", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self?.present(alert, animated: true, completion: nil)
+            }
+            
+            self?.indicator.stopAnimating() // Stop animating the indicator
+        }
+    }
+    
+}
+
+extension DetailsViewController {
+    
+    //MARK: -- Constraints
+    
+    func setUpConstraints() {
+        
+        tableView.backgroundColor = .clear
+        tableView.separatorStyle = .singleLine
         view.backgroundColor = Constants.Attributes.styleBlue1
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.backgroundColor = .cyan
         
         view.addSubview(stackView1)
         view.addSubview(stackView2)
+        view.addSubview(indicator)
         stackView1.addArrangedSubview(imageSelectedUI)
         
         stackView2.addArrangedSubview(clothingLabel)
         stackView2.addArrangedSubview(descriptionText)
         stackView2.addArrangedSubview(addComment)
-
         
+        // Add your NS constraints logic here
         NSLayoutConstraint.activate([
+            
+            indicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            indicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             
             stackView1.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             stackView1.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
@@ -232,33 +288,4 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
 
         ])
     }
-    
-    func updateDeleteButtonVisibility(for cell: CommentViewCell, with comment: Comment, loggedInUserID: String) {
-        if comment.user.uid == loggedInUserID {
-            // Show the delete button
-            cell.deleteButton.isHidden = false
-        } else {
-            // Hide the delete button
-            cell.deleteButton.isHidden = true
-        }
-    }
-    
-    func deleteComment(at indexPath: IndexPath) {
-        let comment = comments[indexPath.row]
-        
-        // Delete the comment from Firestore
-        firebaseAPI.deleteComment(comment) { [weak self] success in
-            if success {
-                // Delete the comment from the local array
-                self?.comments.remove(at: indexPath.row)
-                
-                // Delete the comment from the table view
-                self?.tableView.deleteRows(at: [indexPath], with: .fade)
-            } else {
-                // Handle deletion failure
-                // Display an error message or take appropriate action
-            }
-        }
-    }
-    
 }
