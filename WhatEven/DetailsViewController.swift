@@ -16,6 +16,7 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
     private let imageSelectedUI: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
+        image.contentMode = .scaleAspectFit
         return image
         
     }()

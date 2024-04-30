@@ -113,6 +113,7 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
                     self.tableView.reloadData()
                 }
             case .failure(let error):
+                self.indicator.stopAnimating()
                 let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
