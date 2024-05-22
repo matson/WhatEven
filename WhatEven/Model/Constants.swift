@@ -46,6 +46,7 @@ struct Constants{
         static let regularFont = "PTSans-Regular"
         static let styleBlue1 = UIColor(red: 112/255.0, green: 151/255.0, blue: 250/255.0, alpha: 1.0)
         static let styleBlue2 = UIColor(red: 148/255.0, green: 188/255.0, blue: 255/255.0, alpha: 1.0)
+        static let pink1 = UIColor(red: 216/255.0, green: 179/255.0, blue: 250/255.0, alpha: 1.0)
 
         
     }

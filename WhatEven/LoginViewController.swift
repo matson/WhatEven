@@ -8,9 +8,8 @@
 import UIKit
 import Firebase
 
-
-//The README.
-//Image Size Issue
+//fix this screen first, add some borders/styles/shadow to set tone
+//light baby blue-pinkish-white
 
 class LoginViewController: UIViewController, UITextFieldDelegate {
     
@@ -18,7 +17,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     private let titleLabel: UITextView = {
         let textView = UITextView()
            textView.translatesAutoresizingMaskIntoConstraints = false
-           textView.font = UIFont(name: Constants.Attributes.boldFont, size: 35) ?? UIFont.systemFont(ofSize: 35)
+           textView.font = UIFont(name: Constants.Attributes.boldFont, size: 50) ?? UIFont.systemFont(ofSize: 35)
            textView.textColor = .white
            textView.backgroundColor = .clear
            textView.textAlignment = .center
@@ -46,14 +45,15 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         return label
     }()
     
+    
     private let usernameField: UITextField = {
         let field = UITextField()
         field.translatesAutoresizingMaskIntoConstraints = false
-        //field.placeholder = "Madison.k.adams@gmail.com"
         field.font = UIFont(name: Constants.Attributes.regularFont, size: 15)
-        field.backgroundColor = .white
+        field.backgroundColor = .clear
         field.placeholder = "username"
-        field.layer.cornerRadius = 5
+        field.layer.cornerRadius = 20
+        field.borderStyle = .none
         return field
     }()
     
@@ -64,9 +64,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         field.font = UIFont(name: Constants.Attributes.regularFont, size: 15)
         field.backgroundColor = .white
         field.placeholder = "password"
-        field.layer.cornerRadius = 5
+        field.layer.cornerRadius = 20
         return field
     }()
+    
+    //choose the animation you want
     
     private let loginButton: UIButton = {
         let button = UIButton()
@@ -74,6 +76,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         button.setTitle("login", for: .normal)
         let buttonFont = UIFont(name: Constants.Attributes.regularFont, size: 25)
         let buttonColor = UIColor.white
+        button.setBackgroundImage(UIImage(color: Constants.Attributes.styleBlue1), for: .normal)
+        button.setBackgroundImage(UIImage(color: .systemPink), for: .highlighted)
         button.titleLabel?.font = buttonFont
         button.setTitleColor(buttonColor, for: .normal)
         button.setTitleColor(buttonColor, for: .highlighted)
@@ -154,11 +158,35 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         passwordField.delegate = self
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChangeFrame(_:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+      
         
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        // Create a custom layer for the dashed border
+        let dashedBorder = CAShapeLayer()
+        dashedBorder.strokeColor = Constants.Attributes.pink1.cgColor // Set the color of the border
+        dashedBorder.lineDashPattern = [3, 3] // Set the dash pattern [dashLength, gapLength]
+
+        // Create a path for the dashed border (a rectangle path in this case)
+        let path = UIBezierPath(roundedRect: usernameField.bounds, cornerRadius: usernameField.layer.cornerRadius)
+        dashedBorder.path = path.cgPath
+
+        // Set other properties of the dashed border
+        dashedBorder.frame = usernameField.bounds
+        dashedBorder.fillColor = nil // Make sure the border doesn't fill the inside of the path
+        dashedBorder.lineWidth = 3 // Set the width of the border
+
+        // Add the dashed border layer to the text field's layer
+        usernameField.layer.addSublayer(dashedBorder)
     }
     
     //Login Action
     @objc func loginButtonTapped() {
+        
+        //loginButton.alpha = 0.5
         
         // Start the activity indicator
         indicator.startAnimating()
@@ -239,6 +267,11 @@ extension LoginViewController {
         view.addSubview(topImageContainerView)
         topImageContainerView.addSubview(titleLabel)
         view.backgroundColor = Constants.Attributes.styleBlue1
+        titleLabel.layer.shadowColor = UIColor.black.cgColor
+        titleLabel.layer.shadowOffset = CGSize(width: 0, height: 2)
+        titleLabel.layer.shadowOpacity = 0.5
+        titleLabel.layer.shadowRadius = 6
+        titleLabel.layer.masksToBounds = false
         
 
         NSLayoutConstraint.activate([
@@ -259,6 +292,8 @@ extension LoginViewController {
     
     func setUpMedLayout(){
         //username, password, labels
+        let paddingView1 = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: usernameField.frame.height))
+        let paddingView2 = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: passwordField.frame.height))
         
         let yellowView = UIView()
         yellowView.backgroundColor = .clear
@@ -282,6 +317,20 @@ extension LoginViewController {
         greenView.addSubview(usernameField)
         blueView.addSubview(passwordLabel)
         purpleView.addSubview(passwordField)
+        
+        // Assign the padding view to the leftView property of the UITextField
+        // Create a padding view
+     
+        usernameField.leftView = paddingView1
+        usernameField.leftViewMode = .always
+        
+        usernameField.layer.shadowColor = UIColor.black.cgColor // Set shadow color
+        usernameField.layer.shadowOpacity = 0.5 // Set shadow opacity
+        usernameField.layer.shadowOffset = CGSize(width: 0, height: 2) // Set shadow offset
+        usernameField.layer.shadowRadius = 4 // Set shadow radius
+        
+        passwordField.leftView = paddingView2
+        passwordField.leftViewMode = .always
      
         NSLayoutConstraint.activate([
             stackView1.topAnchor.constraint(equalTo: topImageContainerView.bottomAnchor),
@@ -295,8 +344,8 @@ extension LoginViewController {
             usernameLabel.heightAnchor.constraint(equalTo: yellowView.heightAnchor, multiplier: 0.75),
             
             usernameField.topAnchor.constraint(equalTo: greenView.topAnchor),
-            usernameField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            usernameField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            usernameField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 24),
+            usernameField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -24),
             usernameField.heightAnchor.constraint(equalTo: greenView.heightAnchor, multiplier: 0.75),
             
             passwordLabel.topAnchor.constraint(equalTo: blueView.topAnchor),
@@ -305,8 +354,8 @@ extension LoginViewController {
             passwordLabel.heightAnchor.constraint(equalTo: blueView.heightAnchor, multiplier: 0.75),
             
             passwordField.topAnchor.constraint(equalTo: purpleView.topAnchor),
-            passwordField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            passwordField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            passwordField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 24),
+            passwordField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -24),
             passwordField.heightAnchor.constraint(equalTo: purpleView.heightAnchor, multiplier: 0.75),
  
         ])
@@ -342,6 +391,20 @@ extension LoginViewController {
         ])
         
         
+    }
+    
+
+}
+
+extension UIImage {
+    convenience init(color: UIColor, size: CGSize = CGSize(width: 1, height: 1)) {
+        let rect = CGRect(origin: .zero, size: size)
+        UIGraphicsBeginImageContextWithOptions(rect.size, false, 0)
+        color.setFill()
+        UIRectFill(rect)
+        let image = UIGraphicsGetImageFromCurrentImageContext() ?? UIImage()
+        UIGraphicsEndImageContext()
+        self.init(ciImage: CIImage(image: image)!)
     }
 }
 
