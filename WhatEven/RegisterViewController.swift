@@ -48,6 +48,12 @@ class RegisterViewController: UIViewController{
         label.font = UIFont(name: Constants.Attributes.boldFont, size: 25)
         label.textColor = .white
         label.textAlignment = .center
+        
+        label.layer.shadowColor = UIColor.black.cgColor
+        label.layer.shadowOffset = CGSize(width: 0, height: 2)
+        label.layer.shadowOpacity = 0.5
+        label.layer.shadowRadius = 6
+        label.layer.masksToBounds = false
         return label
     }()
     
@@ -58,6 +64,13 @@ class RegisterViewController: UIViewController{
         label.font = UIFont(name: Constants.Attributes.boldFont, size: 25)
         label.textColor = .white
         label.textAlignment = .center
+        
+        label.layer.shadowColor = UIColor.black.cgColor
+        label.layer.shadowOffset = CGSize(width: 0, height: 2)
+        label.layer.shadowOpacity = 0.5
+        label.layer.shadowRadius = 6
+        label.layer.masksToBounds = false
+        
         return label
     }()
     
@@ -68,6 +81,13 @@ class RegisterViewController: UIViewController{
         label.font = UIFont(name: Constants.Attributes.boldFont, size: 25)
         label.textColor = .white
         label.textAlignment = .center
+        
+        label.layer.shadowColor = UIColor.black.cgColor
+        label.layer.shadowOffset = CGSize(width: 0, height: 2)
+        label.layer.shadowOpacity = 0.5
+        label.layer.shadowRadius = 6
+        label.layer.masksToBounds = false
+        
         return label
     }()
     
@@ -75,9 +95,12 @@ class RegisterViewController: UIViewController{
         let field = UITextField()
         field.translatesAutoresizingMaskIntoConstraints = false
         field.font = UIFont(name: Constants.Attributes.regularFont, size: 15)
-        field.backgroundColor = .white
-        field.placeholder = "password"
-        field.layer.cornerRadius = 5
+        field.backgroundColor = .clear
+        field.textColor = .white
+        let attributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: UIColor.white.withAlphaComponent(0.5),
+        ]
+        field.attributedPlaceholder = NSAttributedString(string: "password", attributes: attributes)
         return field
     }()
     
@@ -85,9 +108,12 @@ class RegisterViewController: UIViewController{
         let field = UITextField()
         field.translatesAutoresizingMaskIntoConstraints = false
         field.font = UIFont(name: Constants.Attributes.regularFont, size: 15)
-        field.backgroundColor = .white
-        field.placeholder = "username"
-        field.layer.cornerRadius = 5
+        field.backgroundColor = .clear
+        field.textColor = .white
+        let attributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: UIColor.white.withAlphaComponent(0.5),
+        ]
+        field.attributedPlaceholder = NSAttributedString(string: "username", attributes: attributes)
         return field
     }()
     
@@ -95,9 +121,12 @@ class RegisterViewController: UIViewController{
         let field = UITextField()
         field.translatesAutoresizingMaskIntoConstraints = false
         field.font = UIFont(name: Constants.Attributes.regularFont, size: 15)
-        field.backgroundColor = .white
-        field.placeholder = "email"
-        field.layer.cornerRadius = 5
+        field.backgroundColor = .clear
+        field.textColor = .white
+        let attributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: UIColor.white.withAlphaComponent(0.5),
+        ]
+        field.attributedPlaceholder = NSAttributedString(string: "email", attributes: attributes)
         return field
     }()
     
@@ -245,6 +274,8 @@ extension RegisterViewController {
         blueView.addSubview(passwordLabel)
         purpleView.addSubview(passwordTextField)
         
+        setBorderStyle()
+        
 
         NSLayoutConstraint.activate([
             
@@ -252,27 +283,27 @@ extension RegisterViewController {
             stackView1.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             stackView1.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             stackView1.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.45),
-            
-            emailLabel.topAnchor.constraint(equalTo: yellowView.topAnchor),
+
             emailLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             emailLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            emailLabel.heightAnchor.constraint(equalTo: yellowView.heightAnchor, multiplier: 0.75),
+            emailLabel.centerXAnchor.constraint(equalTo: yellowView.centerXAnchor),
+            emailLabel.centerYAnchor.constraint(equalTo: yellowView.centerYAnchor, constant: 10),
             
-            emailTextField.topAnchor.constraint(equalTo: greenView.topAnchor),
-            emailTextField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            emailTextField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            emailTextField.heightAnchor.constraint(equalTo: greenView.heightAnchor, multiplier: 0.75),
             
-            passwordLabel.topAnchor.constraint(equalTo: blueView.topAnchor),
+            emailTextField.centerXAnchor.constraint(equalTo: greenView.centerXAnchor),
+            emailTextField.centerYAnchor.constraint(equalTo: greenView.centerYAnchor, constant: -10),
+            emailTextField.widthAnchor.constraint(equalTo: greenView.widthAnchor, multiplier: 0.8), // Adjust the multiplier as needed
+            emailTextField.heightAnchor.constraint(equalTo: greenView.heightAnchor, multiplier: 0.5),
+            
             passwordLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             passwordLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            passwordLabel.heightAnchor.constraint(equalTo: blueView.heightAnchor, multiplier: 0.75),
-            
-            passwordTextField.topAnchor.constraint(equalTo: purpleView.topAnchor),
-            passwordTextField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            passwordTextField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            passwordTextField.heightAnchor.constraint(equalTo: purpleView.heightAnchor, multiplier: 0.75),
-        
+            passwordLabel.centerXAnchor.constraint(equalTo: blueView.centerXAnchor),
+            passwordLabel.centerYAnchor.constraint(equalTo: blueView.centerYAnchor, constant: 10),
+                 
+            passwordTextField.centerXAnchor.constraint(equalTo: purpleView.centerXAnchor),
+            passwordTextField.centerYAnchor.constraint(equalTo: purpleView.centerYAnchor, constant: -10),
+            passwordTextField.widthAnchor.constraint(equalTo: purpleView.widthAnchor, multiplier: 0.8), // Adjust the multiplier as needed
+            passwordTextField.heightAnchor.constraint(equalTo: purpleView.heightAnchor, multiplier: 0.5),
             
         ])
     }
@@ -287,8 +318,10 @@ extension RegisterViewController {
         purpleView.backgroundColor = .clear
         
         view.addSubview(stackView2)
+        
         stackView2.addArrangedSubview(blueView)
         stackView2.addArrangedSubview(purpleView)
+       
         blueView.addSubview(usernameLabel)
         purpleView.addSubview(usernameTextField)
         
@@ -300,15 +333,15 @@ extension RegisterViewController {
             stackView2.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             stackView2.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.25),
             
-            usernameLabel.topAnchor.constraint(equalTo: blueView.topAnchor),
             usernameLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             usernameLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            usernameLabel.heightAnchor.constraint(equalTo: blueView.heightAnchor, multiplier: 0.75),
-            
-            usernameTextField.topAnchor.constraint(equalTo: purpleView.topAnchor),
-            usernameTextField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            usernameTextField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            usernameTextField.heightAnchor.constraint(equalTo: purpleView.heightAnchor, multiplier: 0.75),
+            usernameLabel.centerXAnchor.constraint(equalTo: blueView.centerXAnchor),
+            usernameLabel.centerYAnchor.constraint(equalTo: blueView.centerYAnchor, constant: 10),
+                  
+            usernameTextField.centerXAnchor.constraint(equalTo: purpleView.centerXAnchor),
+            usernameTextField.centerYAnchor.constraint(equalTo: purpleView.centerYAnchor, constant: -10),
+            usernameTextField.widthAnchor.constraint(equalTo: purpleView.widthAnchor, multiplier: 0.8), // Adjust the multiplier as needed
+            usernameTextField.heightAnchor.constraint(equalTo: purpleView.heightAnchor, multiplier: 0.5),
             
             
             
@@ -349,5 +382,53 @@ extension RegisterViewController {
             indicator.heightAnchor.constraint(equalTo: purpleView.heightAnchor, multiplier: 0.75),
    
         ])
+    }
+    
+    func setBorderStyle(){
+        
+        let paddingView1 = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: emailTextField.frame.height))
+        let paddingView2 = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: passwordTextField.frame.height))
+        let paddingView3 = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: usernameTextField   .frame.height))
+        
+        
+        emailTextField.leftView = paddingView1
+        emailTextField.leftViewMode = .always
+        
+        passwordTextField.leftView = paddingView2
+        passwordTextField.leftViewMode = .always
+        
+        usernameTextField.leftView = paddingView3
+        usernameTextField.leftViewMode = .always
+        
+        emailTextField.borderStyle = .none
+        // Set up rounded corners and white border
+        emailTextField.layer.cornerRadius = 20
+        emailTextField.layer.borderWidth = 2
+        emailTextField.layer.borderColor = UIColor.white.cgColor
+        emailTextField.layer.shadowColor = UIColor.systemPink.cgColor// Set shadow color
+        emailTextField.layer.shadowOpacity = 0.5 // Set shadow opacity
+        emailTextField.layer.shadowOffset = CGSize(width: 0, height: 2) // Set shadow offset
+        emailTextField.layer.shadowRadius = 9 // Set shadow radius
+        
+        passwordTextField.borderStyle = .none
+        // Set up rounded corners and white border
+        passwordTextField.layer.cornerRadius = 20
+        passwordTextField.layer.borderWidth = 2
+        passwordTextField.layer.borderColor = UIColor.white.cgColor
+        passwordTextField.layer.shadowColor = UIColor.systemPink.cgColor // Set shadow color
+        passwordTextField.layer.shadowOpacity = 0.5 // Set shadow opacity
+        passwordTextField.layer.shadowOffset = CGSize(width: 0, height: 2) // Set shadow offset
+        passwordTextField.layer.shadowRadius = 9 // Set shadow radius
+        
+        
+        usernameTextField.borderStyle = .none
+        // Set up rounded corners and white border
+        usernameTextField.layer.cornerRadius = 20
+        usernameTextField.layer.borderWidth = 2
+        usernameTextField.layer.borderColor = UIColor.white.cgColor
+        usernameTextField.layer.shadowColor = UIColor.systemPink.cgColor // Set shadow color
+        usernameTextField.layer.shadowOpacity = 0.5 // Set shadow opacity
+        usernameTextField.layer.shadowOffset = CGSize(width: 0, height: 2) // Set shadow offset
+        usernameTextField.layer.shadowRadius = 9 // Set shadow radius
     }
 }
