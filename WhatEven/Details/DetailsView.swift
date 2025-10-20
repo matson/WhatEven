@@ -19,112 +19,201 @@ struct DetailsView: View {
     }
     
     var body: some View {
-        GeometryReader { geometry in
-            ZStack {
-                // Background matching UIKit version
-                Colors.styleBlue1
-                    .ignoresSafeArea()
-                
+        ZStack {
+            // Gradient background matching login/register/homefeed
+            LinearGradient(
+                colors: [
+                    Colors.styleBlue1,
+                    Colors.styleBlue1.opacity(0.6),
+                    Colors.styleBlue2.opacity(0.3)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
+            
+            VStack(spacing: 0) {
+                // Instagram-style post
                 VStack(spacing: 0) {
-                    // Image section (45% of height)
-                    VStack {
-                        Image(uiImage: viewModel.selectedPost.images)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .clipped()
-                    }
-                    .frame(height: geometry.size.height * 0.45)
-                    
-                    // Info section (10% of height)
-                    VStack(spacing: 4) {
-                        // Title
-                        HStack {
-                            Text(viewModel.selectedPost.name)
-                                .font(.custom("PTSans-Bold", size: 20))
-                                .foregroundColor(.white)
-                                .textAlignment(.leading)
-                            Spacer()
-                        }
-                        
-                        // Description
-                        HStack {
-                            Text(viewModel.selectedPost.description)
-                                .font(.custom("PTSans-Bold", size: 10))
-                                .foregroundColor(.white)
-                                .textAlignment(.leading)
-                                .lineLimit(3)
-                            Spacer()
-                        }
-                        
-                        // Add comment button
-                        HStack {
-                            Button("add a comment") {
-                                navigationCoordinator.navigateToComments(postId: postId)
-                            }
-                            .font(.custom("PTSans-Regular", size: 15))
-                            .foregroundColor(.white)
-                            Spacer()
-                        }
-                    }
-                    .padding(.horizontal)
-                    .frame(height: geometry.size.height * 0.10)
-                    
-                    // Comments section (remaining height)
-                    VStack {
-                        if viewModel.isLoading && viewModel.comments.isEmpty {
-                            VStack {
-                                ProgressView()
-                                    .tint(.white)
-                                    .scaleEffect(1.2)
-                                Text("Loading comments...")
+                    // Post header
+                    HStack {
+                        HStack(spacing: 12) {
+                            // User avatar
+                            Circle()
+                                .fill(Colors.babyPink.opacity(0.7))
+                                .frame(width: 40, height: 40)
+                                .overlay(
+                                    Text(String(viewModel.selectedPost.createdBy.username?.first ?? "U"))
+                                        .font(.custom("LexendDeca-Bold", size: 16))
+                                        .foregroundColor(.white)
+                                )
+                            
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(viewModel.selectedPost.createdBy.username ?? "Unknown User")
+                                    .font(.custom("LexendDeca-Medium", size: 16))
                                     .foregroundColor(.white)
-                                    .font(.custom("PTSans-Regular", size: 14))
-                            }
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        } else if viewModel.comments.isEmpty {
-                            VStack {
-                                Text("No comments yet")
-                                    .font(.custom("PTSans-Bold", size: 16))
-                                    .foregroundColor(.white)
-                                Text("Be the first to add a comment!")
-                                    .font(.custom("PTSans-Regular", size: 14))
+                                
+                                Text("Reality Check")
+                                    .font(.custom("LexendDeca-Regular", size: 12))
                                     .foregroundColor(.white.opacity(0.8))
                             }
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        } else {
-                            List(viewModel.comments, id: \.commentID) { comment in
-                                CommentRowView(
-                                    comment: comment,
-                                    canDelete: viewModel.canDeleteComment(comment),
-                                    onDelete: { comment in
-                                        selectedCommentForDeletion = comment
-                                        viewModel.handleAction(.deleteComment(comment))
-                                    }
-                                )
-                                .listRowBackground(Color.clear)
-                                .listRowSeparator(.visible, edges: .all)
-                            }
-                            .listStyle(PlainListStyle())
-                            .background(Color.clear)
                         }
+                        
+                        Spacer()
+                        
+                        // More options
+                        Image(systemName: "ellipsis")
+                            .foregroundColor(.white)
+                            .font(.system(size: 16, weight: .medium))
                     }
-                    .frame(maxHeight: .infinity)
-                }
-                
-                // Loading overlay for comment operations
-                if viewModel.deleteState != .idle {
-                    Color.black.opacity(0.3)
-                        .ignoresSafeArea()
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
                     
-                    VStack {
+                    // Full-width image
+                    Image("example")
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 400)
+                        .clipped()
+                    
+                    // Post interactions (like Instagram)
+                    VStack(spacing: 0) {
+                        // Action buttons
+                        HStack(spacing: 16) {
+                            HStack(spacing: 4) {
+                                Image(systemName: "bubble.left")
+                                    .font(.system(size: 22, weight: .regular))
+                                    .foregroundColor(.white)
+                                    .shadow(color: .black.opacity(0.4), radius: 2, x: 0, y: 1)
+                                
+                                Text("\(viewModel.comments.count)")
+                                    .font(.custom("LexendDeca-Medium", size: 16))
+                                    .foregroundColor(.white)
+                                    .shadow(color: .black.opacity(0.4), radius: 2, x: 0, y: 1)
+                            }
+                            
+                            Image(systemName: "heart")
+                                .font(.system(size: 22, weight: .regular))
+                                .foregroundColor(.white)
+                                .shadow(color: .black.opacity(0.4), radius: 2, x: 0, y: 1)
+                            
+                            Image(systemName: "paperplane")
+                                .font(.system(size: 20, weight: .regular))
+                                .foregroundColor(.white)
+                                .shadow(color: .black.opacity(0.4), radius: 2, x: 0, y: 1)
+                            
+                            Spacer()
+                            
+                            Text("👀")
+                                .font(.system(size: 20))
+                                .shadow(color: .black.opacity(0.4), radius: 2, x: 0, y: 1)
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.top, 12)
+                        
+                        // Post caption
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text(viewModel.selectedPost.name)
+                                    .font(.custom("LexendDeca-Bold", size: 16))
+                                    .foregroundColor(.white)
+                                    .shadow(color: .black.opacity(0.5), radius: 2, x: 0, y: 1)
+                                
+                                Spacer()
+                            }
+                            
+                            HStack {
+                                Text(viewModel.selectedPost.description)
+                                    .font(.custom("LexendDeca-Regular", size: 14))
+                                    .foregroundColor(.white)
+                                    .shadow(color: .black.opacity(0.4), radius: 2, x: 0, y: 1)
+                                    .multilineTextAlignment(.leading)
+                                
+                                Spacer()
+                            }
+                            
+                            // View all comments
+                            if !viewModel.comments.isEmpty {
+                                Button("View all \(viewModel.comments.count) comments") {
+                                    navigationCoordinator.navigateToComments(postId: postId)
+                                }
+                                .font(.custom("LexendDeca-Regular", size: 14))
+                                .foregroundColor(.white)
+                                .shadow(color: .black.opacity(0.4), radius: 2, x: 0, y: 1)
+                            } else {
+                                Button("Add a comment...") {
+                                    navigationCoordinator.navigateToComments(postId: postId)
+                                }
+                                .font(.custom("LexendDeca-Regular", size: 14))
+                                .foregroundColor(.white)
+                                .shadow(color: .black.opacity(0.4), radius: 2, x: 0, y: 1)
+                            }
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.top, 8)
+                        .padding(.bottom, 16)
+                    }
+                }
+                    
+                // Comments section (show recent comments inline like Instagram)
+                if !viewModel.comments.isEmpty {
+                    ScrollView {
+                        VStack(spacing: 12) {
+                            ForEach(Array(viewModel.comments.prefix(3)), id: \.commentID) { comment in
+                                VStack(spacing: 0) {
+                                    CommentRowView(
+                                        comment: comment,
+                                        canDelete: viewModel.canDeleteComment(comment),
+                                        onDelete: { comment in
+                                            selectedCommentForDeletion = comment
+                                            viewModel.handleAction(.deleteComment(comment))
+                                        }
+                                    )
+                                }
+                                .padding(.horizontal, 16)
+                            }
+                            
+                            if viewModel.comments.count > 3 {
+                                Button("View more comments") {
+                                    navigationCoordinator.navigateToComments(postId: postId)
+                                }
+                                .font(.custom("LexendDeca-Regular", size: 14))
+                                .foregroundColor(.white)
+                                .shadow(color: .black.opacity(0.4), radius: 2, x: 0, y: 1)
+                                .padding(.horizontal, 16)
+                                .padding(.top, 8)
+                            }
+                        }
+                        .padding(.vertical, 16)
+                    }
+                } else if viewModel.isLoading {
+                    VStack(spacing: 8) {
                         ProgressView()
                             .tint(.white)
-                            .scaleEffect(1.5)
-                        Text("Deleting comment...")
-                            .foregroundColor(.white)
-                            .font(.custom("PTSans-Regular", size: 16))
+                            .scaleEffect(1.2)
+                        Text("Loading comments...")
+                            .font(.custom("LexendDeca-Regular", size: 14))
+                            .foregroundColor(.white.opacity(0.9))
                     }
+                    .padding(.vertical, 24)
+                }
+                
+                Spacer()
+            }
+            
+            // Loading overlay for comment operations
+            if viewModel.deleteState != .idle {
+                Color.black.opacity(0.3)
+                    .ignoresSafeArea()
+                
+                VStack {
+                    ProgressView()
+                        .tint(.white)
+                        .scaleEffect(1.5)
+                    Text("Deleting comment...")
+                        .foregroundColor(.white)
+                        .font(.custom("LexendDeca-Regular", size: 16))
                 }
             }
         }
@@ -166,37 +255,52 @@ struct CommentRowView: View {
     
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
+            // User avatar
+            Circle()
+                .fill(Colors.babyPink.opacity(0.7))
+                .frame(width: 28, height: 28)
+                .overlay(
+                    Text(String(comment.user.username?.first ?? "U"))
+                        .font(.custom("LexendDeca-Bold", size: 12))
+                        .foregroundColor(.white)
+                )
+            
             VStack(alignment: .leading, spacing: 4) {
-                // Username
-                Text(comment.user.username)
-                    .font(.custom("PTSans-Bold", size: 14))
-                    .foregroundColor(.white)
-                
-                // Comment text
-                Text(comment.text)
-                    .font(.custom("PTSans-Regular", size: 12))
-                    .foregroundColor(.white.opacity(0.9))
+                // Username and comment text (Instagram style)
+                HStack {
+                    Text(comment.user.username ?? "Unknown User")
+                        .font(.custom("LexendDeca-Medium", size: 14))
+                        .foregroundColor(.white)
+                        .shadow(color: .black.opacity(0.4), radius: 1, x: 0, y: 1)
+                    
+                    Text(comment.text)
+                        .font(.custom("LexendDeca-Regular", size: 14))
+                        .foregroundColor(.white)
+                        .shadow(color: .black.opacity(0.4), radius: 1, x: 0, y: 1)
+                        .multilineTextAlignment(.leading)
+                    
+                    Spacer()
+                }
                 
                 // Timestamp
                 Text(comment.timestamp, style: .relative)
-                    .font(.custom("PTSans-Regular", size: 10))
-                    .foregroundColor(.white.opacity(0.6))
+                    .font(.custom("LexendDeca-Regular", size: 12))
+                    .foregroundColor(.white.opacity(0.8))
+                    .shadow(color: .black.opacity(0.4), radius: 1, x: 0, y: 1)
             }
-            
-            Spacer()
             
             // Delete button (only show for user's own comments)
             if canDelete {
                 Button(action: {
                     onDelete(comment)
                 }) {
-                    Image(systemName: "trash.circle")
-                        .foregroundColor(.white)
-                        .font(.title3)
+                    Image(systemName: "ellipsis")
+                        .foregroundColor(.white.opacity(0.7))
+                        .font(.system(size: 12, weight: .medium))
                 }
             }
         }
-        .padding(.vertical, 8)
+        .padding(.vertical, 6)
     }
 }
 

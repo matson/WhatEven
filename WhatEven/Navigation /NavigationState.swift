@@ -30,6 +30,42 @@ enum MainDestination: Hashable {
     case postDetails(postId: String, selectedPost: Bloop)
     case comments(postId: String)
     case addBloop(selectedImage: UIImage)
+    
+    func hash(into hasher: inout Hasher) {
+        switch self {
+        case .home:
+            hasher.combine("home")
+        case .createPost:
+            hasher.combine("createPost")
+        case .postDetails(let postId, let selectedPost):
+            hasher.combine("postDetails")
+            hasher.combine(postId)
+            hasher.combine(selectedPost.postID)
+        case .comments(let postId):
+            hasher.combine("comments")
+            hasher.combine(postId)
+        case .addBloop(let selectedImage):
+            hasher.combine("addBloop")
+            hasher.combine(selectedImage.hashValue)
+        }
+    }
+    
+    static func == (lhs: MainDestination, rhs: MainDestination) -> Bool {
+        switch (lhs, rhs) {
+        case (.home, .home):
+            return true
+        case (.createPost, .createPost):
+            return true
+        case let (.postDetails(lhsId, lhsPost), .postDetails(rhsId, rhsPost)):
+            return lhsId == rhsId && lhsPost.postID == rhsPost.postID
+        case let (.comments(lhsId), .comments(rhsId)):
+            return lhsId == rhsId
+        case let (.addBloop(lhsImage), .addBloop(rhsImage)):
+            return lhsImage == rhsImage
+        default:
+            return false
+        }
+    }
 }
 
 // MARK: - Navigation Coordinator

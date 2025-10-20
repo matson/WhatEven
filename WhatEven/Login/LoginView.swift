@@ -14,9 +14,13 @@ struct LoginView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                // Background gradient matching UIKit version
+                // Gradient background with current color and lower opacity
                 LinearGradient(
-                    colors: [Colors.styleBlue1, Colors.styleBlue2],
+                    colors: [
+                        Colors.styleBlue1,
+                        Colors.styleBlue1.opacity(0.6),
+                        Colors.styleBlue2.opacity(0.3)
+                    ],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
@@ -28,9 +32,9 @@ struct LoginView: View {
                         Spacer()
                         
                         Text("WhatEven!")
-                            .font(.custom("PTSans-Bold", size: 50))
+                            .font(.custom("LexendDeca-Bold", size: 50))
                             .foregroundColor(.white)
-                            .shadow(color: .black, radius: 6, x: 0, y: 2)
+                            .shadow(color: .black.opacity(0.3), radius: 3, x: 0, y: 1)
                         
                         Spacer()
                     }
@@ -40,12 +44,16 @@ struct LoginView: View {
                     VStack(spacing: 0) {
                         // Container with pink background
                         VStack(spacing: 0) {
-                            // "got stuff to say?" section
-                            VStack {
-                                Text("got stuff to say?")
-                                    .font(.custom("PTSans-Regular", size: 20))
-                                    .foregroundColor(.white)
-                                    .shadow(color: .white, radius: 6, x: 0, y: 2)
+                            // Card title section
+                            VStack(spacing: 8) {
+                                Text("Reality Check Time")
+                                    .font(.custom("LexendDeca-Bold", size: 22))
+                                    .foregroundColor(Color(red: 0.4, green: 0.45, blue: 0.55))
+                                
+                                Text("Share your online vs reality fails")
+                                    .font(.custom("LexendDeca-Regular", size: 14))
+                                    .foregroundColor(Color(red: 0.4, green: 0.45, blue: 0.55).opacity(0.8))
+                                    .multilineTextAlignment(.center)
                             }
                             .frame(maxWidth: .infinity)
                             .frame(height: (geometry.size.height * 0.33) / 3)
@@ -53,8 +61,8 @@ struct LoginView: View {
                             // Username field section
                             VStack {
                                 TextField("username", text: $viewModel.credentials.email)
-                                    .font(.custom("PTSans-Regular", size: 15))
-                                    .foregroundColor(.white)
+                                    .font(.custom("LexendDeca-Regular", size: 15))
+                                    .foregroundColor(.primary)
                                     .textFieldStyle(CustomTextFieldStyle())
                                     .autocapitalization(.none)
                                     .keyboardType(.emailAddress)
@@ -66,21 +74,21 @@ struct LoginView: View {
                             // Password field section
                             VStack {
                                 SecureField("password", text: $viewModel.credentials.password)
-                                    .font(.custom("PTSans-Regular", size: 15))
-                                    .foregroundColor(.white)
+                                    .font(.custom("LexendDeca-Regular", size: 15))
+                                    .foregroundColor(.primary)
                                     .textFieldStyle(CustomTextFieldStyle())
                             }
                             .frame(maxWidth: .infinity)
                             .frame(height: (geometry.size.height * 0.33) / 3)
                             .padding(.horizontal, 20)
                         }
-                        .background(Colors.pink1)
+                        .background(Color.white)
                         .cornerRadius(15)
                         .overlay(
                             RoundedRectangle(cornerRadius: 15)
-                                .stroke(Color.white, lineWidth: 2)
+                                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
                         )
-                        .shadow(color: .black, radius: 6, x: 0, y: 2)
+                        .shadow(color: .black.opacity(0.2), radius: 4, x: 0, y: 2)
                         .padding(.horizontal, 26)
                     }
                     .frame(height: geometry.size.height * 0.33)
@@ -88,17 +96,17 @@ struct LoginView: View {
                     // Bottom section with buttons
                     VStack(spacing: 5) {
                         // Buttons
-                        HStack(spacing: 0) {
+                        HStack(spacing: 12) {
                             Button("login") {
                                 viewModel.login()
                             }
-                            .buttonStyle(CustomButtonStyle())
+                            .buttonStyle(CustomButtonStyle(isDark: false))
                             .disabled(!viewModel.canLogin)
                             
-                            Button("register") {
+                            Button("Sign Up") {
                                 // Handle register navigation
                             }
-                            .buttonStyle(CustomButtonStyle())
+                            .buttonStyle(CustomButtonStyle(isDark: true))
                         }
                         .frame(height: geometry.size.height * 0.10)
                         .padding(.horizontal, 24)
@@ -111,9 +119,18 @@ struct LoginView: View {
                                     .scaleEffect(1.2)
                             }
                         }
-                        .frame(height: geometry.size.height * 0.10)
+                        .frame(height: geometry.size.height * 0.05)
                         
                         Spacer()
+                        
+                        // Sign up prompt
+                        VStack {
+                            Text("Don't have an account? Sign Up!")
+                                .font(.custom("LexendDeca-Regular", size: 16))
+                                .foregroundColor(Color(red: 0.1, green: 0.1, blue: 0.3))
+                                .multilineTextAlignment(.center)
+                        }
+                        .padding(.bottom, 30)
                     }
                 }
             }
@@ -139,30 +156,32 @@ struct CustomTextFieldStyle: TextFieldStyle {
         configuration
             .padding(.horizontal, 20)
             .frame(height: 40)
-            .background(Color.clear)
+            .background(Color.white)
             .cornerRadius(20)
             .overlay(
                 RoundedRectangle(cornerRadius: 20)
-                    .stroke(Color.white, lineWidth: 2)
+                    .stroke(Colors.babyPink.opacity(0.6), lineWidth: 2)
             )
-            .shadow(color: .pink, radius: 9, x: 0, y: 2)
+            .shadow(color: Colors.babyPink.opacity(0.2), radius: 4, x: 0, y: 2)
     }
 }
 
 struct CustomButtonStyle: ButtonStyle {
+    let isDark: Bool
+    
+    init(isDark: Bool = false) {
+        self.isDark = isDark
+    }
+    
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(.custom("PTSans-Regular", size: 25))
+            .font(.custom("LexendDeca-Regular", size: 25))
             .foregroundColor(.white)
             .frame(maxWidth: .infinity)
             .frame(height: 50)
-            .background(Colors.styleBlue2)
+            .background(isDark ? Colors.styleBlue1 : Colors.styleBlue2)
             .cornerRadius(15)
-            .overlay(
-                RoundedRectangle(cornerRadius: 15)
-                    .stroke(Color.white, lineWidth: 2)
-            )
-            .shadow(color: .black, radius: 6, x: 0, y: 2)
+            .shadow(color: .black.opacity(0.2), radius: 3, x: 0, y: 1)
             .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
             .opacity(configuration.isPressed ? 0.7 : 1.0)
             .onChange(of: configuration.isPressed) { isPressed in

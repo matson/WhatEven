@@ -12,93 +12,123 @@ struct PostView: View {
     @EnvironmentObject var navigationCoordinator: NavigationCoordinator
     
     var body: some View {
-        GeometryReader { geometry in
-            ZStack {
-                // Background matching UIKit version
-                Colors.styleBlue1
-                    .ignoresSafeArea()
+        ZStack {
+            // Gradient background matching other views
+            LinearGradient(
+                colors: [
+                    Colors.styleBlue1,
+                    Colors.styleBlue1.opacity(0.6),
+                    Colors.styleBlue2.opacity(0.3)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
+            
+            VStack(spacing: 40) {
+                Spacer()
                 
-                VStack(spacing: 0) {
-                    // Main content (50% of height)
-                    VStack(spacing: 20) {
-                        Spacer()
-                        
-                        // Title
-                        Text("Let's Talk Shit!")
-                            .font(.custom("PTSans-Bold", size: 20))
-                            .foregroundColor(.white)
-                            .textAlignment(.center)
-                        
-                        // Subtitle
-                        Text("Choose your item to cause chaos")
-                            .font(.custom("PTSans-Bold", size: 20))
-                            .foregroundColor(.white)
-                            .textAlignment(.center)
-                            .multilineTextAlignment(.center)
-                        
-                        // Pick button or selected image
-                        if let selectedImage = viewModel.selectedImage {
-                            VStack(spacing: 16) {
-                                // Show selected image
-                                Image(uiImage: selectedImage)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(maxWidth: 200, maxHeight: 200)
-                                    .cornerRadius(12)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 12)
-                                            .stroke(Color.white, lineWidth: 2)
-                                    )
-                                
-                                HStack(spacing: 20) {
-                                    // Continue button
-                                    Button("Continue") {
-                                        proceedWithImage(selectedImage)
-                                    }
-                                    .font(.custom("PTSans-Regular", size: 20))
-                                    .foregroundColor(.white)
-                                    .padding(.horizontal, 24)
-                                    .padding(.vertical, 12)
-                                    .background(Colors.styleBlue2)
-                                    .cornerRadius(8)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 8)
-                                            .stroke(Color.white, lineWidth: 1)
-                                    )
-                                    
-                                    // Pick different image button
-                                    Button("Change") {
-                                        viewModel.handleAction(.pickPhoto)
-                                    }
-                                    .font(.custom("PTSans-Regular", size: 20))
-                                    .foregroundColor(.white)
-                                    .padding(.horizontal, 24)
-                                    .padding(.vertical, 12)
-                                    .background(Colors.pink1)
-                                    .cornerRadius(8)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 8)
-                                            .stroke(Color.white, lineWidth: 1)
-                                    )
+                // Main title
+                VStack(spacing: 8) {
+                    Text("Reality Check Time!")
+                        .font(.custom("LexendDeca-Bold", size: 32))
+                        .foregroundColor(.white)
+                        .shadow(color: .black.opacity(0.4), radius: 3, x: 0, y: 2)
+                    
+                    Text("Show the world what you really got")
+                        .font(.custom("LexendDeca-Regular", size: 16))
+                        .foregroundColor(.white.opacity(0.9))
+                        .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
+                        .multilineTextAlignment(.center)
+                }
+                
+                // Camera/Photo card
+                VStack(spacing: 24) {
+                    if let selectedImage = viewModel.selectedImage {
+                        // Selected image display
+                        VStack(spacing: 20) {
+                            // Image preview
+                            Image(uiImage: selectedImage)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 250, height: 250)
+                                .clipped()
+                                .cornerRadius(20)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 20)
+                                        .stroke(Colors.babyPink, lineWidth: 3)
+                                )
+                                .shadow(color: .black.opacity(0.2), radius: 8, x: 0, y: 4)
+                            
+                            // Action buttons
+                            HStack(spacing: 16) {
+                                Button("Continue") {
+                                    proceedWithImage(selectedImage)
                                 }
+                                .font(.custom("LexendDeca-Medium", size: 18))
+                                .foregroundColor(.white)
+                                .frame(width: 120, height: 50)
+                                .background(Colors.styleBlue2)
+                                .cornerRadius(25)
+                                .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 2)
+                                
+                                Button("Change") {
+                                    viewModel.handleAction(.pickPhoto)
+                                }
+                                .font(.custom("LexendDeca-Medium", size: 18))
+                                .foregroundColor(.white)
+                                .frame(width: 120, height: 50)
+                                .background(Colors.babyPink)
+                                .cornerRadius(25)
+                                .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 2)
                             }
-                        } else {
+                        }
+                    } else {
+                        // Camera/Photo selection card
+                        VStack(spacing: 24) {
+                            // Camera icon
+                            Image(systemName: "camera.fill")
+                                .font(.system(size: 80, weight: .light))
+                                .foregroundColor(Colors.babyPink)
+                                .shadow(color: .black.opacity(0.3), radius: 3, x: 0, y: 2)
+                            
+                            VStack(spacing: 12) {
+                                Text("Capture Your Truth")
+                                    .font(.custom("LexendDeca-Bold", size: 20))
+                                    .foregroundColor(.white)
+                                    .shadow(color: .black.opacity(0.4), radius: 2, x: 0, y: 1)
+                                
+                                Text("Take a photo or choose from library")
+                                    .font(.custom("LexendDeca-Regular", size: 14))
+                                    .foregroundColor(.white.opacity(0.8))
+                                    .shadow(color: .black.opacity(0.3), radius: 1, x: 0, y: 1)
+                                    .multilineTextAlignment(.center)
+                            }
+                            
                             // Pick button
-                            Button("Pick") {
+                            Button("Let's Go") {
                                 viewModel.handleAction(.pickPhoto)
                             }
-                            .font(.custom("PTSans-Regular", size: 45))
+                            .font(.custom("LexendDeca-Bold", size: 22))
                             .foregroundColor(.white)
-                            .padding(.horizontal, 40)
-                            .padding(.vertical, 20)
+                            .frame(width: 200, height: 60)
+                            .background(Colors.styleBlue1)
+                            .cornerRadius(30)
+                            .shadow(color: .black.opacity(0.2), radius: 3, x: 0, y: 1)
                         }
-                        
-                        Spacer()
+                        .padding(40)
+                        .background(Color.white.opacity(0.1))
+                        .cornerRadius(25)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 25)
+                                .stroke(Color.white.opacity(0.3), lineWidth: 1)
+                        )
+                        .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
                     }
-                    .frame(height: geometry.size.height * 0.50)
-                    
-                    Spacer()
                 }
+                .padding(.horizontal, 32)
+                
+                Spacer()
             }
         }
         .sheet(isPresented: $viewModel.showingImagePicker) {

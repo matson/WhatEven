@@ -20,9 +20,17 @@ struct HomeFeedView: View {
     
     var body: some View {
         ZStack {
-            // Background color matching UIKit version
-            Colors.styleBlue2
-                .ignoresSafeArea()
+            // Gradient background matching login/register
+            LinearGradient(
+                colors: [
+                    Colors.styleBlue1,
+                    Colors.styleBlue1.opacity(0.6),
+                    Colors.styleBlue2.opacity(0.3)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
             
             VStack(spacing: 0) {
                 // Custom toolbar
@@ -31,30 +39,31 @@ struct HomeFeedView: View {
                         viewModel.handleAction(.logout)
                     }
                     .foregroundColor(.white)
-                    .font(.custom("PTSans-Regular", size: 16))
+                    .font(.custom("LexendDeca-Regular", size: 16))
                     
                     Spacer()
                     
                     Text("WhatEven")
-                        .font(.custom("PTSans-Bold", size: 20))
+                        .font(.custom("LexendDeca-Bold", size: 22))
                         .foregroundColor(.white)
+                        .shadow(color: .black.opacity(0.3), radius: 3, x: 0, y: 1)
                     
                     Spacer()
                     
                     Button(action: {
                         navigationCoordinator.navigateToCreatePost()
                     }) {
-                        Image(systemName: "plus")
+                        Image(systemName: "plus.circle.fill")
                             .foregroundColor(.white)
                             .font(.title2)
+                            .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
                     }
                 }
                 .padding()
-                .background(Colors.styleBlue2)
                 
                 // Feed content
                 ScrollView {
-                    LazyVGrid(columns: columns, spacing: 3) {
+                    LazyVStack(spacing: 16) {
                         ForEach(viewModel.feedItems, id: \.id) { feedItem in
                             FeedItemView(
                                 feedItem: feedItem,
@@ -63,12 +72,13 @@ struct HomeFeedView: View {
                                     viewModel.handleAction(.deletePost(bloop))
                                 },
                                 onTap: { bloop in
-                                    navigationCoordinator.navigateToPostDetails(postId: bloop.postID)
+                                    navigationCoordinator.navigateToPostDetails(postId: bloop.postID, selectedPost: bloop)
                                 }
                             )
                         }
                     }
-                    .padding(3)
+                    .padding(.horizontal, 16)
+                    .padding(.top, 8)
                 }
                 
                 // Loading indicator
@@ -79,7 +89,7 @@ struct HomeFeedView: View {
                             .scaleEffect(1.5)
                         Text("Loading...")
                             .foregroundColor(.white)
-                            .font(.custom("PTSans-Regular", size: 14))
+                            .font(.custom("LexendDeca-Regular", size: 14))
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
@@ -127,38 +137,97 @@ struct FeedItemView: View {
     let onTap: (Bloop) -> Void
     
     var body: some View {
-        ZStack(alignment: .center) {
-            // Main content
-            VStack(spacing: 2) {
+        VStack(spacing: 0) {
+            // Post card
+            VStack(spacing: 12) {
+                // Header with username and delete button
+                HStack {
+                    HStack(spacing: 8) {
+                        // User avatar placeholder
+                        Circle()
+                            .fill(Colors.babyPink.opacity(0.7))
+                            .frame(width: 32, height: 32)
+                            .overlay(
+                                Text(String(feedItem.bloop.createdBy.username?.first ?? "U"))
+                                    .font(.custom("LexendDeca-Bold", size: 14))
+                                    .foregroundColor(Color(red: 0.4, green: 0.45, blue: 0.55))
+                            )
+                        
+                        Text(feedItem.bloop.createdBy.username ?? "Unknown User")
+                            .font(.custom("LexendDeca-Medium", size: 16))
+                            .foregroundColor(Color(red: 0.4, green: 0.45, blue: 0.55))
+                    }
+                    
+                    Spacer()
+                    
+                    // Delete button (only show for user's own posts)
+                    if feedItem.canDelete {
+                        Button(action: {
+                            onDelete(feedItem.bloop)
+                        }) {
+                            Image(systemName: "ellipsis")
+                                .foregroundColor(Color(red: 0.4, green: 0.45, blue: 0.55).opacity(0.7))
+                                .font(.system(size: 16, weight: .medium))
+                        }
+                    }
+                }
+                
                 // Image
                 Image(uiImage: feedItem.bloop.images)
                     .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(maxHeight: .infinity)
+                    .aspectRatio(contentMode: .fill)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 250)
                     .clipped()
+                    .cornerRadius(12)
+                    .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
                 
-                // Label
-                Text(feedItem.bloop.name)
-                    .font(.custom("PTSans-Bold", size: 10))
-                    .foregroundColor(.white)
-                    .lineLimit(1)
-                    .frame(height: 20)
-            }
-            
-            // Delete button (only show for user's own posts)
-            if feedItem.canDelete {
-                Button(action: {
-                    onDelete(feedItem.bloop)
-                }) {
-                    Image(systemName: "trash.circle")
-                        .foregroundColor(.white)
-                        .font(.title2)
-                        .background(Color.black.opacity(0.6))
-                        .clipShape(Circle())
+                // Post content
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Text(feedItem.bloop.name)
+                            .font(.custom("LexendDeca-Bold", size: 16))
+                            .foregroundColor(Color(red: 0.4, green: 0.45, blue: 0.55))
+                        
+                        Spacer()
+                    }
+                    
+                    HStack {
+                        Text(feedItem.bloop.description)
+                            .font(.custom("LexendDeca-Regular", size: 14))
+                            .foregroundColor(Color(red: 0.4, green: 0.45, blue: 0.55).opacity(0.8))
+                            .lineLimit(3)
+                            .multilineTextAlignment(.leading)
+                        
+                        Spacer()
+                    }
+                    
+                    // Engagement section
+                    HStack(spacing: 16) {
+                        // Comments indicator
+                        HStack(spacing: 4) {
+                            Image(systemName: "bubble.left")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundColor(Colors.babyPink)
+                            
+                            Text("\(feedItem.bloop.comments.count)")
+                                .font(.custom("LexendDeca-Regular", size: 12))
+                                .foregroundColor(Color(red: 0.4, green: 0.45, blue: 0.55).opacity(0.7))
+                        }
+                        
+                        Spacer()
+                        
+                        // Reality check emoji
+                        Text("👀")
+                            .font(.system(size: 16))
+                    }
                 }
             }
+            .padding(16)
+            .background(Color.white)
+            .cornerRadius(16)
+            .shadow(color: .black.opacity(0.08), radius: 8, x: 0, y: 2)
         }
-        .background(Colors.styleBlue2)
         .onTapGesture {
             onTap(feedItem.bloop)
         }
@@ -185,9 +254,17 @@ struct NavigationAwareHomeFeedView: View {
     
     var body: some View {
         ZStack {
-            // Background color matching UIKit version
-            Colors.styleBlue2
-                .ignoresSafeArea()
+            // Gradient background matching login/register
+            LinearGradient(
+                colors: [
+                    Colors.styleBlue1,
+                    Colors.styleBlue1.opacity(0.6),
+                    Colors.styleBlue2.opacity(0.3)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
             
             VStack(spacing: 0) {
                 // Custom toolbar
@@ -197,13 +274,14 @@ struct NavigationAwareHomeFeedView: View {
                         navigationCoordinator.logout()
                     }
                     .foregroundColor(.white)
-                    .font(.custom("PTSans-Regular", size: 16))
+                    .font(.custom("LexendDeca-Regular", size: 16))
                     
                     Spacer()
                     
                     Text("WhatEven")
-                        .font(.custom("PTSans-Bold", size: 20))
+                        .font(.custom("LexendDeca-Bold", size: 22))
                         .foregroundColor(.white)
+                        .shadow(color: .black.opacity(0.3), radius: 3, x: 0, y: 1)
                     
                     Spacer()
                     
@@ -211,29 +289,30 @@ struct NavigationAwareHomeFeedView: View {
                         print("📱 Add post button tapped")
                         navigationCoordinator.navigateToCreatePost()
                     }) {
-                        Image(systemName: "plus")
+                        Image(systemName: "plus.circle.fill")
                             .foregroundColor(.white)
                             .font(.title2)
+                            .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
                     }
                 }
                 .padding()
-                .background(Colors.styleBlue2)
                 
                 // Feed content
                 if viewModel.feedItems.isEmpty && !viewModel.isLoading {
                     VStack {
                         Spacer()
-                        Text("No posts yet!")
-                            .font(.custom("PTSans-Bold", size: 24))
+                        Text("No Reality Checks Yet!")
+                            .font(.custom("LexendDeca-Bold", size: 24))
                             .foregroundColor(.white)
-                        Text("Tap + to add your first post")
-                            .font(.custom("PTSans-Regular", size: 16))
-                            .foregroundColor(.white.opacity(0.8))
+                            .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
+                        Text("Tap + to share your first truth")
+                            .font(.custom("LexendDeca-Regular", size: 16))
+                            .foregroundColor(.white.opacity(0.9))
                         Spacer()
                     }
                 } else {
                     ScrollView {
-                        LazyVGrid(columns: columns, spacing: 3) {
+                        LazyVStack(spacing: 16) {
                             ForEach(viewModel.feedItems, id: \.id) { feedItem in
                                 FeedItemView(
                                     feedItem: feedItem,
@@ -248,7 +327,8 @@ struct NavigationAwareHomeFeedView: View {
                                 )
                             }
                         }
-                        .padding(3)
+                        .padding(.horizontal, 16)
+                        .padding(.top, 8)
                     }
                 }
                 
@@ -260,7 +340,7 @@ struct NavigationAwareHomeFeedView: View {
                             .scaleEffect(1.5)
                         Text("Loading...")
                             .foregroundColor(.white)
-                            .font(.custom("PTSans-Regular", size: 14))
+                            .font(.custom("LexendDeca-Regular", size: 14))
                     }
                     .padding()
                 }

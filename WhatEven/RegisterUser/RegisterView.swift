@@ -14,110 +14,141 @@ struct RegisterView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                // Background matching UIKit version
-                Colors.styleBlue2
-                    .ignoresSafeArea()
+                // Gradient background matching LoginView
+                LinearGradient(
+                    colors: [
+                        Colors.styleBlue1,
+                        Colors.styleBlue1.opacity(0.6),
+                        Colors.styleBlue2.opacity(0.3)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea()
                 
                 VStack(spacing: 0) {
-                    // Top section with email and password (45% of height)
-                    VStack(spacing: 0) {
-                        // Email label section
-                        VStack {
-                            Text("email")
-                                .font(.custom("PTSans-Bold", size: 25))
-                                .foregroundColor(.white)
-                                .shadow(color: .black, radius: 6, x: 0, y: 2)
-                        }
-                        .frame(height: (geometry.size.height * 0.45) / 4)
+                    // Top section with title
+                    VStack(spacing: 8) {
+                        Spacer()
                         
-                        // Email field section
-                        VStack {
-                            TextField("email", text: $viewModel.credentials.email)
-                                .font(.custom("PTSans-Regular", size: 15))
-                                .foregroundColor(.white)
-                                .textFieldStyle(CustomTextFieldStyle())
-                                .autocapitalization(.none)
-                                .keyboardType(.emailAddress)
-                        }
-                        .frame(height: (geometry.size.height * 0.45) / 4)
-                        .padding(.horizontal, 20)
+                        Text("Create Your Account")
+                            .font(.custom("LexendDeca-Bold", size: 42))
+                            .foregroundColor(.white)
+                            .shadow(color: .black.opacity(0.3), radius: 3, x: 0, y: 1)
                         
-                        // Password label section
-                        VStack {
-                            Text("password")
-                                .font(.custom("PTSans-Bold", size: 25))
-                                .foregroundColor(.white)
-                                .shadow(color: .black, radius: 6, x: 0, y: 2)
-                        }
-                        .frame(height: (geometry.size.height * 0.45) / 4)
-                        
-                        // Password field section
-                        VStack {
-                            SecureField("password", text: $viewModel.credentials.password)
-                                .font(.custom("PTSans-Regular", size: 15))
-                                .foregroundColor(.white)
-                                .textFieldStyle(CustomTextFieldStyle())
-                        }
-                        .frame(height: (geometry.size.height * 0.45) / 4)
-                        .padding(.horizontal, 20)
-                    }
-                    .frame(height: geometry.size.height * 0.45)
-                    
-                    // Middle section with username (25% of height)
-                    VStack(spacing: 0) {
-                        // Username label section
-                        VStack {
-                            Text("create a cool username")
-                                .font(.custom("PTSans-Bold", size: 25))
-                                .foregroundColor(.white)
-                                .shadow(color: .black, radius: 6, x: 0, y: 2)
-                                .multilineTextAlignment(.center)
-                        }
-                        .frame(height: (geometry.size.height * 0.25) / 2)
-                        
-                        // Username field section
-                        VStack {
-                            TextField("username", text: $viewModel.credentials.username)
-                                .font(.custom("PTSans-Regular", size: 15))
-                                .foregroundColor(.white)
-                                .textFieldStyle(CustomTextFieldStyle())
-                                .autocapitalization(.none)
-                        }
-                        .frame(height: (geometry.size.height * 0.25) / 2)
-                        .padding(.horizontal, 20)
+                        Spacer()
                     }
                     .frame(height: geometry.size.height * 0.25)
                     
-                    // Bottom section with register button and indicator (15% of height)
+                    // Middle section with form card
                     VStack(spacing: 0) {
-                        // Register button section
-                        VStack {
-                            Button("register") {
-                                viewModel.register()
+                        VStack(spacing: 32) {
+                            // Card title section
+                            VStack(spacing: 8) {
+                                Text("Join the Reality Check")
+                                    .font(.custom("LexendDeca-Bold", size: 20))
+                                    .foregroundColor(Color(red: 0.4, green: 0.45, blue: 0.55))
+                                
+                                Text("Start sharing your truth")
+                                    .font(.custom("LexendDeca-Regular", size: 14))
+                                    .foregroundColor(Color(red: 0.4, green: 0.45, blue: 0.55).opacity(0.8))
+                                    .multilineTextAlignment(.center)
                             }
-                            .font(.custom("PTSans-Bold", size: 25))
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: (geometry.size.height * 0.15) * 0.75)
-                            .disabled(!viewModel.canRegister)
+                            
+                            // Form fields
+                            VStack(spacing: 20) {
+                                // Email field with title
+                                VStack(alignment: .leading, spacing: 8) {
+                                    HStack {
+                                        Text("Your Email Address")
+                                            .font(.custom("LexendDeca-Medium", size: 16))
+                                            .foregroundColor(Color(red: 0.4, green: 0.45, blue: 0.55))
+                                        Spacer()
+                                    }
+                                    
+                                    TextField("email@example.com", text: $viewModel.credentials.email)
+                                        .font(.custom("LexendDeca-Regular", size: 15))
+                                        .foregroundColor(.primary)
+                                        .textFieldStyle(RegisterTextFieldStyle())
+                                        .autocapitalization(.none)
+                                        .keyboardType(.emailAddress)
+                                }
+                                
+                                // Password field with title
+                                VStack(alignment: .leading, spacing: 8) {
+                                    HStack {
+                                        Text("Create a Secure Password")
+                                            .font(.custom("LexendDeca-Medium", size: 16))
+                                            .foregroundColor(Color(red: 0.4, green: 0.45, blue: 0.55))
+                                        Spacer()
+                                    }
+                                    
+                                    SecureField("password", text: $viewModel.credentials.password)
+                                        .font(.custom("LexendDeca-Regular", size: 15))
+                                        .foregroundColor(.primary)
+                                        .textFieldStyle(RegisterTextFieldStyle())
+                                }
+                                
+                                // Username field with title
+                                VStack(alignment: .leading, spacing: 8) {
+                                    HStack {
+                                        Text("Pick Your Username")
+                                            .font(.custom("LexendDeca-Medium", size: 16))
+                                            .foregroundColor(Color(red: 0.4, green: 0.45, blue: 0.55))
+                                        Spacer()
+                                    }
+                                    
+                                    TextField("cooluser123", text: $viewModel.credentials.username)
+                                        .font(.custom("LexendDeca-Regular", size: 15))
+                                        .foregroundColor(.primary)
+                                        .textFieldStyle(RegisterTextFieldStyle())
+                                        .autocapitalization(.none)
+                                }
+                            }
                         }
-                        .frame(height: (geometry.size.height * 0.15) / 2)
+                        .padding(.vertical, 24)
+                        .padding(.horizontal, 20)
+                        .background(Color.white)
+                        .cornerRadius(15)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 15)
+                                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                        )
+                        .shadow(color: .black.opacity(0.2), radius: 4, x: 0, y: 2)
+                        .padding(.horizontal, 26)
+                    }
+                    .frame(height: geometry.size.height * 0.45)
+                    
+                    // Bottom section with button
+                    VStack(spacing: 16) {
+                        Button("Register") {
+                            viewModel.register()
+                        }
+                        .buttonStyle(RegisterButtonStyle())
+                        .disabled(!viewModel.canRegister)
+                        .padding(.horizontal, 26)
+                        .padding(.top, 16)
                         
-                        // Loading indicator section
+                        // Pink lightning bolt
+                        Image(systemName: "bolt.fill")
+                            .foregroundColor(Colors.babyPink)
+                            .font(.system(size: 24, weight: .bold))
+                            .shadow(color: .black.opacity(0.3), radius: 2, x: 1, y: 1)
+                        
+                        // Loading indicator
                         VStack {
                             if viewModel.isLoading {
                                 ProgressView()
-                                    .tint(.blue)
+                                    .tint(.white)
                                     .scaleEffect(1.2)
                             }
                         }
-                        .frame(height: (geometry.size.height * 0.15) / 2)
+                        .frame(height: 30)
+                        
+                        Spacer()
                     }
-                    .frame(height: geometry.size.height * 0.15)
-                    
-                    Spacer()
+                    .padding(.top, 20)
                 }
-                .padding(.top, 20)
             }
         }
         .alert("Error", isPresented: $viewModel.showingAlert) {
@@ -133,6 +164,32 @@ struct RegisterView: View {
                 dismiss()
             }
         }
+    }
+}
+
+struct RegisterTextFieldStyle: TextFieldStyle {
+    func _body(configuration: TextField<Self._Label>) -> some View {
+        configuration
+            .padding(.horizontal, 20)
+            .frame(height: 40)
+            .background(Color.white)
+            .cornerRadius(20)
+            .shadow(color: .black.opacity(0.15), radius: 4, x: 0, y: 2)
+    }
+}
+
+struct RegisterButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.custom("LexendDeca-Regular", size: 25))
+            .foregroundColor(.white)
+            .frame(maxWidth: .infinity)
+            .frame(height: 50)
+            .background(Colors.styleBlue1)
+            .cornerRadius(15)
+            .shadow(color: .black.opacity(0.2), radius: 3, x: 0, y: 1)
+            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
+            .opacity(configuration.isPressed ? 0.7 : 1.0)
     }
 }
 

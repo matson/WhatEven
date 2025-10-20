@@ -135,7 +135,7 @@ struct CommentItemView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             // Username
-            Text(comment.user.username ?? "")
+            Text(comment.user.username)
                 .font(.custom("PTSans-Bold", size: 16))
                 .foregroundColor(.black)
             

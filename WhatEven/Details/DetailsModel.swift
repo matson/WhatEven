@@ -33,7 +33,7 @@ enum CommentDeleteState: Equatable {
 }
 
 // MARK: - Post Details Data
-struct PostDetails {
+struct PostDetails: Equatable {
     let bloop: Bloop
     let comments: [Comment]
     let currentUserID: String
@@ -44,6 +44,12 @@ struct PostDetails {
             canDelete[comment.commentID] = comment.user.uid == currentUserID
         }
         return canDelete
+    }
+    
+    static func == (lhs: PostDetails, rhs: PostDetails) -> Bool {
+        return lhs.bloop == rhs.bloop &&
+               lhs.comments == rhs.comments &&
+               lhs.currentUserID == rhs.currentUserID
     }
 }
 
