@@ -9,6 +9,7 @@ import SwiftUI
 
 struct RegisterView: View {
     @StateObject private var viewModel = RegisterViewModel()
+    @EnvironmentObject var navigationCoordinator: NavigationCoordinator
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
@@ -26,7 +27,7 @@ struct RegisterView: View {
                 )
                 .ignoresSafeArea()
                 
-                VStack(spacing: 0) {
+                VStack(alignment: .center, spacing: 0) {
                     // Top section with title
                     VStack(spacing: 8) {
                         Spacer()
@@ -39,7 +40,8 @@ struct RegisterView: View {
                         Spacer()
                     }
                     .frame(height: geometry.size.height * 0.25)
-                    
+                    .padding(.bottom, 15)
+
                     // Middle section with form card
                     VStack(spacing: 0) {
                         VStack(spacing: 32) {
@@ -129,10 +131,9 @@ struct RegisterView: View {
                         .padding(.horizontal, 26)
                         .padding(.top, 16)
                         
-                        // Pink lightning bolt
-                        Image(systemName: "bolt.fill")
-                            .foregroundColor(Colors.babyPink)
-                            .font(.system(size: 24, weight: .bold))
+                        // Lightning bolt emoji
+                        Text("⚡")
+                            .font(.system(size: 24))
                             .shadow(color: .black.opacity(0.3), radius: 2, x: 1, y: 1)
                         
                         // Loading indicator

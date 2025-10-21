@@ -9,6 +9,7 @@ import SwiftUI
 
 struct LoginView: View {
     @StateObject private var viewModel = LoginViewModel()
+    @EnvironmentObject var navigationCoordinator: NavigationCoordinator
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
@@ -104,7 +105,7 @@ struct LoginView: View {
                             .disabled(!viewModel.canLogin)
                             
                             Button("Sign Up") {
-                                // Handle register navigation
+                                navigationCoordinator.showRegister()
                             }
                             .buttonStyle(CustomButtonStyle(isDark: true))
                         }
@@ -148,6 +149,12 @@ struct LoginView: View {
                 dismiss()
             }
         }
+        .onAppear {
+            print("🚨🚨🚨 LoginView LATEST VERSION LOADED - DECEMBER 2024 🚨🚨🚨")
+            print("🎬 Should have gradient background with styleBlue1 -> styleBlue2")
+            print("🎬 Title should be 'WhatEven!' with LexendDeca-Bold font size 50")
+            print("🎬 Should have black shadows on text fields, not pink")
+        }
     }
 }
 
@@ -162,7 +169,7 @@ struct CustomTextFieldStyle: TextFieldStyle {
                 RoundedRectangle(cornerRadius: 20)
                     .stroke(Colors.babyPink.opacity(0.6), lineWidth: 2)
             )
-            .shadow(color: Colors.babyPink.opacity(0.2), radius: 4, x: 0, y: 2)
+            .shadow(color: .black.opacity(0.15), radius: 4, x: 0, y: 2)
     }
 }
 

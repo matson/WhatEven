@@ -112,26 +112,31 @@ struct DetailsView: View {
                         .padding(.horizontal, 16)
                         .padding(.top, 12)
                         
-                        // Post caption
-                        VStack(alignment: .leading, spacing: 8) {
-                            HStack {
-                                Text(viewModel.selectedPost.name)
-                                    .font(.custom("LexendDeca-Bold", size: 16))
-                                    .foregroundColor(.white)
-                                    .shadow(color: .black.opacity(0.5), radius: 2, x: 0, y: 1)
+                        // Post caption with white card background
+                        VStack(alignment: .leading, spacing: 12) {
+                            VStack(alignment: .leading, spacing: 8) {
+                                HStack {
+                                    Text(viewModel.selectedPost.name)
+                                        .font(.custom("LexendDeca-Bold", size: 16))
+                                        .foregroundColor(Color(red: 0.4, green: 0.45, blue: 0.55))
+                                    
+                                    Spacer()
+                                }
                                 
-                                Spacer()
+                                HStack {
+                                    Text(viewModel.selectedPost.description)
+                                        .font(.custom("LexendDeca-Regular", size: 14))
+                                        .foregroundColor(Color(red: 0.4, green: 0.45, blue: 0.55).opacity(0.8))
+                                        .multilineTextAlignment(.leading)
+                                    
+                                    Spacer()
+                                }
                             }
-                            
-                            HStack {
-                                Text(viewModel.selectedPost.description)
-                                    .font(.custom("LexendDeca-Regular", size: 14))
-                                    .foregroundColor(.white)
-                                    .shadow(color: .black.opacity(0.4), radius: 2, x: 0, y: 1)
-                                    .multilineTextAlignment(.leading)
-                                
-                                Spacer()
-                            }
+                            .padding(.vertical, 16)
+                            .padding(.horizontal, 20)
+                            .background(Color.white)
+                            .cornerRadius(12)
+                            .shadow(color: .black.opacity(0.15), radius: 4, x: 0, y: 2)
                             
                             // View all comments
                             if !viewModel.comments.isEmpty {
@@ -151,12 +156,12 @@ struct DetailsView: View {
                             }
                         }
                         .padding(.horizontal, 16)
-                        .padding(.top, 8)
+                        .padding(.top, 12)
                         .padding(.bottom, 16)
                     }
                 }
                     
-                // Comments section (show recent comments inline like Instagram)
+                // Comments section with white card background
                 if !viewModel.comments.isEmpty {
                     ScrollView {
                         VStack(spacing: 12) {
@@ -171,7 +176,6 @@ struct DetailsView: View {
                                         }
                                     )
                                 }
-                                .padding(.horizontal, 16)
                             }
                             
                             if viewModel.comments.count > 3 {
@@ -179,13 +183,16 @@ struct DetailsView: View {
                                     navigationCoordinator.navigateToComments(postId: postId)
                                 }
                                 .font(.custom("LexendDeca-Regular", size: 14))
-                                .foregroundColor(.white)
-                                .shadow(color: .black.opacity(0.4), radius: 2, x: 0, y: 1)
-                                .padding(.horizontal, 16)
+                                .foregroundColor(Colors.styleBlue1)
                                 .padding(.top, 8)
                             }
                         }
                         .padding(.vertical, 16)
+                        .padding(.horizontal, 20)
+                        .background(Color.white)
+                        .cornerRadius(12)
+                        .shadow(color: .black.opacity(0.15), radius: 4, x: 0, y: 2)
+                        .padding(.horizontal, 16)
                     }
                 } else if viewModel.isLoading {
                     VStack(spacing: 8) {
@@ -270,13 +277,11 @@ struct CommentRowView: View {
                 HStack {
                     Text(comment.user.username ?? "Unknown User")
                         .font(.custom("LexendDeca-Medium", size: 14))
-                        .foregroundColor(.white)
-                        .shadow(color: .black.opacity(0.4), radius: 1, x: 0, y: 1)
+                        .foregroundColor(Color(red: 0.4, green: 0.45, blue: 0.55))
                     
                     Text(comment.text)
                         .font(.custom("LexendDeca-Regular", size: 14))
-                        .foregroundColor(.white)
-                        .shadow(color: .black.opacity(0.4), radius: 1, x: 0, y: 1)
+                        .foregroundColor(Color(red: 0.4, green: 0.45, blue: 0.55).opacity(0.8))
                         .multilineTextAlignment(.leading)
                     
                     Spacer()
@@ -285,8 +290,7 @@ struct CommentRowView: View {
                 // Timestamp
                 Text(comment.timestamp, style: .relative)
                     .font(.custom("LexendDeca-Regular", size: 12))
-                    .foregroundColor(.white.opacity(0.8))
-                    .shadow(color: .black.opacity(0.4), radius: 1, x: 0, y: 1)
+                    .foregroundColor(Color(red: 0.4, green: 0.45, blue: 0.55).opacity(0.6))
             }
             
             // Delete button (only show for user's own comments)
@@ -295,7 +299,7 @@ struct CommentRowView: View {
                     onDelete(comment)
                 }) {
                     Image(systemName: "ellipsis")
-                        .foregroundColor(.white.opacity(0.7))
+                        .foregroundColor(Color(red: 0.4, green: 0.45, blue: 0.55).opacity(0.7))
                         .font(.system(size: 12, weight: .medium))
                 }
             }
@@ -317,8 +321,8 @@ extension DetailsView {
     let mockImage = UIImage(systemName: "photo") ?? UIImage()
     let mockPost = Bloop(
         images: mockImage,
-        description: "Sample description for preview",
-        name: "Sample Post",
+        description: "bought from Amazon, 1 out of 5 stars. awful material. don't believe those fake bot reviews",
+        name: "Amazon Marine Green Trousers",
         comments: [],
         createdBy: mockUser,
         postID: "sample-post-id"

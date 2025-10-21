@@ -56,13 +56,16 @@ struct AuthenticationFlow: View {
     var body: some View {
         NavigationStack(path: $navigationCoordinator.authPath) {
             // Root auth view
-            NavigationAwareLoginView()
+            LoginView()
+                .environmentObject(navigationCoordinator)
                 .navigationDestination(for: AuthenticationDestination.self) { destination in
                     switch destination {
                     case .login:
-                        NavigationAwareLoginView()
+                        LoginView()
+                            .environmentObject(navigationCoordinator)
                     case .register:
-                        NavigationAwareRegisterView()
+                        RegisterView()
+                            .environmentObject(navigationCoordinator)
                     }
                 }
         }
@@ -87,6 +90,7 @@ struct MainAppFlow: View {
                         DetailsView(postId: postId, selectedPost: selectedPost)
                     case .comments(let postId):
                         CommentView(postId: postId)
+                            .environmentObject(navigationCoordinator)
                     case .addBloop(let selectedImage):
                         AddBloopView(selectedImage: selectedImage)
                     }
