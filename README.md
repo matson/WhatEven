@@ -2,6 +2,8 @@
 
 # An app designed to combat fast-fashion and avoid the "What I got vs. what I ordered"
 
+-> Recently Converted to SwiftUI <- 
+
 Background: 
 
 This app was created to combat fast fashion and scams found all other instagram and other popular social media
@@ -28,7 +30,43 @@ Instructions:
 -Run the application and register.  The new user info will get stored to Firebase. 
 -Once you register, navigate to the portal and login with those user credentials. 
 -You will be taken to the homepage where you will be able to create posts, comments, and delete your own posts and comments. 
--Deployment target should be 16.0 or higher.  
+
+📱 Features
+
+  Authentication
+
+  - LoginView - User authentication with clean, modern design. Includes
+  option to register and invites new users to sign up for an account
+  - RegisterView - Account creation with username, email, and password
+  validation. Seamlessly navigates back to login after successful
+  registration
+
+  Main App Flow
+
+  - Home Feed - Displays other users' posts with Instagram-style layout.
+  Includes option to create a new "bloop" (reality check post)
+  - PostView - Utilizes PhotoPicker and camera integration to capture
+  images for new posts
+  - AddBloopFeature - Takes the selected image from PostView and allows
+  users to add product details and honest reviews
+  - DetailsView - Comprehensive post view showing full image, interaction
+  buttons (likes, comments), comment count, and preview of recent comments
+  - CommentView - Full comments feed displaying all user comments on a
+  specific item with reply functionality
+
+  Navigation
+
+  - NavigationCoordinator - Centralized routing system managing navigation
+  stack and screen transitions throughout the app
+
+  Design System
+
+  - Consistent gradient backgrounds and LexendDeca typography
+  - White card-based UI with translucent elements
+  - Modern SwiftUI architecture with MVVM pattern
+  - Responsive design optimized for iOS devices
+
+
 
 
 
